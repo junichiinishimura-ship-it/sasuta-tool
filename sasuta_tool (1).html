@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SASUTA — 業務管理</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@300;400;500;700&family=DM+Mono:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root {
+  --ink:#0e0d0b;--ink2:#1c1a17;--paper:#f7f5f0;--paper2:#edeae3;--paper3:#e4e0d8;
+  --line:#d8d3c8;--line2:#c4beb2;--muted:#8c8579;--dim:#b8b2a8;
+  --accent:#c8401a;--accent-pale:#f9ede8;--gold:#a07830;--gold-pale:#f5f0e8;
+  --teal:#1a6670;--teal-pale:#e8f2f3;--sage:#4a6650;--sage-pale:#eaf0eb;
+  --r:6px;--r-sm:3px;--sh:0 1px 4px rgba(14,13,11,0.07),0 0 0 1px rgba(14,13,11,0.04);
+  --sh-md:0 4px 20px rgba(14,13,11,0.1),0 0 0 1px rgba(14,13,11,0.05);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--paper);color:var(--ink);font-family:'Noto Sans JP',sans-serif;font-size:13.5px;display:flex;min-height:100vh;line-height:1.6;}
+
+/* LOADING OVERLAY */
+#loading-overlay{position:fixed;inset:0;background:var(--paper);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity 0.4s;}
+#loading-overlay.hidden{opacity:0;pointer-events:none;}
+.loading-logo{font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:0.08em;color:var(--ink);}
+.loading-logo span{color:var(--accent);}
+.loading-bar-wrap{width:200px;height:2px;background:var(--line);border-radius:99px;overflow:hidden;}
+.loading-bar{height:100%;background:var(--accent);border-radius:99px;animation:loadingAnim 1.2s ease-in-out infinite;}
+@keyframes loadingAnim{0%{width:0%;margin-left:0;}50%{width:80%;margin-left:10%;}100%{width:0%;margin-left:100%;}}
+.loading-text{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;color:var(--dim);text-transform:uppercase;}
+
+/* SYNC STATUS */
+.sync-indicator{display:flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.08em;color:var(--dim);}
+.sync-dot{width:6px;height:6px;border-radius:50%;background:var(--dim);transition:background 0.3s;}
+.sync-dot.syncing{background:var(--gold);animation:pulse 0.8s infinite;}
+.sync-dot.ok{background:var(--sage);}
+.sync-dot.error{background:var(--accent);}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+
+/* SIDEBAR */
+.sidebar{width:228px;min-width:228px;background:var(--ink2);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:60;overflow:hidden;}
+.sidebar::before{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;opacity:0.6;z-index:1;}
+.sidebar-logo{padding:28px 22px 22px;border-bottom:1px solid rgba(255,255,255,0.07);position:relative;z-index:2;}
+.brand-top{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.25em;color:rgba(255,255,255,0.3);text-transform:uppercase;margin-bottom:6px;}
+.brand-name{font-family:'Bebas Neue',sans-serif;font-size:38px;letter-spacing:0.08em;color:#fff;line-height:0.9;}
+.brand-name span{color:var(--accent);}
+.brand-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:12px;color:rgba(255,255,255,0.35);margin-top:6px;letter-spacing:0.05em;}
+.sidebar-date{padding:10px 22px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.08em;color:rgba(255,255,255,0.2);border-bottom:1px solid rgba(255,255,255,0.06);position:relative;z-index:2;}
+.sidebar-nav{flex:1;padding:14px 0;position:relative;z-index:2;}
+.nav-section{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.2em;color:rgba(255,255,255,0.2);padding:12px 22px 6px;text-transform:uppercase;}
+.nav-item{display:flex;align-items:center;gap:11px;padding:10px 22px;cursor:pointer;color:rgba(255,255,255,0.45);font-size:13px;transition:all 0.18s;border-left:2px solid transparent;}
+.nav-item:hover{color:rgba(255,255,255,0.8);background:rgba(255,255,255,0.04);}
+.nav-item.active{color:#fff;border-left-color:var(--accent);background:rgba(200,64,26,0.12);font-weight:500;}
+.nav-icon{font-size:14px;width:18px;text-align:center;}
+.sidebar-footer{padding:16px 22px;border-top:1px solid rgba(255,255,255,0.07);position:relative;z-index:2;}
+
+/* MAIN */
+.main{margin-left:228px;flex:1;display:flex;flex-direction:column;min-height:100vh;}
+.topbar{background:var(--paper);border-bottom:1px solid var(--line);padding:0 32px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40;}
+.topbar-left{display:flex;align-items:baseline;gap:10px;}
+.page-title-en{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:0.06em;color:var(--ink);line-height:1;}
+.page-title-ja{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:13px;color:var(--muted);letter-spacing:0.03em;}
+.topbar-right{display:flex;align-items:center;gap:12px;}
+.content{padding:28px 32px;flex:1;}
+.page{display:none;}.page.active{display:block;animation:fadeUp 0.22s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:var(--r-sm);font-size:12.5px;font-weight:500;cursor:pointer;border:none;transition:all 0.15s;font-family:'Noto Sans JP',sans-serif;letter-spacing:0.01em;}
+.btn-primary{background:var(--ink);color:#fff;}.btn-primary:hover{background:var(--ink2);transform:translateY(-1px);box-shadow:0 3px 10px rgba(14,13,11,0.2);}
+.btn-accent{background:var(--accent);color:#fff;}.btn-accent:hover{background:#b03416;transform:translateY(-1px);box-shadow:0 3px 10px rgba(200,64,26,0.25);}
+.btn-secondary{background:var(--paper);color:var(--ink);border:1px solid var(--line2);}.btn-secondary:hover{background:var(--paper2);}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid transparent;}.btn-ghost:hover{background:var(--paper2);color:var(--ink);border-color:var(--line);}
+.btn-danger{background:var(--accent-pale);color:var(--accent);border:1px solid #f0c8bc;}.btn-danger:hover{background:#f5ddd7;}
+.btn-sm{padding:4px 9px;font-size:11.5px;}.btn-xs{padding:3px 7px;font-size:11px;}
+
+/* STAT CARDS */
+.stat-card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;box-shadow:var(--sh);position:relative;overflow:hidden;transition:box-shadow 0.18s;}
+.stat-card:hover{box-shadow:var(--sh-md);}
+.stat-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.14em;color:var(--dim);text-transform:uppercase;margin-bottom:8px;}
+.stat-value{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:0.04em;color:var(--ink);line-height:1;}
+.stat-sub{font-size:11px;color:var(--muted);margin-top:7px;display:flex;align-items:center;gap:6px;}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:2px;font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:0.04em;}
+.badge-red{background:var(--accent-pale);color:var(--accent);}
+.badge-gold{background:var(--gold-pale);color:var(--gold);}
+.badge-teal{background:var(--teal-pale);color:var(--teal);}
+.badge-sage{background:var(--sage-pale);color:var(--sage);}
+.badge-ink{background:var(--ink);color:#fff;}
+.badge-gray{background:var(--paper2);color:var(--muted);border:1px solid var(--line);}
+
+/* CARD */
+.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);}
+.card-header{padding:14px 20px 12px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;}
+.card-title{font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:0.12em;color:var(--muted);text-transform:uppercase;}
+.card-body{padding:20px;}
+
+/* TABLE */
+.table-wrap{overflow-x:auto;border-radius:var(--r);border:1px solid var(--line);box-shadow:var(--sh);}
+table{width:100%;border-collapse:collapse;background:var(--paper);font-size:13px;}
+thead th{background:var(--paper2);padding:9px 14px;text-align:left;font-family:'DM Mono',monospace;font-weight:500;font-size:10px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;border-bottom:1px solid var(--line);white-space:nowrap;}
+tbody td{padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:middle;}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:hover{background:var(--paper2);}
+
+/* FORM */
+.form-group{margin-bottom:14px;}
+.form-label{display:block;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase;margin-bottom:5px;}
+.form-control{width:100%;padding:8px 11px;border:1px solid var(--line2);border-radius:var(--r-sm);font-size:13.5px;font-family:'Noto Sans JP',sans-serif;background:var(--paper);color:var(--ink);transition:all 0.15s;}
+.form-control:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 3px rgba(14,13,11,0.07);}
+.form-control[readonly]{background:var(--paper2);color:var(--muted);}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(14,13,11,0.45);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(2px);}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--paper);border-radius:var(--r);box-shadow:var(--sh-md);width:500px;max-width:96vw;max-height:88vh;overflow-y:auto;border:1px solid var(--line);}
+.modal-header{padding:20px 24px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;}
+.modal-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:0.06em;color:var(--ink);}
+.modal-close{cursor:pointer;color:var(--muted);font-size:16px;background:none;border:none;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
+.modal-close:hover{background:var(--paper2);color:var(--ink);}
+.modal-body{padding:22px 24px;}
+.modal-footer{padding:14px 24px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px;}
+
+/* TABS */
+.tabs{display:flex;border-bottom:1px solid var(--line);margin-bottom:24px;}
+.tab{padding:9px 18px;font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.15s;}
+.tab:hover{color:var(--ink);}
+.tab.active{color:var(--ink);border-bottom-color:var(--accent);}
+
+/* PROGRESS */
+.progress-wrap{background:var(--paper3);border-radius:99px;overflow:hidden;}
+.progress-bar{height:100%;border-radius:99px;transition:width 0.5s cubic-bezier(.4,0,.2,1);}
+
+/* TOGGLE */
+.toggle{position:relative;display:inline-block;width:34px;height:19px;cursor:pointer;}
+.toggle input{opacity:0;width:0;height:0;position:absolute;}
+.toggle-slider{position:absolute;inset:0;background:var(--line2);border-radius:99px;transition:background 0.2s;}
+.toggle-slider::before{content:'';position:absolute;height:13px;width:13px;left:3px;top:3px;background:#fff;border-radius:50%;transition:transform 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.15);}
+.toggle input:checked+.toggle-slider{background:var(--sage);}
+.toggle input:checked+.toggle-slider::before{transform:translateX(15px);}
+
+/* GRID */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.grid-4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px;}
+
+/* FILTER BAR */
+.filter-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:20px;}
+.filter-bar select,.filter-bar input{padding:7px 11px;border:1px solid var(--line2);border-radius:var(--r-sm);font-size:13px;font-family:'Noto Sans JP',sans-serif;background:var(--paper);color:var(--ink);cursor:pointer;}
+.filter-bar select:focus,.filter-bar input:focus{outline:none;border-color:var(--ink);}
+
+.chart-container{position:relative;height:195px;}
+.empty-state{text-align:center;padding:40px;color:var(--dim);font-size:13px;}
+.actions-cell{display:flex;gap:4px;}
+.mt-4{margin-top:16px;}.mb-4{margin-bottom:16px;}
+.w-full{width:100%;}.mono{font-family:'DM Mono',monospace;}
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:0.06em;color:var(--ink);}
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-thumb{background:var(--line2);border-radius:3px;}
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div id="loading-overlay">
+  <div class="loading-logo">SAS<span>U</span>TA</div>
+  <div class="loading-bar-wrap"><div class="loading-bar"></div></div>
+  <div class="loading-text" id="loading-text">データを読み込み中...</div>
+</div>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="brand-top">Creative Management</div>
+    <div class="brand-name">SAS<span>U</span>TA</div>
+    <div class="brand-sub">業務管理システム</div>
+  </div>
+  <div class="sidebar-date" id="sidebarDate">—</div>
+  <div class="sidebar-nav">
+    <div class="nav-section">Navigation</div>
+    <div class="nav-item active" onclick="showPage('dashboard')"><span class="nav-icon">◈</span>ダッシュボード</div>
+    <div class="nav-item" onclick="showPage('sales')"><span class="nav-icon">◇</span>月次売上</div>
+    <div class="nav-item" onclick="showPage('orders')"><span class="nav-icon">◉</span>外注発注</div>
+    <div class="nav-item" onclick="showPage('costs')"><span class="nav-icon">◫</span>原価計算</div>
+  </div>
+  <div class="sidebar-footer">
+    <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.1em;color:rgba(255,255,255,0.15);text-transform:uppercase;">sasuta LLC — 2026</div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="page-title-en" id="pageTitleEn">DASHBOARD</div>
+      <div class="page-title-ja" id="pageTitleJa">ダッシュボード</div>
+    </div>
+    <div class="topbar-right">
+      <div class="sync-indicator">
+        <div class="sync-dot" id="syncDot"></div>
+        <span id="syncText">—</span>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="forceSync()">↻ 更新</button>
+      <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--dim);letter-spacing:0.1em;" id="currentDate"></span>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <div class="grid-4 mb-4">
+        <div class="stat-card"><div class="stat-label">当月売上</div><div class="stat-value" id="dash-sales">¥0</div><div class="stat-sub">目標 ¥5,000,000&nbsp;<span class="badge" id="dash-rate">0%</span></div></div>
+        <div class="stat-card"><div class="stat-label">外注費 / 当月</div><div class="stat-value" id="dash-ext">¥0</div><div class="stat-sub">発注データから集計</div></div>
+        <div class="stat-card"><div class="stat-label">粗利</div><div class="stat-value" id="dash-profit">¥0</div><div class="stat-sub" id="dash-profit-rate">利益率 —</div></div>
+        <div class="stat-card"><div class="stat-label">入金済み</div><div class="stat-value" id="dash-paid">0 / 0</div><div class="stat-sub">件数</div></div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Sales Trend — 12 Months</span></div>
+          <div class="card-body"><div class="chart-container"><canvas id="salesChart"></canvas></div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Fixed Costs</span></div>
+          <div class="card-body">
+            <table><tbody>
+              <tr><td style="color:var(--muted)">家賃</td><td class="mono" style="text-align:right;">¥288,070</td></tr>
+              <tr><td style="color:var(--muted)">税理士</td><td class="mono" style="text-align:right;">¥20,469</td></tr>
+              <tr><td style="color:var(--muted)">役員報酬</td><td class="mono" style="text-align:right;">¥120,000</td></tr>
+              <tr><td style="color:var(--muted)">水道光熱</td><td class="mono" style="text-align:right;">¥50,000</td></tr>
+              <tr style="border-top:1px solid var(--line);">
+                <td style="font-weight:600;padding-top:10px;">合計</td>
+                <td class="mono" style="text-align:right;font-weight:600;padding-top:10px;">¥478,539</td>
+              </tr>
+            </tbody></table>
+          </div>
+        </div>
+      </div>
+      <div class="card mt-4">
+        <div class="card-header"><span class="card-title">Current Month Projects</span><button class="btn btn-ghost btn-sm" onclick="showPage('sales')">売上管理へ →</button></div>
+        <div id="dash-proj-list"><div class="empty-state">売上データを追加すると表示されます</div></div>
+      </div>
+    </div>
+
+    <!-- SALES -->
+    <div class="page" id="page-sales">
+      <div class="filter-bar">
+        <select id="salesMonthFilter" onchange="renderSales()">
+          <option value="26年4月">26年4月</option><option value="26年3月">26年3月</option>
+          <option value="26年2月">26年2月</option><option value="26年1月">26年1月</option>
+          <option value="25年12月">25年12月</option><option value="25年11月">25年11月</option>
+          <option value="25年10月">25年10月</option><option value="25年9月">25年9月</option>
+          <option value="25年8月">25年8月</option><option value="25年7月">25年7月</option>
+          <option value="25年6月">25年6月</option><option value="25年5月">25年5月</option>
+          <option value="25年4月">25年4月</option>
+        </select>
+        <button class="btn btn-primary" onclick="openSalesModal()">＋ 売上追加</button>
+      </div>
+      <div class="grid-4 mb-4">
+        <div class="stat-card"><div class="stat-label">売上合計</div><div class="stat-value" id="s-total">¥0</div></div>
+        <div class="stat-card"><div class="stat-label">目標差分</div><div class="stat-value" id="s-diff">¥0</div></div>
+        <div class="stat-card"><div class="stat-label">利益合計</div><div class="stat-value" id="s-profit">¥0</div></div>
+        <div class="stat-card"><div class="stat-label">入金済み</div><div class="stat-value" id="s-paid">0 / 0</div></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>企業名（案件）</th><th>状況</th><th>振り込み月</th><th>金額</th><th>利益額</th><th>利益率</th><th>担当</th><th>入金</th><th>操作</th></tr></thead>
+          <tbody id="sales-tbody"><tr><td colspan="9" class="empty-state">データがありません</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ORDERS -->
+    <div class="page" id="page-orders">
+      <div class="tabs">
+        <div class="tab active" onclick="switchOTab('form')">発注フォーム</div>
+        <div class="tab" onclick="switchOTab('list')">発注台帳</div>
+        <div class="tab" onclick="switchOTab('dash')">外注ダッシュボード</div>
+      </div>
+      <div id="otab-form">
+        <div class="card" style="max-width:540px;">
+          <div class="card-header"><span class="card-title">New Order</span></div>
+          <div class="card-body">
+            <div class="grid-2">
+              <div class="form-group"><label class="form-label">発注日</label><input type="date" class="form-control" id="o-date"></div>
+              <div class="form-group"><label class="form-label">担当者 *</label>
+                <select class="form-control" id="o-vendor">
+                  <option value="">選択してください</option>
+                  <option>西村 実奈歩</option><option>西村 純一</option><option>村上 エミリ</option>
+                  <option>Kemi</option><option>アンビ</option><option>山本 冬馬</option>
+                  <option>ねね</option><option>藤原</option><option>ISOさん</option><option>メディアスタンド</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">案件名 <span style="color:var(--sage);font-family:'Noto Sans JP',sans-serif;text-transform:none;font-size:10px;letter-spacing:0;">— 売上から自動取得</span></label>
+              <select class="form-control" id="o-project"><option value="">選択してください</option></select>
+            </div>
+            <div class="form-group"><label class="form-label">内容 *</label><input type="text" class="form-control" id="o-task" placeholder="例：撮影補助、編集、3Dモデリング等"></div>
+            <div class="grid-2">
+              <div class="form-group"><label class="form-label">金額（税抜）</label><input type="number" class="form-control" id="o-amount" placeholder="50000"></div>
+              <div class="form-group"><label class="form-label">納期</label><input type="date" class="form-control" id="o-due"></div>
+            </div>
+            <button class="btn btn-accent w-full" style="justify-content:center;padding:10px;" onclick="submitOrder()">✉ 発注登録 ＆ メール送信</button>
+            <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--dim);margin-top:8px;text-align:center;letter-spacing:0.05em;">CLICK TO OPEN MAIL APP — 宛先・件名・本文が自動入力されます</div>
+          </div>
+        </div>
+      </div>
+      <div id="otab-list" style="display:none;">
+        <div class="filter-bar">
+          <select id="o-mf" onchange="renderOrders()"><option value="">全期間</option></select>
+          <select id="o-vf" onchange="renderOrders()">
+            <option value="">全担当者</option>
+            <option>西村 実奈歩</option><option>西村 純一</option><option>村上 エミリ</option>
+            <option>Kemi</option><option>アンビ</option><option>山本 冬馬</option>
+            <option>ねね</option><option>藤原</option><option>ISOさん</option><option>メディアスタンド</option>
+          </select>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>発注ID</th><th>発注日</th><th>案件名</th><th>内容</th><th>金額</th><th>納期</th><th>担当者</th><th>操作</th></tr></thead>
+            <tbody id="orders-tbody"><tr><td colspan="8" class="empty-state">発注データがありません</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+      <div id="otab-dash" style="display:none;">
+        <div class="card"><div class="card-header"><span class="card-title">Monthly Order Summary</span></div><div id="o-dash-content" class="card-body"><div class="empty-state">発注データを登録すると表示されます</div></div></div>
+      </div>
+    </div>
+
+    <!-- COSTS -->
+    <div class="page" id="page-costs">
+      <div class="filter-bar">
+        <select id="costFilter" onchange="renderCosts()"><option value="">案件を選択してください</option></select>
+        <button class="btn btn-primary" onclick="openNewCostModal()">＋ 新規案件作成</button>
+      </div>
+      <div id="cost-placeholder"><div class="empty-state" style="padding:70px;"><div style="font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:0.08em;color:var(--line2);margin-bottom:8px;">COSTS</div><div>売上に登録された案件、または新規作成した案件を選択してください</div></div></div>
+      <div id="cost-main" style="display:none;">
+        <div class="grid-4 mb-4">
+          <div class="stat-card"><div class="stat-label">案件金額</div><div class="stat-value" id="c-amount">¥0</div></div>
+          <div class="stat-card"><div class="stat-label">経費予算</div><div class="stat-value" id="c-budget">¥0</div><div class="stat-sub" id="c-budget-rate">0%</div></div>
+          <div class="stat-card"><div class="stat-label">実際経費</div><div class="stat-value" id="c-actual">¥0</div></div>
+          <div class="stat-card"><div class="stat-label">残予算</div><div class="stat-value" id="c-remaining">¥0</div><div class="stat-sub" id="c-usage"></div></div>
+        </div>
+        <div class="progress-wrap mb-4" style="height:6px;"><div class="progress-bar" id="c-bar" style="width:0%;"></div></div>
+        <div class="section-head">
+          <div class="section-title">費目明細</div>
+          <button class="btn btn-primary" onclick="openCostItemModal()">＋ 費目追加</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>費目</th><th>金額</th><th>メモ</th><th>操作</th></tr></thead>
+            <tbody id="costs-tbody"><tr><td colspan="4" class="empty-state">費目がありません</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="salesModal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title" id="sModalTitle">SALES ENTRY</div><button class="modal-close" onclick="closeSalesModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">企業名（＝案件名）*</label><input type="text" class="form-control" id="s-company" placeholder="例：GU株式会社"></div>
+      <div class="grid-2">
+        <div class="form-group"><label class="form-label">状況</label><select class="form-control" id="s-status"><option>実行中</option><option>確定前</option></select></div>
+        <div class="form-group"><label class="form-label">振り込み月</label><input type="text" class="form-control" id="s-month"></div>
+      </div>
+      <div class="grid-2">
+        <div class="form-group"><label class="form-label">金額（税抜）</label><input type="number" class="form-control" id="s-amount" placeholder="1000000" oninput="calcProfitRate()"></div>
+        <div class="form-group"><label class="form-label">利益額</label><input type="number" class="form-control" id="s-profit" placeholder="300000" oninput="calcProfitRate()"></div>
+      </div>
+      <div class="grid-2">
+        <div class="form-group"><label class="form-label">利益率（自動計算）</label><input type="text" class="form-control" id="s-rate" readonly></div>
+        <div class="form-group"><label class="form-label">担当</label><select class="form-control" id="s-person"><option>じゅん</option><option>みなほ</option></select></div>
+      </div>
+      <div class="form-group"><label class="form-label">今後の展開</label><input type="text" class="form-control" id="s-future"></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeSalesModal()">キャンセル</button><button class="btn btn-primary" onclick="saveSales()">保存</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="costItemModal">
+  <div class="modal" style="width:380px;">
+    <div class="modal-header"><div class="modal-title">COST ITEM</div><button class="modal-close" onclick="closeCostItemModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">費目名 *</label><input type="text" class="form-control" id="ci-name" placeholder="例：撮影スタジオ"></div>
+      <div class="form-group"><label class="form-label">金額（税抜）</label><input type="number" class="form-control" id="ci-amount"></div>
+      <div class="form-group"><label class="form-label">メモ</label><input type="text" class="form-control" id="ci-memo"></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeCostItemModal()">キャンセル</button><button class="btn btn-primary" onclick="saveCostItem()">保存</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="newCostModal">
+  <div class="modal" style="width:400px;">
+    <div class="modal-header"><div class="modal-title">NEW PROJECT</div><button class="modal-close" onclick="closeNewCostModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">案件名 *</label><input type="text" class="form-control" id="nc-name"></div>
+      <div class="form-group"><label class="form-label">案件金額（税抜）</label><input type="number" class="form-control" id="nc-amount"></div>
+      <div class="form-group"><label class="form-label">経費予算率</label><select class="form-control" id="nc-rate"><option value="15">15%</option><option value="20" selected>20%</option><option value="25">25%</option><option value="30">30%</option></select></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeNewCostModal()">キャンセル</button><button class="btn btn-primary" onclick="createNewCostProject()">作成</button></div>
+  </div>
+</div>
+
+<script>
+// ===== JSONBIN CONFIG =====
+const BIN_ID  = '69a6c94bae596e708f5acd85';
+const API_KEY = '$2a$10$AvmWUg6WVIQyDh8CBFaWFOx40lKAW6cLjXrK97I2AmsG80a.4IOtO';
+const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+
+// ===== DATA =====
+let DB = { sales:{}, orders:[], costs:{} };
+let _saving = false;
+let _pendingSave = false;
+
+// SYNC UI
+function setSyncStatus(status, text) {
+  const dot = document.getElementById('syncDot');
+  const txt = document.getElementById('syncText');
+  dot.className = 'sync-dot ' + status;
+  txt.textContent = text;
+}
+
+// LOAD from JSONBin
+async function loadFromCloud() {
+  setSyncStatus('syncing', '読み込み中...');
+  try {
+    const res = await fetch(BIN_URL + '/latest', {
+      headers: { 'X-Master-Key': API_KEY }
+    });
+    if (!res.ok) throw new Error('Load failed: ' + res.status);
+    const json = await res.json();
+    const record = json.record || {};
+    // マイグレーション: 古いデータ形式でも動くように
+    DB.sales  = record.sales  || {};
+    DB.orders = record.orders || [];
+    DB.costs  = record.costs  || {};
+    setSyncStatus('ok', '同期済み');
+  } catch(e) {
+    console.error(e);
+    setSyncStatus('error', '読み込みエラー');
+    // フォールバック: localStorageから
+    try {
+      const local = localStorage.getItem('sasuta_v2');
+      if (local) DB = JSON.parse(local);
+    } catch(e2) {}
+  }
+}
+
+// SAVE to JSONBin
+async function saveToCloud() {
+  if (_saving) { _pendingSave = true; return; }
+  _saving = true;
+  setSyncStatus('syncing', '保存中...');
+  // localStorageにも保存（バックアップ）
+  try { localStorage.setItem('sasuta_v2', JSON.stringify(DB)); } catch(e) {}
+  try {
+    const res = await fetch(BIN_URL, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
+      body: JSON.stringify(DB)
+    });
+    if (!res.ok) throw new Error('Save failed: ' + res.status);
+    setSyncStatus('ok', '保存完了');
+  } catch(e) {
+    console.error(e);
+    setSyncStatus('error', '保存エラー（ローカルに保存済み）');
+  } finally {
+    _saving = false;
+    if (_pendingSave) { _pendingSave = false; await saveToCloud(); }
+  }
+}
+
+async function forceSync() {
+  await loadFromCloud();
+  renderCurrentPage();
+}
+
+// ===== VENDORS =====
+const VENDORS = {
+  '西村 実奈歩':'minahooo.1113.168@gmail.com','西村 純一':'junichi.i.nishimura@gmail.com',
+  '村上 エミリ':'214d0189@gmail.com','Kemi':'kemithx@gmail.com','アンビ':'hiroshi0505andou@gmail.com',
+  '山本 冬馬':'futa.hiradate@gmail.com','ねね':'snjjjns@gmail.com','藤原':'gengen0916@gmail.com',
+  'ISOさん':'jougosan@gmail.com','メディアスタンド':'shimizutatsuroh721@gmail.com'
+};
+const CC = 'info@sasuta.biz';
+
+// ===== HELPERS =====
+const fmt = n => (n||n===0) ? '¥'+Number(n).toLocaleString('ja-JP') : '—';
+const fmtD = d => d ? d.replace(/-/g,'/') : '—';
+const today = () => new Date().toISOString().slice(0,10);
+const save = () => saveToCloud();
+
+function getAllProjects() {
+  const s = new Set();
+  Object.values(DB.sales).forEach(rows => rows.forEach(r => { if(r.company) s.add(r.company); }));
+  return [...s].sort();
+}
+
+function getSalesAmount(name) {
+  const all = Object.values(DB.sales).flat();
+  const found = all.find(r => r.company === name);
+  return found ? found.amount : 0;
+}
+
+// ===== NAV =====
+const PAGE_META = {
+  dashboard:{en:'DASHBOARD',ja:'ダッシュボード'},
+  sales:{en:'MONTHLY SALES',ja:'月次売上管理'},
+  orders:{en:'ORDERS',ja:'外注発注'},
+  costs:{en:'COST TRACKER',ja:'原価計算'}
+};
+let currentPage = 'dashboard';
+
+function showPage(id) {
+  currentPage = id;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>{ if(n.getAttribute('onclick').includes("'"+id+"'")) n.classList.add('active'); });
+  const m=PAGE_META[id];
+  document.getElementById('pageTitleEn').textContent=m.en;
+  document.getElementById('pageTitleJa').textContent=m.ja;
+  if(id==='dashboard') renderDashboard();
+  if(id==='sales') renderSales();
+  if(id==='orders') { syncOrderProjects(); renderOrders(); }
+  if(id==='costs') syncCostProjects();
+}
+
+function renderCurrentPage() {
+  showPage(currentPage);
+}
+
+// ===== DASHBOARD =====
+function renderDashboard() {
+  const month='26年4月';
+  const rows=DB.sales[month]||[];
+  const total=rows.reduce((s,r)=>s+(Number(r.amount)||0),0);
+  const profit=rows.reduce((s,r)=>s+(Number(r.profit)||0),0);
+  const paid=rows.filter(r=>r.paid).length;
+  const rate=total?Math.round(total/5000000*100):0;
+  document.getElementById('dash-sales').textContent=fmt(total);
+  const rb=document.getElementById('dash-rate');
+  rb.textContent=rate+'%';
+  rb.className='badge '+(rate>=100?'badge-sage':rate>=60?'badge-gold':'badge-red');
+  const now=new Date();
+  const ym=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+  const ext=DB.orders.filter(o=>(o.date||'').startsWith(ym)).reduce((s,o)=>s+(Number(o.amount)||0),0);
+  document.getElementById('dash-ext').textContent=fmt(ext);
+  document.getElementById('dash-profit').textContent=fmt(profit);
+  document.getElementById('dash-profit-rate').textContent='利益率 '+(total?Math.round(profit/total*100):0)+'%';
+  document.getElementById('dash-paid').textContent=paid+' / '+rows.length;
+  const months12=['25年5月','25年6月','25年7月','25年8月','25年9月','25年10月','25年11月','25年12月','26年1月','26年2月','26年3月','26年4月'];
+  const data=months12.map(m=>(DB.sales[m]||[]).reduce((s,r)=>s+(Number(r.amount)||0),0));
+  const ctx=document.getElementById('salesChart');
+  if(ctx._chart) ctx._chart.destroy();
+  ctx._chart=new Chart(ctx,{type:'bar',data:{labels:months12.map(m=>m.replace('年','/').replace('月','')),datasets:[{data,backgroundColor:months12.map((_,i)=>i===11?'rgba(200,64,26,0.85)':'rgba(14,13,11,0.08)'),borderColor:months12.map((_,i)=>i===11?'rgba(200,64,26,1)':'rgba(14,13,11,0.15)'),borderWidth:1,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'¥'+(v>=1000000?(v/1000000).toFixed(1)+'M':v.toLocaleString()),font:{size:10,family:'DM Mono'},color:'#8c8579'},grid:{color:'#e4e0d8'},border:{display:false}},x:{ticks:{font:{size:10},color:'#8c8579'},grid:{display:false},border:{display:false}}}}});
+  const list=document.getElementById('dash-proj-list');
+  if(!rows.length){list.innerHTML='<div class="empty-state">売上データを追加すると表示されます</div>';return;}
+  list.innerHTML='<table><thead><tr><th>企業名</th><th>状況</th><th>金額</th><th>利益額</th><th>担当</th><th>入金</th></tr></thead><tbody>'+
+    rows.map(r=>`<tr><td><strong>${r.company}</strong></td><td><span class="badge ${r.status==='実行中'?'badge-teal':'badge-gold'}">${r.status}</span></td><td class="mono">${fmt(r.amount)}</td><td class="mono">${fmt(r.profit)}</td><td><span class="badge badge-gray">${r.person}</span></td><td>${r.paid?'<span class="badge badge-sage">✓ 入金済</span>':'<span class="badge badge-gray">未入金</span>'}</td></tr>`).join('')+
+    '</tbody></table>';
+}
+
+// ===== SALES =====
+let editingSales=null;
+function renderSales(){
+  const month=document.getElementById('salesMonthFilter').value;
+  const rows=DB.sales[month]||[];
+  const total=rows.reduce((s,r)=>s+(Number(r.amount)||0),0);
+  const profit=rows.reduce((s,r)=>s+(Number(r.profit)||0),0);
+  const paid=rows.filter(r=>r.paid).length;
+  document.getElementById('s-total').textContent=fmt(total);
+  document.getElementById('s-diff').textContent=fmt(5000000-total);
+  document.getElementById('s-profit').textContent=fmt(profit);
+  document.getElementById('s-paid').textContent=paid+' / '+rows.length;
+  const tbody=document.getElementById('sales-tbody');
+  if(!rows.length){tbody.innerHTML='<tr><td colspan="9" class="empty-state">データがありません</td></tr>';syncOrderProjects();syncCostProjects();return;}
+  tbody.innerHTML=rows.map((r,i)=>`
+    <tr>
+      <td><strong>${r.company}</strong></td>
+      <td><span class="badge ${r.status==='実行中'?'badge-teal':'badge-gold'}">${r.status}</span></td>
+      <td class="mono" style="font-size:12px;">${r.month||'—'}</td>
+      <td class="mono">${fmt(r.amount)}</td><td class="mono">${fmt(r.profit)}</td>
+      <td class="mono">${r.rate||'—'}</td>
+      <td><span class="badge badge-gray">${r.person}</span></td>
+      <td><label class="toggle"><input type="checkbox" ${r.paid?'checked':''} onchange="togglePaid('${month}',${i})"><span class="toggle-slider"></span></label></td>
+      <td><div class="actions-cell"><button class="btn btn-ghost btn-sm" onclick="editSales('${month}',${i})">編集</button><button class="btn btn-danger btn-sm" onclick="deleteSales('${month}',${i})">削除</button></div></td>
+    </tr>`).join('');
+  syncOrderProjects();syncCostProjects();
+}
+function openSalesModal(){editingSales=null;document.getElementById('sModalTitle').textContent='SALES ENTRY';['s-company','s-amount','s-profit','s-rate','s-future'].forEach(id=>document.getElementById(id).value='');document.getElementById('s-status').value='実行中';document.getElementById('s-month').value=document.getElementById('salesMonthFilter').value;document.getElementById('s-person').value='じゅん';document.getElementById('salesModal').classList.add('open');}
+function editSales(month,idx){const r=DB.sales[month][idx];editingSales={month,idx};document.getElementById('sModalTitle').textContent='EDIT ENTRY';document.getElementById('s-company').value=r.company;document.getElementById('s-status').value=r.status;document.getElementById('s-month').value=r.month;document.getElementById('s-amount').value=r.amount;document.getElementById('s-profit').value=r.profit;document.getElementById('s-rate').value=r.rate;document.getElementById('s-person').value=r.person;document.getElementById('s-future').value=r.future||'';document.getElementById('salesModal').classList.add('open');}
+function closeSalesModal(){document.getElementById('salesModal').classList.remove('open');}
+function calcProfitRate(){const a=Number(document.getElementById('s-amount').value);const p=Number(document.getElementById('s-profit').value);document.getElementById('s-rate').value=(a&&p)?Math.round(p/a*100)+'%':'';}
+function saveSales(){
+  const company=document.getElementById('s-company').value.trim();if(!company){alert('企業名を入力してください');return;}
+  const month=editingSales?editingSales.month:document.getElementById('salesMonthFilter').value;
+  if(!DB.sales[month]) DB.sales[month]=[];
+  const row={company,status:document.getElementById('s-status').value,month:document.getElementById('s-month').value,amount:Number(document.getElementById('s-amount').value)||0,profit:Number(document.getElementById('s-profit').value)||0,rate:document.getElementById('s-rate').value,person:document.getElementById('s-person').value,future:document.getElementById('s-future').value,paid:editingSales?DB.sales[editingSales.month][editingSales.idx].paid:false};
+  if(editingSales) DB.sales[editingSales.month][editingSales.idx]=row;
+  else DB.sales[month].push(row);
+  save();closeSalesModal();renderSales();
+}
+function togglePaid(month,idx){DB.sales[month][idx].paid=!DB.sales[month][idx].paid;save();renderSales();}
+function deleteSales(month,idx){if(!confirm('削除しますか？'))return;DB.sales[month].splice(idx,1);save();renderSales();}
+
+// ===== SYNC =====
+function syncOrderProjects(){const sel=document.getElementById('o-project');const cur=sel.value;const p=getAllProjects();sel.innerHTML='<option value="">選択してください</option>'+p.map(x=>`<option value="${x}">${x}</option>`).join('');if(cur)sel.value=cur;}
+function syncCostProjects(){const sel=document.getElementById('costFilter');const cur=sel.value;const p=getAllProjects();const custom=Object.keys(DB.costs).filter(k=>!p.includes(k));const all=[...p,...custom];sel.innerHTML='<option value="">案件を選択してください</option>'+all.map(x=>`<option value="${x}">${x}</option>`).join('');if(cur)sel.value=cur;}
+
+// ===== ORDERS =====
+function switchOTab(tab){['form','list','dash'].forEach((t,i)=>{document.querySelectorAll('.tab')[i].classList.toggle('active',t===tab);document.getElementById('otab-'+t).style.display=t===tab?'':'none';});if(tab==='list')renderOrders();if(tab==='dash')renderOrderDash();}
+function genOrderId(date){const[y,m]=(date||today()).split('-');const same=DB.orders.filter(o=>o.orderId&&o.orderId.startsWith('ORD-'+y+'-'+m)).length;return 'ORD-'+y+'-'+m+'-'+String(same+1).padStart(4,'0');}
+function submitOrder(){
+  const date=document.getElementById('o-date').value||today();
+  const project=document.getElementById('o-project').value;
+  const task=document.getElementById('o-task').value.trim();
+  const amount=Number(document.getElementById('o-amount').value);
+  const due=document.getElementById('o-due').value;
+  const vendor=document.getElementById('o-vendor').value;
+  if(!vendor||!task){alert('担当者と内容を入力してください');return;}
+  const[y,m]=date.split('-');
+  const orderId=genOrderId(date);
+  DB.orders.push({orderId,date,project,task,amount,due,vendor,status:'Sent',sentAt:new Date().toISOString(),monthKey:y+'/'+m+'/01'});
+  syncOrderMonths();save();
+  const toEmail=VENDORS[vendor]||'';
+  if(toEmail){
+    const subject=`【発注】${project?project+' / ':''}${task}`;
+    const body=[`${vendor} さん`,'','以下の内容でご依頼いたします。','ご確認・ご承諾のほどよろしくお願いいたします。','','━━━━━━━━━━━━━━━━',`発注ID　：${orderId}`,`発注日　：${date}`,`案件名　：${project||'—'}`,`内容　　：${task}`,`金額　　：${amount?'¥'+Number(amount).toLocaleString('ja-JP')+'（税抜）':'—'}`,`納期　　：${due||'—'}`,'━━━━━━━━━━━━━━━━','','ご不明点があればご連絡ください。','','sasuta合同会社'].join('\n');
+    window.location.href=`mailto:${toEmail}?cc=${CC}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  }else{alert('⚠️ このベンダーのメールアドレスが見つかりません');}
+  ['o-project','o-task','o-amount','o-due','o-vendor'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('o-date').value=today();
+}
+function syncOrderMonths(){const months=[...new Set(DB.orders.map(o=>o.monthKey))].sort().reverse();const sel=document.getElementById('o-mf');const cur=sel.value;sel.innerHTML='<option value="">全期間</option>'+months.map(m=>`<option value="${m}">${m.slice(0,7)}</option>`).join('');if(cur)sel.value=cur;}
+function renderOrders(){
+  const mf=document.getElementById('o-mf').value;const vf=document.getElementById('o-vf').value;
+  const rows=DB.orders.filter(o=>(!mf||o.monthKey===mf)&&(!vf||o.vendor===vf)).slice().reverse();
+  const tbody=document.getElementById('orders-tbody');
+  if(!rows.length){tbody.innerHTML='<tr><td colspan="8" class="empty-state">発注データがありません</td></tr>';return;}
+  tbody.innerHTML=rows.map(o=>`<tr><td class="mono" style="font-size:11px;">${o.orderId}</td><td class="mono" style="font-size:12px;">${fmtD(o.date)}</td><td>${o.project||'—'}</td><td>${o.task}</td><td class="mono">${fmt(o.amount)}</td><td class="mono" style="font-size:12px;">${fmtD(o.due)}</td><td>${o.vendor}</td><td><button class="btn btn-danger btn-sm" onclick="deleteOrder(${DB.orders.indexOf(o)})">削除</button></td></tr>`).join('');
+}
+function deleteOrder(idx){if(!confirm('削除しますか？'))return;DB.orders.splice(idx,1);save();renderOrders();}
+function renderOrderDash(){
+  const months=[...new Set(DB.orders.map(o=>o.monthKey))].sort().reverse();
+  const c=document.getElementById('o-dash-content');
+  if(!months.length){c.innerHTML='<div class="empty-state">発注データを登録すると表示されます</div>';return;}
+  c.innerHTML='<div class="table-wrap"><table><thead><tr><th>Month</th><th>外注費合計</th><th>目安（30%）</th><th>利用率</th></tr></thead><tbody>'+
+    months.map(mk=>{const t=DB.orders.filter(o=>o.monthKey===mk).reduce((s,o)=>s+(Number(o.amount)||0),0);const b=5000000*0.3;const r=Math.round(t/b*100);const color=r>100?'var(--accent)':r>80?'var(--gold)':'var(--sage)';return `<tr><td class="mono">${mk.slice(0,7)}</td><td class="mono">${fmt(t)}</td><td class="mono">${fmt(b)}</td><td><div style="display:flex;align-items:center;gap:10px;"><div class="progress-wrap" style="width:120px;height:4px;"><div class="progress-bar" style="width:${Math.min(r,100)}%;background:${color};"></div></div><span class="mono" style="font-size:11px;color:${r>100?'var(--accent)':'var(--muted)'};">${r}%</span></div></td></tr>`;}).join('')+'</tbody></table></div>';
+}
+
+// ===== COSTS =====
+let editingCostItem=null;
+function renderCosts(){
+  const name=document.getElementById('costFilter').value;
+  const main=document.getElementById('cost-main');const ph=document.getElementById('cost-placeholder');
+  if(!name){main.style.display='none';ph.style.display='';return;}
+  ph.style.display='none';main.style.display='';
+  if(!DB.costs[name]) DB.costs[name]={name,amount:getSalesAmount(name),budgetRate:20,items:[]};
+  const p=DB.costs[name];const sa=getSalesAmount(name);if(sa) p.amount=sa;
+  const budget=Math.round(p.amount*p.budgetRate/100);
+  const actual=(p.items||[]).reduce((s,i)=>s+(Number(i.amount)||0),0);
+  const remaining=budget-actual;const rate=budget?Math.round(actual/budget*100):0;
+  document.getElementById('c-amount').textContent=fmt(p.amount);
+  document.getElementById('c-budget').textContent=fmt(budget);
+  document.getElementById('c-budget-rate').textContent=p.budgetRate+'%';
+  document.getElementById('c-actual').textContent=fmt(actual);
+  document.getElementById('c-remaining').textContent=fmt(remaining);
+  document.getElementById('c-usage').innerHTML=`使用率 <span style="color:${rate>100?'var(--accent)':'var(--sage)'};font-weight:600;">${rate}%</span>`;
+  const bar=document.getElementById('c-bar');bar.style.width=Math.min(rate,100)+'%';bar.style.background=rate>100?'var(--accent)':rate>80?'var(--gold)':'var(--sage)';
+  const items=p.items||[];const tbody=document.getElementById('costs-tbody');
+  if(!items.length){tbody.innerHTML='<tr><td colspan="4" class="empty-state">費目がありません</td></tr>';return;}
+  tbody.innerHTML=items.map((item,i)=>`<tr><td><strong>${item.name}</strong></td><td class="mono">${fmt(item.amount)}</td><td style="color:var(--muted);font-size:12px;">${item.memo||'—'}</td><td><div class="actions-cell"><button class="btn btn-ghost btn-sm" onclick="editCostItem(${i})">編集</button><button class="btn btn-danger btn-sm" onclick="deleteCostItem(${i})">削除</button></div></td></tr>`).join('');
+}
+function openCostItemModal(){editingCostItem=null;['ci-name','ci-memo'].forEach(id=>document.getElementById(id).value='');document.getElementById('ci-amount').value='';document.getElementById('costItemModal').classList.add('open');}
+function editCostItem(idx){const name=document.getElementById('costFilter').value;const item=DB.costs[name].items[idx];editingCostItem=idx;document.getElementById('ci-name').value=item.name;document.getElementById('ci-amount').value=item.amount;document.getElementById('ci-memo').value=item.memo||'';document.getElementById('costItemModal').classList.add('open');}
+function closeCostItemModal(){document.getElementById('costItemModal').classList.remove('open');}
+function saveCostItem(){
+  const name=document.getElementById('costFilter').value;if(!name)return;
+  const itemName=document.getElementById('ci-name').value.trim();if(!itemName){alert('費目名を入力してください');return;}
+  if(!DB.costs[name]) DB.costs[name]={name,amount:0,budgetRate:20,items:[]};
+  const item={name:itemName,amount:Number(document.getElementById('ci-amount').value)||0,memo:document.getElementById('ci-memo').value};
+  if(editingCostItem!==null) DB.costs[name].items[editingCostItem]=item;else DB.costs[name].items.push(item);
+  save();closeCostItemModal();renderCosts();
+}
+function deleteCostItem(idx){if(!confirm('削除しますか？'))return;const name=document.getElementById('costFilter').value;DB.costs[name].items.splice(idx,1);save();renderCosts();}
+function openNewCostModal(){document.getElementById('nc-name').value='';document.getElementById('nc-amount').value='';document.getElementById('nc-rate').value='20';document.getElementById('newCostModal').classList.add('open');}
+function closeNewCostModal(){document.getElementById('newCostModal').classList.remove('open');}
+function createNewCostProject(){
+  const name=document.getElementById('nc-name').value.trim();if(!name){alert('案件名を入力してください');return;}
+  DB.costs[name]={name,amount:Number(document.getElementById('nc-amount').value)||0,budgetRate:Number(document.getElementById('nc-rate').value),items:[]};
+  syncCostProjects();document.getElementById('costFilter').value=name;
+  save();closeNewCostModal();renderCosts();
+}
+
+// ===== INIT =====
+async function init(){
+  const now=new Date();
+  const dateStr=now.getFullYear()+'.'+String(now.getMonth()+1).padStart(2,'0')+'.'+String(now.getDate()).padStart(2,'0');
+  document.getElementById('currentDate').textContent=dateStr;
+  document.getElementById('sidebarDate').textContent=dateStr;
+  document.getElementById('o-date').value=today();
+
+  document.getElementById('loading-text').textContent='クラウドからデータを取得中...';
+  await loadFromCloud();
+
+  syncOrderMonths();syncOrderProjects();syncCostProjects();
+  renderDashboard();
+
+  // ローディング非表示
+  const overlay=document.getElementById('loading-overlay');
+  overlay.classList.add('hidden');
+  setTimeout(()=>overlay.style.display='none',400);
+}
+
+init();
+</script>
+</body>
+</html>
