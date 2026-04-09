@@ -113,13 +113,50 @@ tbody tr:hover{background:var(--paper2);}
 /* MODAL */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(14,13,11,0.45);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(2px);}
 .modal-overlay.open{display:flex;}
-.modal{background:var(--paper);border-radius:var(--r);box-shadow:var(--sh-md);width:500px;max-width:96vw;max-height:88vh;overflow-y:auto;border:1px solid var(--line);}
-.modal-header{padding:20px 24px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;}
+
+/* モーダル本体: flexで縦並び、高さを明示的に制限 */
+.modal{
+  background:var(--paper);
+  border-radius:var(--r);
+  box-shadow:var(--sh-md);
+  width:500px;
+  max-width:96vw;
+  max-height:88vh;       /* 高さ上限 */
+  border:1px solid var(--line);
+  display:flex;
+  flex-direction:column; /* header / body / footer を縦並び */
+  overflow:hidden;       /* 子要素がはみ出さないよう */
+}
+.modal-header{
+  padding:20px 24px 16px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-shrink:0;          /* 縮まない */
+}
 .modal-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:0.06em;color:var(--ink);}
 .modal-close{cursor:pointer;color:var(--muted);font-size:16px;background:none;border:none;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
 .modal-close:hover{background:var(--paper2);color:var(--ink);}
-.modal-body{padding:22px 24px;}
-.modal-footer{padding:14px 24px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px;}
+
+/* bodyは残りスペースを使ってスクロール */
+.modal-body{
+  padding:22px 24px;
+  flex:1;                 /* 伸びる */
+  overflow-y:auto;        /* 縦スクロール */
+  -webkit-overflow-scrolling:touch;
+}
+
+/* footerは常に下に固定 */
+.modal-footer{
+  padding:14px 24px;
+  border-top:1px solid var(--line);
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  flex-shrink:0;          /* 縮まない */
+  background:var(--paper);
+}
 
 /* TABS */
 .tabs{display:flex;border-bottom:1px solid var(--line);margin-bottom:24px;}
@@ -142,16 +179,6 @@ tbody tr:hover{background:var(--paper2);}
 /* GRID */
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
 .grid-4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px;}
-
-/* MODAL sticky footer（スマホでボトムナビに隠れない） */
-.modal{display:flex;flex-direction:column;}
-.modal-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
-.modal-footer{flex-shrink:0;position:sticky;bottom:0;background:var(--paper);z-index:1;}
-
-@media(max-width:768px){
-  /* モーダルのfooterがボトムナビ（60px）に隠れないように余白追加 */
-  .modal-footer{padding-bottom:calc(14px + env(safe-area-inset-bottom));}
-}
 
 /* FILTER BAR */
 .filter-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:20px;}
@@ -238,15 +265,19 @@ tbody tr:hover{background:var(--paper2);}
   .modal{
     width:100%!important;
     max-width:100vw!important;
-    max-height:88vh!important;
+    max-height:calc(88vh - 60px)!important; /* ボトムナビ60px分引く */
     border-radius:16px 16px 0 0!important;
     position:fixed!important;
-    bottom:0!important;left:0!important;right:0!important;
+    bottom:60px!important;  /* ボトムナビの上に表示 */
+    left:0!important;right:0!important;
     margin:0!important;
   }
-  .modal-body{padding:16px 16px;}
-  .modal-header{padding:16px 18px 12px;}
-  .modal-footer{padding:12px 16px;}
+  .modal-body{padding:14px 16px;}
+  .modal-header{padding:14px 16px 12px;}
+  .modal-footer{
+    padding:12px 16px!important; /* 上書き */
+    padding-bottom:16px!important;
+  }
   .grid-2.modal-grid{grid-template-columns:1fr!important;}
 
   /* ── フィルターバー ── */
@@ -516,7 +547,55 @@ tbody tr:hover{background:var(--paper2);}
         </div>
       </div>
       <div id="otab-dash" style="display:none;">
-        <div class="card"><div class="card-header"><span class="card-title">Monthly Order Summary</span></div><div id="o-dash-content" class="card-body"><div class="empty-state">発注データを登録すると表示されます</div></div></div>
+        <!-- 月選択 -->
+        <div class="filter-bar mb-4">
+          <select id="odash-month" onchange="renderOrderDash()"><option value="">月を選択</option></select>
+        </div>
+
+        <!-- サマリーカード -->
+        <div class="grid-4 mb-4" id="odash-summary" style="display:none;">
+          <div class="stat-card">
+            <div class="stat-label">発注見込み合計</div>
+            <div class="stat-value" id="odash-forecast">¥0</div>
+            <div class="stat-sub">発注台帳から集計</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">実際の支払い合計</div>
+            <div class="stat-value" id="odash-actual">¥0</div>
+            <div class="stat-sub">振込シートから</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">差額（見込み－実際）</div>
+            <div class="stat-value" id="odash-diff">¥0</div>
+            <div class="stat-sub" id="odash-diff-note">—</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">支払済み件数</div>
+            <div class="stat-value" id="odash-paid-count">0 / 0</div>
+            <div class="stat-sub">件</div>
+          </div>
+        </div>
+
+        <!-- 見込みリスト -->
+        <div class="section-head mt-4"><div class="section-title">発注見込み</div></div>
+        <div class="table-wrap mb-4">
+          <table>
+            <thead><tr><th>発注ID</th><th>案件名</th><th>内容</th><th>担当者</th><th>見込み金額</th><th>納期</th></tr></thead>
+            <tbody id="odash-forecast-tbody"><tr><td colspan="6" class="empty-state">月を選択してください</td></tr></tbody>
+          </table>
+        </div>
+
+        <!-- 実際の支払い入力 -->
+        <div class="section-head">
+          <div class="section-title">実際の支払い（振込シートから）</div>
+          <button class="btn btn-primary btn-sm" onclick="openPaymentImportModal()">＋ 支払い追加 / CSVインポート</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>支払先</th><th>当月支払額</th><th>手数料</th><th>合計</th><th>支払済</th><th>摘要</th><th>操作</th></tr></thead>
+            <tbody id="odash-payment-tbody"><tr><td colspan="7" class="empty-state">月を選択してください</td></tr></tbody>
+          </table>
+        </div>
       </div>
     </div>
 
@@ -654,6 +733,44 @@ tbody tr:hover{background:var(--paper2);}
 </div>
 
 <!-- MODALS -->
+<div class="modal-overlay" id="paymentImportModal">
+  <div class="modal" style="width:560px;">
+    <div class="modal-header">
+      <div class="modal-title">支払い追加 / CSVインポート</div>
+      <button class="modal-close" onclick="document.getElementById('paymentImportModal').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body">
+      <!-- 1件手入力 -->
+      <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--muted);margin-bottom:10px;">1件ずつ手入力</div>
+      <div class="grid-2">
+        <div class="form-group"><label class="form-label">支払先</label><input type="text" class="form-control" id="pay-vendor" placeholder="例：村上 エミリ"></div>
+        <div class="form-group"><label class="form-label">当月支払額</label><input type="number" class="form-control" id="pay-amount" placeholder="50000"></div>
+      </div>
+      <div class="grid-2">
+        <div class="form-group"><label class="form-label">手数料</label><input type="number" class="form-control" id="pay-fee" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">支払済</label>
+          <select class="form-control" id="pay-done"><option value="1">✓ 支払済</option><option value="0">未払い</option></select>
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label">摘要</label><input type="text" class="form-control" id="pay-note" placeholder="案件名・作業内容など"></div>
+      <button class="btn btn-primary" style="width:100%;margin-bottom:20px;" onclick="addPaymentRow()">追加</button>
+
+      <!-- CSVインポート -->
+      <div style="border-top:1px solid var(--line);padding-top:16px;">
+        <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--muted);margin-bottom:8px;">振込シートからCSV貼り付け</div>
+        <div style="font-size:11.5px;color:var(--muted);margin-bottom:8px;">
+          振込シートの「支払先・当月支払額・手数料・支払済・摘要」列をコピーして貼り付けてください（タブ区切り）
+        </div>
+        <textarea class="form-control" id="pay-csv" rows="5" placeholder="支払先&#9;当月支払額&#9;手数料&#9;支払済&#9;摘要&#10;村上 エミリ&#9;50000&#9;220&#9;✓&#9;GU動画編集&#10;Kemi&#9;30000&#9;220&#9;&#9;ライオン撮影"></textarea>
+        <button class="btn btn-accent" style="width:100%;margin-top:8px;" onclick="importPaymentCSV()">CSVを取り込む</button>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="document.getElementById('paymentImportModal').classList.remove('open')">閉じる</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="cfRowModal">
   <div class="modal" style="width:540px;">
     <div class="modal-header"><div class="modal-title" id="cfModalTitle">月データ追加</div><button class="modal-close" onclick="closeCfRowModal()">✕</button></div>
@@ -796,7 +913,7 @@ const API_KEY = '$2a$10$AvmWUg6WVIQyDh8CBFaWFOx40lKAW6cLjXrK97I2AmsG80a.4IOtO';
 const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
 // ===== DATA =====
-let DB = { sales:{}, orders:[], costs:{}, cashflow:{} };
+let DB = { sales:{}, orders:[], costs:{}, cashflow:{}, payments:{} };
 let _saving = false;
 let _pendingSave = false;
 
@@ -823,6 +940,7 @@ async function loadFromCloud() {
     DB.orders = record.orders || [];
     DB.costs  = record.costs  || {};
     DB.cashflow = record.cashflow || {};
+    DB.payments = record.payments || {};
     setSyncStatus('ok', '同期済み');
   } catch(e) {
     console.error(e);
@@ -1104,7 +1222,136 @@ function submitOrder(){
   ['o-project','o-task','o-amount','o-due','o-vendor'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('o-date').value=today();
 }
-function syncOrderMonths(){const months=[...new Set(DB.orders.map(o=>o.monthKey))].sort().reverse();const sel=document.getElementById('o-mf');const cur=sel.value;sel.innerHTML='<option value="">全期間</option>'+months.map(m=>`<option value="${m}">${m.slice(0,7)}</option>`).join('');if(cur)sel.value=cur;}
+function syncOrderMonths(){
+  const months=[...new Set(DB.orders.map(o=>o.monthKey))].sort().reverse();
+  const sel=document.getElementById('o-mf');const cur=sel.value;
+  sel.innerHTML='<option value="">全期間</option>'+months.map(m=>`<option value="${m}">${m.slice(0,7)}</option>`).join('');
+  if(cur)sel.value=cur;
+
+  // 外注ダッシュボードの月セレクタも同期
+  const odashSel = document.getElementById('odash-month');
+  const odashCur = odashSel.value;
+  odashSel.innerHTML='<option value="">月を選択</option>'+months.map(m=>`<option value="${m}">${m.slice(0,7)}</option>`).join('');
+  if(odashCur) odashSel.value = odashCur;
+}
+
+function renderOrderDash(){
+  const mk = document.getElementById('odash-month').value;
+  const summary = document.getElementById('odash-summary');
+  const forecastTbody = document.getElementById('odash-forecast-tbody');
+  const paymentTbody = document.getElementById('odash-payment-tbody');
+
+  if(!mk){
+    summary.style.display='none';
+    forecastTbody.innerHTML='<tr><td colspan="6" class="empty-state">月を選択してください</td></tr>';
+    paymentTbody.innerHTML='<tr><td colspan="7" class="empty-state">月を選択してください</td></tr>';
+    return;
+  }
+
+  // 見込み（発注台帳）
+  const forecasts = DB.orders.filter(o=>o.monthKey===mk);
+  const forecastTotal = forecasts.reduce((s,o)=>s+(Number(o.amount)||0),0);
+
+  // 実際の支払い
+  if(!DB.payments) DB.payments = {};
+  const payments = DB.payments[mk] || [];
+  const paymentTotal = payments.reduce((s,p)=>s+(Number(p.amount)||0)+(Number(p.fee)||0),0);
+  const paidCount = payments.filter(p=>p.done).length;
+
+  summary.style.display='';
+  document.getElementById('odash-forecast').textContent = fmt(forecastTotal);
+  document.getElementById('odash-actual').textContent = fmt(paymentTotal);
+  const diff = forecastTotal - paymentTotal;
+  document.getElementById('odash-diff').textContent = (diff>=0?'+':'')+fmt(diff);
+  document.getElementById('odash-diff').style.color = diff>0?'var(--gold)':diff<0?'var(--accent)':'var(--sage)';
+  document.getElementById('odash-diff-note').textContent = diff>0?'見込みより少ない':diff<0?'見込みを超過':'ぴったり';
+  document.getElementById('odash-paid-count').textContent = paidCount+' / '+payments.length;
+
+  // 見込みテーブル
+  forecastTbody.innerHTML = forecasts.length===0
+    ? '<tr><td colspan="6" class="empty-state">この月の発注データがありません</td></tr>'
+    : forecasts.map(o=>`<tr>
+        <td class="mono" style="font-size:11px;">${o.orderId||'—'}</td>
+        <td>${o.project||'—'}</td>
+        <td>${o.task}</td>
+        <td>${o.vendor}</td>
+        <td class="mono">${fmt(o.amount)}</td>
+        <td class="mono" style="font-size:12px;">${fmtD(o.due)}</td>
+      </tr>`).join('');
+
+  // 実際の支払いテーブル
+  paymentTbody.innerHTML = payments.length===0
+    ? '<tr><td colspan="7" class="empty-state">「＋ 支払い追加」から入力してください</td></tr>'
+    : payments.map((p,i)=>`<tr>
+        <td><strong>${p.vendor}</strong></td>
+        <td class="mono">${fmt(p.amount)}</td>
+        <td class="mono" style="color:var(--muted);">${p.fee?fmt(p.fee):'—'}</td>
+        <td class="mono">${fmt((Number(p.amount)||0)+(Number(p.fee)||0))}</td>
+        <td>${p.done?'<span class="badge badge-sage">✓ 支払済</span>':'<span class="badge badge-yellow">未払い</span>'}</td>
+        <td style="font-size:12px;color:var(--muted);">${p.note||'—'}</td>
+        <td><button class="btn btn-danger btn-sm" onclick="deletePayment('${mk}',${i})">削除</button></td>
+      </tr>`).join('');
+}
+
+function openPaymentImportModal(){
+  ['pay-vendor','pay-amount','pay-fee','pay-note','pay-csv'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('pay-done').value='1';
+  document.getElementById('paymentImportModal').classList.add('open');
+}
+
+function addPaymentRow(){
+  const mk = document.getElementById('odash-month').value;
+  if(!mk){alert('先に月を選択してください');return;}
+  const vendor = document.getElementById('pay-vendor').value.trim();
+  if(!vendor){alert('支払先を入力してください');return;}
+  if(!DB.payments) DB.payments={};
+  if(!DB.payments[mk]) DB.payments[mk]=[];
+  DB.payments[mk].push({
+    vendor,
+    amount: Number(document.getElementById('pay-amount').value)||0,
+    fee:    Number(document.getElementById('pay-fee').value)||0,
+    done:   document.getElementById('pay-done').value==='1',
+    note:   document.getElementById('pay-note').value
+  });
+  save();
+  document.getElementById('paymentImportModal').classList.remove('open');
+  renderOrderDash();
+}
+
+function importPaymentCSV(){
+  const mk = document.getElementById('odash-month').value;
+  if(!mk){alert('先に月を選択してください');return;}
+  const csv = document.getElementById('pay-csv').value.trim();
+  if(!csv){alert('データを貼り付けてください');return;}
+  if(!DB.payments) DB.payments={};
+  if(!DB.payments[mk]) DB.payments[mk]=[];
+  const lines = csv.split('\n').filter(l=>l.trim());
+  let count=0;
+  lines.forEach(line=>{
+    const cols = line.split('\t');
+    if(cols.length < 2) return;
+    const vendor = (cols[0]||'').trim();
+    if(!vendor) return;
+    const amount = Number((cols[1]||'').replace(/[¥,]/g,''))||0;
+    const fee    = Number((cols[2]||'').replace(/[¥,]/g,''))||0;
+    const done   = !!(cols[3]||'').trim();
+    const note   = (cols[4]||'').trim();
+    DB.payments[mk].push({vendor,amount,fee,done,note});
+    count++;
+  });
+  if(count===0){alert('取り込める行がありませんでした');return;}
+  save();
+  document.getElementById('paymentImportModal').classList.remove('open');
+  renderOrderDash();
+  alert(`✅ ${count}件を取り込みました`);
+}
+
+function deletePayment(mk,idx){
+  if(!confirm('削除しますか？'))return;
+  DB.payments[mk].splice(idx,1);
+  save();renderOrderDash();
+}
+
 function renderOrders(){
   const mf=document.getElementById('o-mf').value;const vf=document.getElementById('o-vf').value;
   const rows=DB.orders.filter(o=>(!mf||o.monthKey===mf)&&(!vf||o.vendor===vf)).slice().reverse();
@@ -1396,9 +1643,33 @@ function monthKeyToYM(mk) {
   return y + '-' + String(m[2]).padStart(2,'0');
 }
 
+// 前の月のキーを返す（"26年4月" → "26年3月"）
+function prevMonthKey(mk) {
+  const m = mk.match(/(\d+)年(\d+)月/);
+  if(!m) return '';
+  let y = Number(m[1]), mo = Number(m[2]);
+  mo--; if(mo===0){mo=12;y--;}
+  return y+'年'+mo+'月';
+}
+
+// 資金繰り用: 前月の売上を当月入金として取得
+function getSalesForMonthCF(mk) {
+  const prev = prevMonthKey(mk);
+  const rows = DB.sales[prev] || [];
+  return rows.reduce((s,r) => s + (Number(r.amount)||0), 0);
+}
+
 function getSalesForMonth(mk) {
   const rows = DB.sales[mk] || [];
   return rows.reduce((s,r) => s + (Number(r.amount)||0), 0);
+}
+
+// 実際の支払い合計を取得
+function getPaymentForMonth(mk) {
+  const ym = monthKeyToYM(mk); // "2026-04"
+  const monthKey = ym.slice(0,4)+'/'+ym.slice(5,7)+'/01';
+  const payments = (DB.payments||{})[monthKey] || [];
+  return payments.reduce((s,p)=>s+(Number(p.amount)||0)+(Number(p.fee)||0),0);
 }
 
 function getExtForMonth(mk) {
@@ -1419,15 +1690,21 @@ function renderCashflow() {
   // 最新口座残高
   const rows = ALL_MONTHS.map(mk => {
     const cf = DB.cashflow[mk] || {};
-    const sales  = cf.salesOw  !== undefined ? cf.salesOw  : getSalesForMonth(mk);
-    const ext    = cf.extOw    !== undefined ? cf.extOw    : getExtForMonth(mk);
+    // 売上: 前月分が当月末に入金
+    const salesBase = getSalesForMonthCF(mk);
+    const sales  = cf.salesOw  !== undefined ? cf.salesOw  : salesBase;
+    // 外注費: 実際の支払いがあればそちら優先、なければ発注見込み
+    const paymentActual = getPaymentForMonth(mk);
+    const extBase = paymentActual > 0 ? paymentActual : getExtForMonth(mk);
+    const ext    = cf.extOw    !== undefined ? cf.extOw    : extBase;
     const fixed  = cf.fixed    !== undefined ? cf.fixed    : FIXED_COST;
     const salary = cf.salary   !== undefined ? cf.salary   : 120000;
     const other  = Number(cf.other)  || 0;
     const bonus  = Number(cf.bonus)  || 0;
     const total  = ext + fixed + salary + other + bonus;
     const net    = sales - total;
-    return { mk, sales, ext, fixed, salary, other, bonus, total, net, bal: cf.bal, memo: cf.memo||'' };
+    const isActualExt = paymentActual > 0 && cf.extOw === undefined;
+    return { mk, sales, ext, fixed, salary, other, bonus, total, net, bal: cf.bal, memo: cf.memo||'', isActualExt };
   });
 
   // 最新の残高
@@ -1446,10 +1723,11 @@ function renderCashflow() {
   } else {
     tbody.innerHTML = active.map(r => {
       const netColor = r.net >= 0 ? 'var(--sage)' : 'var(--accent)';
+      const prevMk = prevMonthKey(r.mk);
       return `<tr>
         <td class="mono" style="font-weight:600;">${r.mk}</td>
-        <td class="mono">${fmt(r.sales)}</td>
-        <td class="mono">${fmt(r.ext)}</td>
+        <td class="mono">${fmt(r.sales)}<div style="font-size:9px;color:var(--dim);">${prevMk}分入金</div></td>
+        <td class="mono">${fmt(r.ext)}<div style="font-size:9px;color:${r.isActualExt?'var(--teal)':'var(--dim)'};">${r.isActualExt?'実績':'見込み'}</div></td>
         <td class="mono" style="color:var(--muted);">${fmt(r.fixed)}</td>
         <td class="mono" style="color:var(--muted);">${fmt(r.salary)}</td>
         <td class="mono" style="color:var(--muted);">${fmt(r.other)}</td>
