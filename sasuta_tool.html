@@ -143,6 +143,16 @@ tbody tr:hover{background:var(--paper2);}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
 .grid-4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px;}
 
+/* MODAL sticky footer（スマホでボトムナビに隠れない） */
+.modal{display:flex;flex-direction:column;}
+.modal-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.modal-footer{flex-shrink:0;position:sticky;bottom:0;background:var(--paper);z-index:1;}
+
+@media(max-width:768px){
+  /* モーダルのfooterがボトムナビ（60px）に隠れないように余白追加 */
+  .modal-footer{padding-bottom:calc(14px + env(safe-area-inset-bottom));}
+}
+
 /* FILTER BAR */
 .filter-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:20px;}
 .filter-bar select,.filter-bar input{padding:7px 11px;border:1px solid var(--line2);border-radius:var(--r-sm);font-size:13px;font-family:'Noto Sans JP',sans-serif;background:var(--paper);color:var(--ink);cursor:pointer;}
@@ -161,6 +171,10 @@ tbody tr:hover{background:var(--paper2);}
 /* 固定費リスト */
 .fixed-cost-list{display:flex;flex-direction:column;gap:8px;}
 .fc-row{display:flex;justify-content:space-between;align-items:center;font-size:13px;}
+/* 年月ピッカー */
+.month-picker{display:flex;align-items:center;gap:6px;}
+.month-picker select{padding:7px 10px;border:1px solid var(--line2);border-radius:var(--r-sm);font-size:13px;font-family:'Noto Sans JP',sans-serif;background:var(--paper);color:var(--ink);cursor:pointer;}
+.month-picker select:focus{outline:none;border-color:var(--ink);}
 ::-webkit-scrollbar{width:5px;height:5px;}
 ::-webkit-scrollbar-thumb{background:var(--line2);border-radius:3px;}
 
@@ -209,7 +223,8 @@ tbody tr:hover{background:var(--paper2);}
     -webkit-overflow-scrolling:touch;
     border-radius:var(--r-sm);
   }
-  table{font-size:11px;min-width:0;width:100%;}
+  /* テーブル幅を列数に応じて最低限確保 → table-wrap内でスクロール */
+  table{font-size:11px;width:max-content;min-width:100%;}
   thead th{padding:6px 8px;font-size:9px;white-space:nowrap;}
   tbody td{padding:6px 8px;white-space:nowrap;}
 
@@ -372,15 +387,17 @@ tbody tr:hover{background:var(--paper2);}
     <!-- DASHBOARD -->
     <div class="page active" id="page-dashboard">
       <div class="filter-bar">
-        <select id="dashMonthFilter" onchange="renderDashboard()">
-          <option value="26年4月">26年4月</option><option value="26年3月">26年3月</option>
-          <option value="26年2月">26年2月</option><option value="26年1月">26年1月</option>
-          <option value="25年12月">25年12月</option><option value="25年11月">25年11月</option>
-          <option value="25年10月">25年10月</option><option value="25年9月">25年9月</option>
-          <option value="25年8月">25年8月</option><option value="25年7月">25年7月</option>
-          <option value="25年6月">25年6月</option><option value="25年5月">25年5月</option>
-          <option value="25年4月">25年4月</option>
-        </select>
+        <div class="month-picker">
+          <select id="dashYearFilter" onchange="renderDashboard()"></select>
+          <span style="color:var(--muted);font-size:13px;">年</span>
+          <select id="dashMonthFilter" onchange="renderDashboard()">
+            <option value="1">1月</option><option value="2">2月</option><option value="3">3月</option>
+            <option value="4">4月</option><option value="5">5月</option><option value="6">6月</option>
+            <option value="7">7月</option><option value="8">8月</option><option value="9">9月</option>
+            <option value="10">10月</option><option value="11">11月</option><option value="12">12月</option>
+          </select>
+          <span style="color:var(--muted);font-size:13px;">月</span>
+        </div>
       </div>
       <div class="grid-4 mb-4">
         <div class="stat-card"><div class="stat-label">当月売上</div><div class="stat-value" id="dash-sales">¥0</div><div class="stat-sub">目標 ¥5,000,000&nbsp;<span class="badge" id="dash-rate">0%</span></div></div>
@@ -417,15 +434,17 @@ tbody tr:hover{background:var(--paper2);}
     <!-- SALES -->
     <div class="page" id="page-sales">
       <div class="filter-bar">
-        <select id="salesMonthFilter" onchange="renderSales()">
-          <option value="26年4月">26年4月</option><option value="26年3月">26年3月</option>
-          <option value="26年2月">26年2月</option><option value="26年1月">26年1月</option>
-          <option value="25年12月">25年12月</option><option value="25年11月">25年11月</option>
-          <option value="25年10月">25年10月</option><option value="25年9月">25年9月</option>
-          <option value="25年8月">25年8月</option><option value="25年7月">25年7月</option>
-          <option value="25年6月">25年6月</option><option value="25年5月">25年5月</option>
-          <option value="25年4月">25年4月</option>
-        </select>
+        <div class="month-picker">
+          <select id="salesYearFilter" onchange="renderSales()"></select>
+          <span style="color:var(--muted);font-size:13px;">年</span>
+          <select id="salesMonthFilter" onchange="renderSales()">
+            <option value="1">1月</option><option value="2">2月</option><option value="3">3月</option>
+            <option value="4">4月</option><option value="5">5月</option><option value="6">6月</option>
+            <option value="7">7月</option><option value="8">8月</option><option value="9">9月</option>
+            <option value="10">10月</option><option value="11">11月</option><option value="12">12月</option>
+          </select>
+          <span style="color:var(--muted);font-size:13px;">月</span>
+        </div>
         <button class="btn btn-primary" onclick="openSalesModal()">＋ 売上追加</button>
       </div>
       <div class="grid-4 mb-4">
@@ -703,7 +722,7 @@ tbody tr:hover{background:var(--paper2);}
   <div class="modal">
     <div class="modal-header"><div class="modal-title" id="sModalTitle">SALES ENTRY</div><button class="modal-close" onclick="closeSalesModal()">✕</button></div>
     <div class="modal-body">
-      <div class="form-group"><label class="form-label">企業名（＝案件名）*</label><input type="text" class="form-control" id="s-company" placeholder="例：GU株式会社"></div>
+      <div class="form-group"><label class="form-label">企業名（＝案件名）*</label><input type="text" class="form-control" id="s-company" placeholder="例：サスタ合同会社"></div>
       <div class="grid-2">
         <div class="form-group"><label class="form-label">状況</label><select class="form-control" id="s-status"><option>実行中</option><option>確定前</option></select></div>
         <div class="form-group"><label class="form-label">振り込み月</label><input type="text" class="form-control" id="s-month"></div>
@@ -718,7 +737,7 @@ tbody tr:hover{background:var(--paper2);}
       </div>
       <div class="form-group"><label class="form-label">今後の展開</label><input type="text" class="form-control" id="s-future"></div>
     </div>
-    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeSalesModal()">キャンセル</button><button class="btn btn-primary" onclick="saveSales()">保存</button></div>
+    <div class="modal-footer sticky-footer"><button class="btn btn-secondary" onclick="closeSalesModal()">キャンセル</button><button class="btn btn-primary" onclick="saveSales()">保存</button></div>
   </div>
 </div>
 
@@ -907,7 +926,7 @@ function renderCurrentPage() {
 
 // ===== DASHBOARD =====
 function renderDashboard() {
-  const month=document.getElementById('dashMonthFilter').value||'26年4月';
+  const month = getSelectedMonth('dashYearFilter', 'dashMonthFilter');
   const rows=DB.sales[month]||[];
   const total=rows.reduce((s,r)=>s+(Number(r.amount)||0),0);
   const profit=rows.reduce((s,r)=>s+(Number(r.profit)||0),0);
@@ -936,15 +955,15 @@ function renderDashboard() {
   ctx._chart=new Chart(ctx,{type:'bar',data:{labels:months12.map(m=>m.replace('年','/').replace('月','')),datasets:[{data,backgroundColor:months12.map(m=>m===month?'rgba(200,64,26,0.85)':'rgba(14,13,11,0.08)'),borderColor:months12.map(m=>m===month?'rgba(200,64,26,1)':'rgba(14,13,11,0.15)'),borderWidth:1,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'¥'+(v>=1000000?(v/1000000).toFixed(1)+'M':v.toLocaleString()),font:{size:10,family:'DM Mono'},color:'#8c8579'},grid:{color:'#e4e0d8'},border:{display:false}},x:{ticks:{font:{size:10},color:'#8c8579'},grid:{display:false},border:{display:false}}}}});
   const list=document.getElementById('dash-proj-list');
   if(!rows.length){list.innerHTML='<div class="empty-state">売上データを追加すると表示されます</div>';return;}
-  list.innerHTML='<table><thead><tr><th>企業名</th><th>状況</th><th>金額</th><th>利益額</th><th>担当</th><th>入金</th></tr></thead><tbody>'+
+  list.innerHTML='<div class="table-wrap"><table><thead><tr><th>企業名</th><th>状況</th><th>金額</th><th>利益額</th><th>担当</th><th>入金</th></tr></thead><tbody>'+
     rows.map(r=>`<tr><td><strong>${r.company}</strong></td><td><span class="badge ${r.status==='実行中'?'badge-teal':'badge-gold'}">${r.status}</span></td><td class="mono">${fmt(r.amount)}</td><td class="mono">${fmt(r.profit)}</td><td><span class="badge badge-gray">${r.person}</span></td><td>${r.paid?'<span class="badge badge-sage">✓ 入金済</span>':'<span class="badge badge-gray">未入金</span>'}</td></tr>`).join('')+
-    '</tbody></table>';
+    '</tbody></table></div>';
 }
 
 // ===== SALES =====
 let editingSales=null;
 function renderSales(){
-  const month=document.getElementById('salesMonthFilter').value;
+  const month = getSelectedMonth('salesYearFilter', 'salesMonthFilter');
   const rows=DB.sales[month]||[];
   const total=rows.reduce((s,r)=>s+(Number(r.amount)||0),0);
   const profit=rows.reduce((s,r)=>s+(Number(r.profit)||0),0);
@@ -968,13 +987,13 @@ function renderSales(){
     </tr>`).join('');
   syncOrderProjects();syncCostProjects();
 }
-function openSalesModal(){editingSales=null;document.getElementById('sModalTitle').textContent='SALES ENTRY';['s-company','s-amount','s-profit','s-rate','s-future'].forEach(id=>document.getElementById(id).value='');document.getElementById('s-status').value='実行中';document.getElementById('s-month').value=document.getElementById('salesMonthFilter').value;document.getElementById('s-person').value='じゅん';document.getElementById('salesModal').classList.add('open');}
+function openSalesModal(){editingSales=null;document.getElementById('sModalTitle').textContent='SALES ENTRY';['s-company','s-amount','s-profit','s-rate','s-future'].forEach(id=>document.getElementById(id).value='');document.getElementById('s-status').value='実行中';document.getElementById('s-month').value=getSelectedMonth('salesYearFilter','salesMonthFilter');document.getElementById('s-person').value='じゅん';document.getElementById('salesModal').classList.add('open');}
 function editSales(month,idx){const r=DB.sales[month][idx];editingSales={month,idx};document.getElementById('sModalTitle').textContent='EDIT ENTRY';document.getElementById('s-company').value=r.company;document.getElementById('s-status').value=r.status;document.getElementById('s-month').value=r.month;document.getElementById('s-amount').value=r.amount;document.getElementById('s-profit').value=r.profit;document.getElementById('s-rate').value=r.rate;document.getElementById('s-person').value=r.person;document.getElementById('s-future').value=r.future||'';document.getElementById('salesModal').classList.add('open');}
 function closeSalesModal(){document.getElementById('salesModal').classList.remove('open');}
 function calcProfitRate(){const a=Number(document.getElementById('s-amount').value);const p=Number(document.getElementById('s-profit').value);document.getElementById('s-rate').value=(a&&p)?Math.round(p/a*100)+'%':'';}
 function saveSales(){
   const company=document.getElementById('s-company').value.trim();if(!company){alert('企業名を入力してください');return;}
-  const month=editingSales?editingSales.month:document.getElementById('salesMonthFilter').value;
+  const month=editingSales?editingSales.month:getSelectedMonth('salesYearFilter','salesMonthFilter');
   if(!DB.sales[month]) DB.sales[month]=[];
   const row={company,status:document.getElementById('s-status').value,month:document.getElementById('s-month').value,amount:Number(document.getElementById('s-amount').value)||0,profit:Number(document.getElementById('s-profit').value)||0,rate:document.getElementById('s-rate').value,person:document.getElementById('s-person').value,future:document.getElementById('s-future').value,paid:editingSales?DB.sales[editingSales.month][editingSales.idx].paid:false};
   if(editingSales) DB.sales[editingSales.month][editingSales.idx]=row;
@@ -1307,7 +1326,38 @@ function runSimulation() {
   });
 }
 
-// ===== CASHFLOW =====
+// ===== MONTH PICKER =====
+function buildYearOptions(selId, defaultYear) {
+  const sel = document.getElementById(selId);
+  const cur = sel.value;
+  sel.innerHTML = '';
+  for(let y = 2024; y <= 2030; y++) {
+    const opt = document.createElement('option');
+    opt.value = y;
+    opt.textContent = y + '年';
+    if(y === defaultYear) opt.selected = true;
+    sel.appendChild(opt);
+  }
+  if(cur) sel.value = cur;
+}
+
+// "26年4月" 形式の文字列を返す
+function getSelectedMonth(yearId, monthId) {
+  const y = Number(document.getElementById(yearId).value);
+  const m = Number(document.getElementById(monthId).value);
+  return String(y - 2000) + '年' + m + '月';
+}
+
+// 現在の年月を各ピッカーにセット
+function initMonthPickers() {
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = now.getMonth() + 1;
+  buildYearOptions('dashYearFilter', y);
+  buildYearOptions('salesYearFilter', y);
+  document.getElementById('dashMonthFilter').value = m;
+  document.getElementById('salesMonthFilter').value = m;
+}
 const FIXED_COST = 478539;
 const ALL_MONTHS = ['25年4月','25年5月','25年6月','25年7月','25年8月','25年9月','25年10月','25年11月','25年12月','26年1月','26年2月','26年3月','26年4月','26年5月','26年6月','26年7月'];
 
@@ -1474,6 +1524,7 @@ async function init(){
   await loadFromCloud();
 
   syncOrderMonths();syncOrderProjects();syncCostProjects();
+  initMonthPickers();
   renderDashboard();
 
   // ローディング非表示
