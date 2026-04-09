@@ -182,6 +182,7 @@ tbody tr:hover{background:var(--paper2);}
     <div class="nav-item" onclick="showPage('sales')"><span class="nav-icon">◇</span>月次売上</div>
     <div class="nav-item" onclick="showPage('orders')"><span class="nav-icon">◉</span>外注発注</div>
     <div class="nav-item" onclick="showPage('costs')"><span class="nav-icon">◫</span>原価計算</div>
+    <div class="nav-item" onclick="showPage('cashflow')"><span class="nav-icon">◐</span>資金繰り</div>
   </div>
   <div class="sidebar-footer">
     <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.1em;color:rgba(255,255,255,0.15);text-transform:uppercase;">sasuta LLC — 2026</div>
@@ -368,10 +369,144 @@ tbody tr:hover{background:var(--paper2);}
       </div>
     </div>
 
+    <!-- ===== CASHFLOW ===== -->
+    <div class="page" id="page-cashflow">
+      <div class="grid-4 mb-4">
+        <div class="stat-card"><div class="stat-label">年間売上予想</div><div class="stat-value" id="cf-annual-sales">¥0</div><div class="stat-sub">全月合計（ツールデータ）</div></div>
+        <div class="stat-card"><div class="stat-label">年間外注費</div><div class="stat-value" id="cf-annual-ext">¥0</div><div class="stat-sub">全発注合計</div></div>
+        <div class="stat-card"><div class="stat-label">年間固定費</div><div class="stat-value">¥5,742,468</div><div class="stat-sub">¥478,539 × 12ヶ月</div></div>
+        <div class="stat-card"><div class="stat-label">現在口座残高</div><div class="stat-value" id="cf-balance">—</div><div class="stat-sub" id="cf-balance-date">手入力で更新</div></div>
+      </div>
+      <div class="grid-2 mb-4">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Monthly Cash Flow — 月次純増減</span></div>
+          <div class="card-body"><div class="chart-container"><canvas id="cfChart"></canvas></div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Balance — 口座残高推移</span></div>
+          <div class="card-body"><div class="chart-container"><canvas id="balanceChart"></canvas></div></div>
+        </div>
+      </div>
+      <div class="section-head">
+        <div class="section-title">月別収支明細</div>
+        <button class="btn btn-primary" onclick="openCfRowModal()">＋ 月データ追加・編集</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>年月</th><th>売上</th><th>外注費</th><th>固定費</th><th>役員給与</th><th>その他経費</th><th>経費合計</th><th>月次純増減</th><th>口座残高</th><th>メモ</th><th>操作</th></tr></thead>
+          <tbody id="cf-tbody"><tr><td colspan="11" class="empty-state">「月データ追加・編集」から登録してください</td></tr></tbody>
+        </table>
+      </div>
+      <div style="margin-top:16px;padding:14px 18px;background:var(--teal-pale);border-radius:var(--r);border:1px solid #c0dde0;">
+        <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.1em;color:var(--teal);margin-bottom:4px;">AUTO SYNC</div>
+        <div style="font-size:12px;color:var(--teal);">売上・外注費はツール内データを自動集計。口座残高・その他経費・役員給与は月データから手入力できます。</div>
+      </div>
+
+      <!-- 予測シミュレーター -->
+      <div style="margin-top:32px;">
+        <div class="section-head">
+          <div class="section-title">⚡ 資金予測シミュレーター</div>
+          <button class="btn btn-ghost btn-sm" onclick="runSimulation()">↻ 再計算</button>
+        </div>
+
+        <!-- シミュレーター入力 -->
+        <div class="card mb-4">
+          <div class="card-header"><span class="card-title">Simulation Settings — 予測パラメーター</span></div>
+          <div class="card-body">
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px;">
+              <div class="form-group">
+                <label class="form-label">現在口座残高 *</label>
+                <input type="number" class="form-control" id="sim-start-bal" placeholder="例：6500000" oninput="runSimulation()">
+              </div>
+              <div class="form-group">
+                <label class="form-label">月間売上予想（平均）</label>
+                <input type="number" class="form-control" id="sim-monthly-sales" placeholder="例：3500000" oninput="runSimulation()">
+              </div>
+              <div class="form-group">
+                <label class="form-label">月間外注費予想</label>
+                <input type="number" class="form-control" id="sim-monthly-ext" placeholder="例：700000" oninput="runSimulation()">
+              </div>
+              <div class="form-group">
+                <label class="form-label">月間その他経費</label>
+                <input type="number" class="form-control" id="sim-monthly-other" placeholder="例：500000" oninput="runSimulation()">
+              </div>
+            </div>
+            <div style="margin-top:8px;">
+              <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.1em;color:var(--muted);margin-bottom:10px;">SCHEDULED EVENTS — スケジュール済み特別支出</div>
+              <div id="sim-events-list" style="display:flex;flex-direction:column;gap:8px;"></div>
+              <button class="btn btn-ghost btn-sm" style="margin-top:8px;" onclick="addSimEvent()">＋ 特別支出を追加</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 判定バナー -->
+        <div id="sim-verdict" style="display:none;margin-bottom:16px;"></div>
+
+        <!-- 予測グラフ -->
+        <div class="card mb-4">
+          <div class="card-header"><span class="card-title">Forecast Chart — 6ヶ月先までの残高予測</span></div>
+          <div class="card-body"><div style="position:relative;height:240px;"><canvas id="simChart"></canvas></div></div>
+        </div>
+
+        <!-- 予測テーブル -->
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>月</th>
+                <th>期首残高</th>
+                <th>売上（予測）</th>
+                <th>固定費</th>
+                <th>外注費</th>
+                <th>その他</th>
+                <th>特別支出</th>
+                <th>月次増減</th>
+                <th>期末残高</th>
+                <th>判定</th>
+              </tr>
+            </thead>
+            <tbody id="sim-tbody"><tr><td colspan="10" class="empty-state">上の「現在口座残高」を入力すると予測が表示されます</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
 <!-- MODALS -->
+<div class="modal-overlay" id="cfRowModal">
+  <div class="modal" style="width:540px;">
+    <div class="modal-header"><div class="modal-title" id="cfModalTitle">月データ追加</div><button class="modal-close" onclick="closeCfRowModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="grid-2">
+        <div class="form-group"><label class="form-label">年月 *</label><input type="month" class="form-control" id="cf-month"></div>
+        <div class="form-group"><label class="form-label">口座残高</label><input type="number" class="form-control" id="cf-bal" placeholder="例：8500000"></div>
+      </div>
+      <div style="padding:10px 12px;background:var(--teal-pale);border-radius:var(--r-sm);margin-bottom:14px;font-size:12px;color:var(--teal);">
+        💡 売上・外注費はツールのデータから自動取得されます。以下は手動で上書き入力できます。
+      </div>
+      <div class="grid-2">
+        <div class="form-group"><label class="form-label">売上（手動上書き）</label><input type="number" class="form-control" id="cf-sales-ow" placeholder="空白=自動取得"></div>
+        <div class="form-group"><label class="form-label">外注費（手動上書き）</label><input type="number" class="form-control" id="cf-ext-ow" placeholder="空白=自動取得"></div>
+      </div>
+      <div class="grid-2">
+        <div class="form-group"><label class="form-label">固定費</label><input type="number" class="form-control" id="cf-fixed" placeholder="478539" value="478539"></div>
+        <div class="form-group"><label class="form-label">役員給与</label><input type="number" class="form-control" id="cf-salary" placeholder="120000" value="120000"></div>
+      </div>
+      <div class="grid-2">
+        <div class="form-group"><label class="form-label">その他経費</label><input type="number" class="form-control" id="cf-other" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">賞与・特別支出</label><input type="number" class="form-control" id="cf-bonus" placeholder="0"></div>
+      </div>
+      <div class="form-group"><label class="form-label">メモ</label><input type="text" class="form-control" id="cf-memo" placeholder="例：賞与支給、借入返済等"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeCfRowModal()">キャンセル</button>
+      <button class="btn btn-primary" onclick="saveCfRow()">保存</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="orderModal">
   <div class="modal">
     <div class="modal-header"><div class="modal-title" id="oModalTitle">発注追加</div><button class="modal-close" onclick="closeOrderModal()">✕</button></div>
@@ -458,7 +593,7 @@ const API_KEY = '$2a$10$AvmWUg6WVIQyDh8CBFaWFOx40lKAW6cLjXrK97I2AmsG80a.4IOtO';
 const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
 // ===== DATA =====
-let DB = { sales:{}, orders:[], costs:{} };
+let DB = { sales:{}, orders:[], costs:{}, cashflow:{} };
 let _saving = false;
 let _pendingSave = false;
 
@@ -484,6 +619,7 @@ async function loadFromCloud() {
     DB.sales  = record.sales  || {};
     DB.orders = record.orders || [];
     DB.costs  = record.costs  || {};
+    DB.cashflow = record.cashflow || {};
     setSyncStatus('ok', '同期済み');
   } catch(e) {
     console.error(e);
@@ -557,7 +693,8 @@ const PAGE_META = {
   dashboard:{en:'DASHBOARD',ja:'ダッシュボード'},
   sales:{en:'MONTHLY SALES',ja:'月次売上管理'},
   orders:{en:'ORDERS',ja:'外注発注'},
-  costs:{en:'COST TRACKER',ja:'原価計算'}
+  costs:{en:'COST TRACKER',ja:'原価計算'},
+  cashflow:{en:'CASH FLOW',ja:'資金繰り'}
 };
 let currentPage = 'dashboard';
 
@@ -574,6 +711,7 @@ function showPage(id) {
   if(id==='sales') renderSales();
   if(id==='orders') { syncOrderProjects(); renderOrders(); }
   if(id==='costs') syncCostProjects();
+  if(id==='cashflow') renderCashflow();
 }
 
 function renderCurrentPage() {
@@ -792,6 +930,349 @@ function createNewCostProject(){
   DB.costs[name]={name,amount:Number(document.getElementById('nc-amount').value)||0,budgetRate:Number(document.getElementById('nc-rate').value),items:[]};
   syncCostProjects();document.getElementById('costFilter').value=name;
   save();closeNewCostModal();renderCosts();
+}
+
+// ===== SIMULATION =====
+let simEvents = [
+  { month: '2026-06', label: 'ボーナス支給', amount: 13000000 }
+];
+
+function addSimEvent() {
+  simEvents.push({ month: '', label: '', amount: 0 });
+  renderSimEvents();
+}
+
+function removeSimEvent(i) {
+  simEvents.splice(i, 1);
+  renderSimEvents();
+  runSimulation();
+}
+
+function renderSimEvents() {
+  const el = document.getElementById('sim-events-list');
+  el.innerHTML = simEvents.map((ev, i) => `
+    <div style="display:grid;grid-template-columns:150px 1fr 160px 36px;gap:8px;align-items:center;">
+      <input type="month" class="form-control" value="${ev.month}" placeholder="年月" oninput="simEvents[${i}].month=this.value;runSimulation()">
+      <input type="text" class="form-control" value="${ev.label}" placeholder="内容（例：ボーナス支給）" oninput="simEvents[${i}].label=this.value">
+      <input type="number" class="form-control" value="${ev.amount||''}" placeholder="金額（支出は正の数）" oninput="simEvents[${i}].amount=Number(this.value);runSimulation()">
+      <button class="btn btn-danger btn-sm" onclick="removeSimEvent(${i})" style="padding:6px 8px;">✕</button>
+    </div>`).join('');
+}
+
+function runSimulation() {
+  const startBal = Number(document.getElementById('sim-start-bal').value) || 0;
+  if(!startBal) {
+    document.getElementById('sim-verdict').style.display = 'none';
+    document.getElementById('sim-tbody').innerHTML = '<tr><td colspan="10" class="empty-state">現在口座残高を入力すると予測が表示されます</td></tr>';
+    return;
+  }
+
+  const monthlySales = Number(document.getElementById('sim-monthly-sales').value) || 0;
+  const monthlyExt   = Number(document.getElementById('sim-monthly-ext').value)   || 0;
+  const monthlyOther = Number(document.getElementById('sim-monthly-other').value) || 0;
+  const FIXED = FIXED_COST; // 478539
+  const SALARY = 120000;
+
+  // 今月から6ヶ月分を予測
+  const now = new Date();
+  const months = [];
+  for(let i = 0; i < 7; i++) {
+    const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
+    const ym = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
+    const label = String(d.getFullYear()-2000) + '年' + (d.getMonth()+1) + '月';
+    months.push({ ym, label });
+  }
+
+  let balance = startBal;
+  const rows = [];
+  let dangerMonth = null;
+
+  months.forEach(({ ym, label }) => {
+    const openBal = balance;
+
+    // ツールデータから売上・外注費を取得（あれば優先）
+    const toolSales = getSalesForMonth(label);
+    const toolExt   = getExtForMonth(label);
+    const sales  = toolSales > 0 ? toolSales : monthlySales;
+    const ext    = toolExt   > 0 ? toolExt   : monthlyExt;
+    const other  = monthlyOther;
+
+    // その月のイベント支出
+    const events = simEvents.filter(ev => ev.month === ym && ev.amount > 0);
+    const eventTotal = events.reduce((s, ev) => s + ev.amount, 0);
+    const eventLabel = events.map(ev => ev.label).join('、');
+
+    const totalOut = FIXED + SALARY + ext + other + eventTotal;
+    const net = sales - totalOut;
+    balance = openBal + net;
+
+    rows.push({ ym, label, openBal, sales, fixed: FIXED, salary: SALARY, ext, other, eventTotal, eventLabel, net, closeBal: balance });
+
+    if(balance < 0 && dangerMonth === null) dangerMonth = label;
+  });
+
+  // 判定バナー
+  const verdict = document.getElementById('sim-verdict');
+  verdict.style.display = '';
+  const juneRow = rows.find(r => r.ym.endsWith('-06'));
+  const juneOk = juneRow ? juneRow.closeBal > 0 : true;
+  const overallOk = dangerMonth === null;
+
+  if(overallOk) {
+    verdict.innerHTML = `<div style="padding:16px 20px;background:var(--sage-pale);border:1px solid #a8c8b0;border-radius:var(--r);display:flex;align-items:center;gap:12px;">
+      <div style="font-size:24px;">✅</div>
+      <div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:0.05em;color:var(--sage);">6ヶ月間、資金は安全です</div>
+        <div style="font-size:12px;color:var(--sage);margin-top:2px;">このまま進めば赤字になる月はありません。${juneRow?'6月末残高：'+fmt(juneRow.closeBal):''}</div>
+      </div>
+    </div>`;
+  } else if(!juneOk && juneRow) {
+    verdict.innerHTML = `<div style="padding:16px 20px;background:var(--accent-pale);border:1px solid #f0b0a0;border-radius:var(--r);display:flex;align-items:center;gap:12px;">
+      <div style="font-size:24px;">🚨</div>
+      <div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:0.05em;color:var(--accent);">6月の資金が不足します</div>
+        <div style="font-size:12px;color:var(--accent);margin-top:2px;">6月末の予測残高：${fmt(juneRow.closeBal)}（${fmt(Math.abs(juneRow.closeBal))} 不足）。売上増加または支出削減を検討してください。</div>
+      </div>
+    </div>`;
+  } else {
+    verdict.innerHTML = `<div style="padding:16px 20px;background:var(--yellow-pale);border:1px solid #d4b870;border-radius:var(--r);display:flex;align-items:center;gap:12px;">
+      <div style="font-size:24px;">⚠️</div>
+      <div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:0.05em;color:var(--gold);">${dangerMonth} に資金が底をつく可能性があります</div>
+        <div style="font-size:12px;color:var(--gold);margin-top:2px;">6月自体は問題ありません（6月末残高：${juneRow?fmt(juneRow.closeBal):'—'}）が、${dangerMonth}に注意が必要です。</div>
+      </div>
+    </div>`;
+  }
+
+  // テーブル
+  const tbody = document.getElementById('sim-tbody');
+  tbody.innerHTML = rows.map(r => {
+    const danger = r.closeBal < 0;
+    const warn = r.closeBal < 1000000 && r.closeBal >= 0;
+    const isJune = r.ym.endsWith('-06');
+    const rowStyle = isJune ? 'background:var(--gold-pale);' : danger ? 'background:var(--accent-pale);' : '';
+    const balColor = danger ? 'color:var(--accent);font-weight:700;' : warn ? 'color:var(--gold);font-weight:600;' : 'color:var(--sage);font-weight:600;';
+    const verdict2 = danger ? '<span class="badge badge-red">🚨 赤字</span>' : warn ? '<span class="badge badge-gold">⚠️ 注意</span>' : isJune ? '<span class="badge badge-gold">🎯 6月</span>' : '<span class="badge badge-sage">✓ 安全</span>';
+    return `<tr style="${rowStyle}">
+      <td style="font-weight:600;${isJune?'color:var(--gold);':''}">${r.label}${isJune?' 🎯':''}</td>
+      <td class="mono">${fmt(r.openBal)}</td>
+      <td class="mono" style="color:var(--teal);">${fmt(r.sales)}</td>
+      <td class="mono" style="color:var(--muted);font-size:12px;">${fmt(r.fixed+r.salary)}</td>
+      <td class="mono" style="color:var(--muted);font-size:12px;">${fmt(r.ext)}</td>
+      <td class="mono" style="color:var(--muted);font-size:12px;">${fmt(r.other)}</td>
+      <td class="mono" style="color:var(--accent);font-size:12px;">${r.eventTotal>0?'▼'+fmt(r.eventTotal)+(r.eventLabel?' ('+r.eventLabel+')':''):'—'}</td>
+      <td class="mono" style="color:${r.net>=0?'var(--sage)':'var(--accent)'};">${r.net>=0?'+':''}${fmt(r.net)}</td>
+      <td class="mono" style="${balColor}">${fmt(r.closeBal)}</td>
+      <td>${verdict2}</td>
+    </tr>`;
+  }).join('');
+
+  // グラフ
+  const labels2 = rows.map(r => r.label.replace('年','/').replace('月',''));
+  const balData2 = rows.map(r => r.closeBal);
+  const zeroLine = rows.map(() => 0);
+  const ctx = document.getElementById('simChart');
+  if(ctx._chart) ctx._chart.destroy();
+  ctx._chart = new Chart(ctx, {
+    type:'line',
+    data:{
+      labels: labels2,
+      datasets:[
+        {
+          label:'予測残高',
+          data: balData2,
+          borderColor:'rgba(26,102,112,1)',
+          backgroundColor:'rgba(26,102,112,0.08)',
+          fill:true, tension:0.3, borderWidth:2.5,
+          pointRadius: rows.map(r => r.ym.endsWith('-06') ? 8 : 4),
+          pointBackgroundColor: rows.map(r => r.closeBal < 0 ? 'rgba(200,64,26,1)' : r.ym.endsWith('-06') ? 'rgba(160,120,48,1)' : 'rgba(26,102,112,1)'),
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2,
+        },
+        {
+          label:'0ライン',
+          data: zeroLine,
+          borderColor:'rgba(200,64,26,0.4)',
+          borderWidth:1.5,
+          borderDash:[4,4],
+          fill:false, pointRadius:0, tension:0
+        }
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          callbacks:{
+            label: ctx2 => ctx2.datasetIndex === 0 ? '残高: ¥' + Number(ctx2.raw).toLocaleString('ja-JP') : ''
+          }
+        }
+      },
+      scales:{
+        y:{
+          ticks:{callback:v=>Math.round(v/10000)+'万', font:{size:10,family:'DM Mono'}, color:'#8c8579'},
+          grid:{color:'#e4e0d8'}, border:{display:false}
+        },
+        x:{ticks:{font:{size:10},color:'#8c8579'},grid:{display:false},border:{display:false}}
+      }
+    }
+  });
+}
+
+// ===== CASHFLOW =====
+const FIXED_COST = 478539;
+const ALL_MONTHS = ['25年4月','25年5月','25年6月','25年7月','25年8月','25年9月','25年10月','25年11月','25年12月','26年1月','26年2月','26年3月','26年4月','26年5月','26年6月','26年7月'];
+
+function monthKeyToYM(mk) {
+  // "26年4月" → "2026-04"
+  const m = mk.match(/(\d+)年(\d+)月/);
+  if(!m) return '';
+  const y = Number(m[1]) < 100 ? 2000 + Number(m[1]) : Number(m[1]);
+  return y + '-' + String(m[2]).padStart(2,'0');
+}
+
+function getSalesForMonth(mk) {
+  const rows = DB.sales[mk] || [];
+  return rows.reduce((s,r) => s + (Number(r.amount)||0), 0);
+}
+
+function getExtForMonth(mk) {
+  const ym = monthKeyToYM(mk);
+  return DB.orders.filter(o => (o.date||'').startsWith(ym)).reduce((s,o) => s+(Number(o.amount)||0), 0);
+}
+
+function renderCashflow() {
+  if(!DB.cashflow) DB.cashflow = {};
+  renderSimEvents();
+
+  // 年間集計
+  const annualSales = ALL_MONTHS.reduce((s,m) => s + getSalesForMonth(m), 0);
+  const annualExt   = ALL_MONTHS.reduce((s,m) => s + getExtForMonth(m), 0);
+  document.getElementById('cf-annual-sales').textContent = fmt(annualSales);
+  document.getElementById('cf-annual-ext').textContent   = fmt(annualExt);
+
+  // 最新口座残高
+  const rows = ALL_MONTHS.map(mk => {
+    const cf = DB.cashflow[mk] || {};
+    const sales  = cf.salesOw  !== undefined ? cf.salesOw  : getSalesForMonth(mk);
+    const ext    = cf.extOw    !== undefined ? cf.extOw    : getExtForMonth(mk);
+    const fixed  = cf.fixed    !== undefined ? cf.fixed    : FIXED_COST;
+    const salary = cf.salary   !== undefined ? cf.salary   : 120000;
+    const other  = Number(cf.other)  || 0;
+    const bonus  = Number(cf.bonus)  || 0;
+    const total  = ext + fixed + salary + other + bonus;
+    const net    = sales - total;
+    return { mk, sales, ext, fixed, salary, other, bonus, total, net, bal: cf.bal, memo: cf.memo||'' };
+  });
+
+  // 最新の残高
+  const withBal = rows.filter(r => r.bal !== undefined && r.bal !== null && r.bal !== '');
+  if(withBal.length > 0) {
+    const latest = withBal[withBal.length - 1];
+    document.getElementById('cf-balance').textContent = fmt(latest.bal);
+    document.getElementById('cf-balance-date').textContent = latest.mk + ' 時点';
+  }
+
+  // テーブル描画
+  const tbody = document.getElementById('cf-tbody');
+  const active = rows.filter(r => r.sales > 0 || Object.keys(DB.cashflow[r.mk]||{}).length > 0);
+  if(!active.length) {
+    tbody.innerHTML = '<tr><td colspan="11" class="empty-state">「月データ追加・編集」から登録してください</td></tr>';
+  } else {
+    tbody.innerHTML = active.map(r => {
+      const netColor = r.net >= 0 ? 'var(--sage)' : 'var(--accent)';
+      return `<tr>
+        <td class="mono" style="font-weight:600;">${r.mk}</td>
+        <td class="mono">${fmt(r.sales)}</td>
+        <td class="mono">${fmt(r.ext)}</td>
+        <td class="mono" style="color:var(--muted);">${fmt(r.fixed)}</td>
+        <td class="mono" style="color:var(--muted);">${fmt(r.salary)}</td>
+        <td class="mono" style="color:var(--muted);">${fmt(r.other)}</td>
+        <td class="mono">${fmt(r.total)}</td>
+        <td class="mono" style="color:${netColor};font-weight:600;">${r.net>=0?'+':''}${fmt(r.net)}</td>
+        <td class="mono" style="color:var(--teal);font-weight:600;">${r.bal!==undefined&&r.bal!==''?fmt(r.bal):'—'}</td>
+        <td style="font-size:12px;color:var(--muted);">${r.memo}</td>
+        <td><button class="btn btn-ghost btn-sm" onclick="openCfRowModal('${r.mk}')">編集</button></td>
+      </tr>`;
+    }).join('');
+  }
+
+  // チャート: 月次純増減
+  const chartRows = active.length > 0 ? active : rows.slice(-6);
+  const labels = chartRows.map(r => r.mk.replace('年','/').replace('月',''));
+  const netData = chartRows.map(r => r.net);
+  const balData = chartRows.map(r => r.bal || null);
+
+  const ctx1 = document.getElementById('cfChart');
+  if(ctx1._chart) ctx1._chart.destroy();
+  ctx1._chart = new Chart(ctx1, {
+    type:'bar',
+    data:{ labels, datasets:[{ data:netData,
+      backgroundColor: netData.map(v => v>=0 ? 'rgba(74,102,80,0.7)' : 'rgba(200,64,26,0.7)'),
+      borderColor: netData.map(v => v>=0 ? 'rgba(74,102,80,1)' : 'rgba(200,64,26,1)'),
+      borderWidth:1, borderRadius:3
+    }]},
+    options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
+      scales:{
+        y:{beginAtZero:false, ticks:{callback:v=>(v>=0?'+':'')+Math.round(v/10000)+'万', font:{size:10,family:'DM Mono'}, color:'#8c8579'}, grid:{color:'#e4e0d8'}, border:{display:false}},
+        x:{ticks:{font:{size:10},color:'#8c8579'}, grid:{display:false}, border:{display:false}}
+      }
+    }
+  });
+
+  // チャート: 残高推移
+  const ctx2 = document.getElementById('balanceChart');
+  if(ctx2._chart) ctx2._chart.destroy();
+  ctx2._chart = new Chart(ctx2, {
+    type:'line',
+    data:{ labels, datasets:[{ data:balData, borderColor:'rgba(26,102,112,0.9)', backgroundColor:'rgba(26,102,112,0.08)', fill:true, tension:0.3, borderWidth:2, pointRadius:4, pointBackgroundColor:'rgba(26,102,112,1)' }]},
+    options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
+      scales:{
+        y:{beginAtZero:false, ticks:{callback:v=>Math.round(v/10000)+'万', font:{size:10,family:'DM Mono'}, color:'#8c8579'}, grid:{color:'#e4e0d8'}, border:{display:false}},
+        x:{ticks:{font:{size:10},color:'#8c8579'}, grid:{display:false}, border:{display:false}}
+      }
+    }
+  });
+}
+
+let editingCfMonth = null;
+function openCfRowModal(mk) {
+  editingCfMonth = mk || null;
+  document.getElementById('cfModalTitle').textContent = mk ? mk + ' を編集' : '月データ追加';
+  const cf = mk ? (DB.cashflow[mk] || {}) : {};
+  document.getElementById('cf-month').value = mk ? monthKeyToYM(mk) : '';
+  document.getElementById('cf-bal').value = cf.bal ?? '';
+  document.getElementById('cf-sales-ow').value = cf.salesOw ?? '';
+  document.getElementById('cf-ext-ow').value = cf.extOw ?? '';
+  document.getElementById('cf-fixed').value = cf.fixed ?? FIXED_COST;
+  document.getElementById('cf-salary').value = cf.salary ?? 120000;
+  document.getElementById('cf-other').value = cf.other ?? '';
+  document.getElementById('cf-bonus').value = cf.bonus ?? '';
+  document.getElementById('cf-memo').value = cf.memo ?? '';
+  document.getElementById('cfRowModal').classList.add('open');
+}
+function closeCfRowModal() { document.getElementById('cfRowModal').classList.remove('open'); }
+function saveCfRow() {
+  const ym = document.getElementById('cf-month').value; // "2026-04"
+  if(!ym) { alert('年月を入力してください'); return; }
+  // "2026-04" → "26年4月"
+  const [y, m] = ym.split('-');
+  const mk = String(Number(y)-2000) + '年' + String(Number(m)) + '月';
+  if(!DB.cashflow) DB.cashflow = {};
+  const salesOw = document.getElementById('cf-sales-ow').value;
+  const extOw   = document.getElementById('cf-ext-ow').value;
+  DB.cashflow[mk] = {
+    bal:     document.getElementById('cf-bal').value !== '' ? Number(document.getElementById('cf-bal').value) : undefined,
+    salesOw: salesOw !== '' ? Number(salesOw) : undefined,
+    extOw:   extOw   !== '' ? Number(extOw)   : undefined,
+    fixed:   Number(document.getElementById('cf-fixed').value) || FIXED_COST,
+    salary:  Number(document.getElementById('cf-salary').value) || 120000,
+    other:   Number(document.getElementById('cf-other').value) || 0,
+    bonus:   Number(document.getElementById('cf-bonus').value) || 0,
+    memo:    document.getElementById('cf-memo').value,
+  };
+  save(); closeCfRowModal(); renderCashflow();
 }
 
 // ===== INIT =====
