@@ -948,11 +948,38 @@ function renderDashboard() {
   document.getElementById('dash-profit').textContent=fmt(profit);
   document.getElementById('dash-profit-rate').textContent='利益率 '+(total?Math.round(profit/total*100):0)+'%';
   document.getElementById('dash-paid').textContent=paid+' / '+rows.length;
-  const months12=['25年5月','25年6月','25年7月','25年8月','25年9月','25年10月','25年11月','25年12月','26年1月','26年2月','26年3月','26年4月'];
-  const data=months12.map(m=>(DB.sales[m]||[]).reduce((s,r)=>s+(Number(r.amount)||0),0));
+  // データが入ってる月だけ取得して時系列順にソート
+  const allSalesMonths = Object.keys(DB.sales).filter(mk => {
+    const r = DB.sales[mk];
+    return Array.isArray(r) && r.length > 0;
+  });
+  // "26年4月" → ソート用数値変換
+  const mkToNum = mk => {
+    const match = mk.match(/(\d+)年(\d+)月/);
+    if(!match) return 0;
+    return (2000 + Number(match[1])) * 100 + Number(match[2]);
+  };
+  const sortedMonths = allSalesMonths.sort((a,b) => mkToNum(a) - mkToNum(b));
+  const chartMonths = sortedMonths.length > 0 ? sortedMonths : [month];
+  const data = chartMonths.map(m => (DB.sales[m]||[]).reduce((s,r)=>s+(Number(r.amount)||0),0));
   const ctx=document.getElementById('salesChart');
   if(ctx._chart) ctx._chart.destroy();
-  ctx._chart=new Chart(ctx,{type:'bar',data:{labels:months12.map(m=>m.replace('年','/').replace('月','')),datasets:[{data,backgroundColor:months12.map(m=>m===month?'rgba(200,64,26,0.85)':'rgba(14,13,11,0.08)'),borderColor:months12.map(m=>m===month?'rgba(200,64,26,1)':'rgba(14,13,11,0.15)'),borderWidth:1,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'¥'+(v>=1000000?(v/1000000).toFixed(1)+'M':v.toLocaleString()),font:{size:10,family:'DM Mono'},color:'#8c8579'},grid:{color:'#e4e0d8'},border:{display:false}},x:{ticks:{font:{size:10},color:'#8c8579'},grid:{display:false},border:{display:false}}}}});
+  if(chartMonths.length === 0) {
+    ctx._chart = null;
+  } else {
+    ctx._chart=new Chart(ctx,{type:'bar',data:{
+      labels:chartMonths.map(m=>m.replace('年','/').replace('月','')),
+      datasets:[{
+        data,
+        backgroundColor:chartMonths.map(m=>m===month?'rgba(200,64,26,0.85)':'rgba(14,13,11,0.08)'),
+        borderColor:chartMonths.map(m=>m===month?'rgba(200,64,26,1)':'rgba(14,13,11,0.15)'),
+        borderWidth:1,borderRadius:3
+      }]
+    },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{
+      y:{beginAtZero:true,ticks:{callback:v=>'¥'+(v>=1000000?(v/1000000).toFixed(1)+'M':v.toLocaleString()),font:{size:10,family:'DM Mono'},color:'#8c8579'},grid:{color:'#e4e0d8'},border:{display:false}},
+      x:{ticks:{font:{size:10},color:'#8c8579'},grid:{display:false},border:{display:false}}
+    }}});
+  }
   const list=document.getElementById('dash-proj-list');
   if(!rows.length){list.innerHTML='<div class="empty-state">売上データを追加すると表示されます</div>';return;}
   list.innerHTML='<div class="table-wrap"><table><thead><tr><th>企業名</th><th>状況</th><th>金額</th><th>利益額</th><th>担当</th><th>入金</th></tr></thead><tbody>'+
