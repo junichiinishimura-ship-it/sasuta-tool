@@ -842,7 +842,20 @@ tbody tr:hover{background:var(--paper2);}
       <div class="form-group"><label class="form-label">企業名（＝案件名）*</label><input type="text" class="form-control" id="s-company" placeholder="例：サスタ合同会社"></div>
       <div class="grid-2">
         <div class="form-group"><label class="form-label">状況</label><select class="form-control" id="s-status"><option>実行中</option><option>確定前</option></select></div>
-        <div class="form-group"><label class="form-label">振り込み月</label><input type="text" class="form-control" id="s-month"></div>
+        <div class="form-group">
+          <label class="form-label">振り込み月</label>
+          <div class="month-picker">
+            <select class="form-control" id="s-month-year" style="flex:1;"></select>
+            <span style="color:var(--muted);font-size:13px;white-space:nowrap;">年</span>
+            <select class="form-control" id="s-month-month" style="flex:1;">
+              <option value="1">1月</option><option value="2">2月</option><option value="3">3月</option>
+              <option value="4">4月</option><option value="5">5月</option><option value="6">6月</option>
+              <option value="7">7月</option><option value="8">8月</option><option value="9">9月</option>
+              <option value="10">10月</option><option value="11">11月</option><option value="12">12月</option>
+            </select>
+            <span style="color:var(--muted);font-size:13px;white-space:nowrap;">月</span>
+          </div>
+        </div>
       </div>
       <div class="grid-2">
         <div class="form-group"><label class="form-label">金額（税抜）</label><input type="number" class="form-control" id="s-amount" placeholder="1000000" oninput="calcProfitRate()"></div>
@@ -1132,15 +1145,79 @@ function renderSales(){
     </tr>`).join('');
   syncOrderProjects();syncCostProjects();
 }
-function openSalesModal(){editingSales=null;document.getElementById('sModalTitle').textContent='SALES ENTRY';['s-company','s-amount','s-profit','s-rate','s-future'].forEach(id=>document.getElementById(id).value='');document.getElementById('s-status').value='実行中';document.getElementById('s-month').value=getSelectedMonth('salesYearFilter','salesMonthFilter');document.getElementById('s-person').value='じゅん';document.getElementById('salesModal').classList.add('open');}
-function editSales(month,idx){const r=DB.sales[month][idx];editingSales={month,idx};document.getElementById('sModalTitle').textContent='EDIT ENTRY';document.getElementById('s-company').value=r.company;document.getElementById('s-status').value=r.status;document.getElementById('s-month').value=r.month;document.getElementById('s-amount').value=r.amount;document.getElementById('s-profit').value=r.profit;document.getElementById('s-rate').value=r.rate;document.getElementById('s-person').value=r.person;document.getElementById('s-future').value=r.future||'';document.getElementById('salesModal').classList.add('open');}
+// 振込月セレクトの初期化（年オプション設定）
+function initSaleMonthPicker() {
+  const sel = document.getElementById('s-month-year');
+  if(!sel) return;
+  if(sel.options.length > 0) return; // 既に初期化済み
+  for(let y = 2024; y <= 2030; y++) {
+    const opt = document.createElement('option');
+    opt.value = y;
+    opt.textContent = y + '年';
+    sel.appendChild(opt);
+  }
+}
+
+// 振込月セレクトの値を取得 → "26年4月" 形式
+function getSaleMonth() {
+  const y = Number(document.getElementById('s-month-year').value);
+  const m = Number(document.getElementById('s-month-month').value);
+  return String(y - 2000) + '年' + m + '月';
+}
+
+// 振込月セレクトに値をセット（"26年4月" → year=2026, month=4）
+function setSaleMonth(mk) {
+  const match = (mk||'').match(/(\d+)年(\d+)月/);
+  if(!match) return;
+  const y = Number(match[1]) < 100 ? 2000 + Number(match[1]) : Number(match[1]);
+  const m = Number(match[2]);
+  document.getElementById('s-month-year').value = y;
+  document.getElementById('s-month-month').value = m;
+}
+
+function openSalesModal(){
+  editingSales=null;
+  document.getElementById('sModalTitle').textContent='SALES ENTRY';
+  ['s-company','s-amount','s-profit','s-rate','s-future'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('s-status').value='実行中';
+  document.getElementById('s-person').value='じゅん';
+  initSaleMonthPicker();
+  // 振込月のデフォルト = 発生月（現在選択月）の翌月
+  const curMk = getSelectedMonth('salesYearFilter','salesMonthFilter');
+  const match = curMk.match(/(\d+)年(\d+)月/);
+  if(match) {
+    let y = Number(match[1]) < 100 ? 2000 + Number(match[1]) : Number(match[1]);
+    let m = Number(match[2]) + 1;
+    if(m > 12){ m = 1; y++; }
+    setSaleMonth(String(y - 2000) + '年' + m + '月');
+  }
+  document.getElementById('salesModal').classList.add('open');
+}
+
+function editSales(month,idx){
+  const r=DB.sales[month][idx];
+  editingSales={month,idx};
+  document.getElementById('sModalTitle').textContent='EDIT ENTRY';
+  document.getElementById('s-company').value=r.company;
+  document.getElementById('s-status').value=r.status;
+  document.getElementById('s-amount').value=r.amount;
+  document.getElementById('s-profit').value=r.profit;
+  document.getElementById('s-rate').value=r.rate;
+  document.getElementById('s-person').value=r.person;
+  document.getElementById('s-future').value=r.future||'';
+  initSaleMonthPicker();
+  setSaleMonth(r.month || month); // 保存済みの振込月をセット
+  document.getElementById('salesModal').classList.add('open');
+}
+
 function closeSalesModal(){document.getElementById('salesModal').classList.remove('open');}
 function calcProfitRate(){const a=Number(document.getElementById('s-amount').value);const p=Number(document.getElementById('s-profit').value);document.getElementById('s-rate').value=(a&&p)?Math.round(p/a*100)+'%':'';}
 function saveSales(){
   const company=document.getElementById('s-company').value.trim();if(!company){alert('企業名を入力してください');return;}
   const month=editingSales?editingSales.month:getSelectedMonth('salesYearFilter','salesMonthFilter');
   if(!DB.sales[month]) DB.sales[month]=[];
-  const row={company,status:document.getElementById('s-status').value,month:document.getElementById('s-month').value,amount:Number(document.getElementById('s-amount').value)||0,profit:Number(document.getElementById('s-profit').value)||0,rate:document.getElementById('s-rate').value,person:document.getElementById('s-person').value,future:document.getElementById('s-future').value,paid:editingSales?DB.sales[editingSales.month][editingSales.idx].paid:false};
+  const transferMonth = getSaleMonth(); // 振込月セレクトから取得
+  const row={company,status:document.getElementById('s-status').value,month:transferMonth,amount:Number(document.getElementById('s-amount').value)||0,profit:Number(document.getElementById('s-profit').value)||0,rate:document.getElementById('s-rate').value,person:document.getElementById('s-person').value,future:document.getElementById('s-future').value,paid:editingSales?DB.sales[editingSales.month][editingSales.idx].paid:false};
   if(editingSales) DB.sales[editingSales.month][editingSales.idx]=row;
   else DB.sales[month].push(row);
   save();closeSalesModal();renderSales();
