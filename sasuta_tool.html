@@ -713,7 +713,7 @@ tbody tr:hover{background:var(--paper2);}
               <tr>
                 <th>月</th>
                 <th>期首残高</th>
-                <th>入金（前月売上）</th>
+                <th>入金（振込月）</th>
                 <th>固定費</th>
                 <th>外注費</th>
                 <th>その他</th>
@@ -1470,14 +1470,8 @@ function runSimulation() {
   months.forEach(({ ym, label }) => {
     const openBal = balance;
 
-    // 売上は「前月分が当月末に入金」なので前月キーで取得
-    const prevLabel = (() => {
-      const [y, m] = ym.split('-').map(Number);
-      const pm = m === 1 ? 12 : m - 1;
-      const py = m === 1 ? y - 1 : y;
-      return String(py - 2000) + '年' + pm + '月';
-    })();
-    const toolSales = getSalesForMonth(prevLabel);
+    // 売上は「振り込み月」が一致するものを集計
+    const toolSales = getSalesForMonthCF(label);
     const toolExt   = getExtForMonth(label);
     const sales  = toolSales > 0 ? toolSales : monthlySales;
     const ext    = toolExt   > 0 ? toolExt   : monthlyExt;
@@ -1658,11 +1652,20 @@ function prevMonthKey(mk) {
   return y+'年'+mo+'月';
 }
 
-// 資金繰り用: 前月の売上を当月入金として取得
+// 資金繰り用: 振込月が一致する売上を集計
+// 売上データの「振り込み月」フィールド（例: "26年4月"）を使う
 function getSalesForMonthCF(mk) {
-  const prev = prevMonthKey(mk);
-  const rows = DB.sales[prev] || [];
-  return rows.reduce((s,r) => s + (Number(r.amount)||0), 0);
+  let total = 0;
+  Object.values(DB.sales).forEach(rows => {
+    rows.forEach(r => {
+      // 振り込み月が指定月と一致するものを集計
+      const transferMonth = (r.month || '').trim();
+      if(transferMonth === mk) {
+        total += Number(r.amount) || 0;
+      }
+    });
+  });
+  return total;
 }
 
 function getSalesForMonth(mk) {
@@ -1732,7 +1735,7 @@ function renderCashflow() {
       const prevMk = prevMonthKey(r.mk);
       return `<tr>
         <td class="mono" style="font-weight:600;">${r.mk}</td>
-        <td class="mono">${fmt(r.sales)}<div style="font-size:9px;color:var(--dim);">${prevMk}分入金</div></td>
+        <td class="mono">${fmt(r.sales)}<div style="font-size:9px;color:var(--dim);">振込月ベース</div></td>
         <td class="mono">${fmt(r.ext)}<div style="font-size:9px;color:${r.isActualExt?'var(--teal)':'var(--dim)'};">${r.isActualExt?'実績':'見込み'}</div></td>
         <td class="mono" style="color:var(--muted);">${fmt(r.fixed)}</td>
         <td class="mono" style="color:var(--muted);">${fmt(r.salary)}</td>
