@@ -713,7 +713,7 @@ tbody tr:hover{background:var(--paper2);}
               <tr>
                 <th>月</th>
                 <th>期首残高</th>
-                <th>売上（予測）</th>
+                <th>入金（前月売上）</th>
                 <th>固定費</th>
                 <th>外注費</th>
                 <th>その他</th>
@@ -1470,8 +1470,14 @@ function runSimulation() {
   months.forEach(({ ym, label }) => {
     const openBal = balance;
 
-    // ツールデータから売上・外注費を取得（あれば優先）
-    const toolSales = getSalesForMonth(label);
+    // 売上は「前月分が当月末に入金」なので前月キーで取得
+    const prevLabel = (() => {
+      const [y, m] = ym.split('-').map(Number);
+      const pm = m === 1 ? 12 : m - 1;
+      const py = m === 1 ? y - 1 : y;
+      return String(py - 2000) + '年' + pm + '月';
+    })();
+    const toolSales = getSalesForMonth(prevLabel);
     const toolExt   = getExtForMonth(label);
     const sales  = toolSales > 0 ? toolSales : monthlySales;
     const ext    = toolExt   > 0 ? toolExt   : monthlyExt;
