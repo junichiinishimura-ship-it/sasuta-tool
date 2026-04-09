@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SASUTA — 業務管理</title>
+<title>SASUTA â æ¥­åç®¡ç</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@300;400;500;700&family=DM+Mono:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
@@ -165,7 +165,7 @@ tbody tr:hover{background:var(--paper2);}
 <div id="loading-overlay">
   <div class="loading-logo">SAS<span>U</span>TA</div>
   <div class="loading-bar-wrap"><div class="loading-bar"></div></div>
-  <div class="loading-text" id="loading-text">データを読み込み中...</div>
+  <div class="loading-text" id="loading-text">ãã¼ã¿ãèª­ã¿è¾¼ã¿ä¸­...</div>
 </div>
 
 <!-- SIDEBAR -->
@@ -173,18 +173,18 @@ tbody tr:hover{background:var(--paper2);}
   <div class="sidebar-logo">
     <div class="brand-top">Creative Management</div>
     <div class="brand-name">SAS<span>U</span>TA</div>
-    <div class="brand-sub">業務管理システム</div>
+    <div class="brand-sub">æ¥­åç®¡çã·ã¹ãã </div>
   </div>
-  <div class="sidebar-date" id="sidebarDate">—</div>
+  <div class="sidebar-date" id="sidebarDate">â</div>
   <div class="sidebar-nav">
     <div class="nav-section">Navigation</div>
-    <div class="nav-item active" onclick="showPage('dashboard')"><span class="nav-icon">◈</span>ダッシュボード</div>
-    <div class="nav-item" onclick="showPage('sales')"><span class="nav-icon">◇</span>月次売上</div>
-    <div class="nav-item" onclick="showPage('orders')"><span class="nav-icon">◉</span>外注発注</div>
-    <div class="nav-item" onclick="showPage('costs')"><span class="nav-icon">◫</span>原価計算</div>
+    <div class="nav-item active" onclick="showPage('dashboard')"><span class="nav-icon">â</span>ããã·ã¥ãã¼ã</div>
+    <div class="nav-item" onclick="showPage('sales')"><span class="nav-icon">â</span>ææ¬¡å£²ä¸</div>
+    <div class="nav-item" onclick="showPage('orders')"><span class="nav-icon">â</span>å¤æ³¨çºæ³¨</div>
+    <div class="nav-item" onclick="showPage('costs')"><span class="nav-icon">â«</span>åä¾¡è¨ç®</div>
   </div>
   <div class="sidebar-footer">
-    <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.1em;color:rgba(255,255,255,0.15);text-transform:uppercase;">sasuta LLC — 2026</div>
+    <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.1em;color:rgba(255,255,255,0.15);text-transform:uppercase;">sasuta LLC â 2026</div>
   </div>
 </nav>
 
@@ -193,14 +193,14 @@ tbody tr:hover{background:var(--paper2);}
   <div class="topbar">
     <div class="topbar-left">
       <div class="page-title-en" id="pageTitleEn">DASHBOARD</div>
-      <div class="page-title-ja" id="pageTitleJa">ダッシュボード</div>
+      <div class="page-title-ja" id="pageTitleJa">ããã·ã¥ãã¼ã</div>
     </div>
     <div class="topbar-right">
       <div class="sync-indicator">
         <div class="sync-dot" id="syncDot"></div>
-        <span id="syncText">—</span>
+        <span id="syncText">â</span>
       </div>
-      <button class="btn btn-ghost btn-sm" onclick="forceSync()">↻ 更新</button>
+      <button class="btn btn-ghost btn-sm" onclick="forceSync()">â» æ´æ°</button>
       <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--dim);letter-spacing:0.1em;" id="currentDate"></span>
     </div>
   </div>
@@ -210,35 +210,35 @@ tbody tr:hover{background:var(--paper2);}
     <!-- DASHBOARD -->
     <div class="page active" id="page-dashboard">
       <div class="grid-4 mb-4">
-        <div class="stat-card"><div class="stat-label">当月売上</div><div class="stat-value" id="dash-sales">¥0</div><div class="stat-sub">目標 ¥5,000,000&nbsp;<span class="badge" id="dash-rate">0%</span></div></div>
-        <div class="stat-card"><div class="stat-label">外注費 / 当月</div><div class="stat-value" id="dash-ext">¥0</div><div class="stat-sub">発注データから集計</div></div>
-        <div class="stat-card"><div class="stat-label">粗利</div><div class="stat-value" id="dash-profit">¥0</div><div class="stat-sub" id="dash-profit-rate">利益率 —</div></div>
-        <div class="stat-card"><div class="stat-label">入金済み</div><div class="stat-value" id="dash-paid">0 / 0</div><div class="stat-sub">件数</div></div>
+        <div class="stat-card"><div class="stat-label">å½æå£²ä¸</div><div class="stat-value" id="dash-sales">Â¥0</div><div class="stat-sub">ç®æ¨ Â¥5,000,000&nbsp;<span class="badge" id="dash-rate">0%</span></div></div>
+        <div class="stat-card"><div class="stat-label">å¤æ³¨è²» / å½æ</div><div class="stat-value" id="dash-ext">Â¥0</div><div class="stat-sub">çºæ³¨ãã¼ã¿ããéè¨</div></div>
+        <div class="stat-card"><div class="stat-label">ç²å©</div><div class="stat-value" id="dash-profit">Â¥0</div><div class="stat-sub" id="dash-profit-rate">å©çç â</div></div>
+        <div class="stat-card"><div class="stat-label">å¥éæ¸ã¿</div><div class="stat-value" id="dash-paid">0 / 0</div><div class="stat-sub">ä»¶æ°</div></div>
       </div>
       <div class="grid-2">
         <div class="card">
-          <div class="card-header"><span class="card-title">Sales Trend — 12 Months</span></div>
+          <div class="card-header"><span class="card-title">Sales Trend â 12 Months</span></div>
           <div class="card-body"><div class="chart-container"><canvas id="salesChart"></canvas></div></div>
         </div>
         <div class="card">
           <div class="card-header"><span class="card-title">Fixed Costs</span></div>
           <div class="card-body">
             <table><tbody>
-              <tr><td style="color:var(--muted)">家賃</td><td class="mono" style="text-align:right;">¥288,070</td></tr>
-              <tr><td style="color:var(--muted)">税理士</td><td class="mono" style="text-align:right;">¥20,469</td></tr>
-              <tr><td style="color:var(--muted)">役員報酬</td><td class="mono" style="text-align:right;">¥120,000</td></tr>
-              <tr><td style="color:var(--muted)">水道光熱</td><td class="mono" style="text-align:right;">¥50,000</td></tr>
+              <tr><td style="color:var(--muted)">å®¶è³</td><td class="mono" style="text-align:right;">Â¥288,070</td></tr>
+              <tr><td style="color:var(--muted)">ç¨çå£«</td><td class="mono" style="text-align:right;">Â¥20,469</td></tr>
+              <tr><td style="color:var(--muted)">å½¹å¡å ±é¬</td><td class="mono" style="text-align:right;">Â¥120,000</td></tr>
+              <tr><td style="color:var(--muted)">æ°´éåç±</td><td class="mono" style="text-align:right;">Â¥50,000</td></tr>
               <tr style="border-top:1px solid var(--line);">
-                <td style="font-weight:600;padding-top:10px;">合計</td>
-                <td class="mono" style="text-align:right;font-weight:600;padding-top:10px;">¥478,539</td>
+                <td style="font-weight:600;padding-top:10px;">åè¨</td>
+                <td class="mono" style="text-align:right;font-weight:600;padding-top:10px;">Â¥478,539</td>
               </tr>
             </tbody></table>
           </div>
         </div>
       </div>
       <div class="card mt-4">
-        <div class="card-header"><span class="card-title">Current Month Projects</span><button class="btn btn-ghost btn-sm" onclick="showPage('sales')">売上管理へ →</button></div>
-        <div id="dash-proj-list"><div class="empty-state">売上データを追加すると表示されます</div></div>
+        <div class="card-header"><span class="card-title">Current Month Projects</span><button class="btn btn-ghost btn-sm" onclick="showPage('sales')">å£²ä¸ç®¡çã¸ â</button></div>
+        <div id="dash-proj-list"><div class="empty-state">å£²ä¸ãã¼ã¿ãè¿½å ããã¨è¡¨ç¤ºããã¾ã</div></div>
       </div>
     </div>
 
@@ -246,26 +246,26 @@ tbody tr:hover{background:var(--paper2);}
     <div class="page" id="page-sales">
       <div class="filter-bar">
         <select id="salesMonthFilter" onchange="renderSales()">
-          <option value="26年4月">26年4月</option><option value="26年3月">26年3月</option>
-          <option value="26年2月">26年2月</option><option value="26年1月">26年1月</option>
-          <option value="25年12月">25年12月</option><option value="25年11月">25年11月</option>
-          <option value="25年10月">25年10月</option><option value="25年9月">25年9月</option>
-          <option value="25年8月">25年8月</option><option value="25年7月">25年7月</option>
-          <option value="25年6月">25年6月</option><option value="25年5月">25年5月</option>
-          <option value="25年4月">25年4月</option>
+          <option value="26å¹´4æ">26å¹´4æ</option><option value="26å¹´3æ">26å¹´3æ</option>
+          <option value="26å¹´2æ">26å¹´2æ</option><option value="26å¹´1æ">26å¹´1æ</option>
+          <option value="25å¹´12æ">25å¹´12æ</option><option value="25å¹´11æ">25å¹´11æ</option>
+          <option value="25å¹´10æ">25å¹´10æ</option><option value="25å¹´9æ">25å¹´9æ</option>
+          <option value="25å¹´8æ">25å¹´8æ</option><option value="25å¹´7æ">25å¹´7æ</option>
+          <option value="25å¹´6æ">25å¹´6æ</option><option value="25å¹´5æ">25å¹´5æ</option>
+          <option value="25å¹´4æ">25å¹´4æ</option>
         </select>
-        <button class="btn btn-primary" onclick="openSalesModal()">＋ 売上追加</button>
+        <button class="btn btn-primary" onclick="openSalesModal()">ï¼ å£²ä¸è¿½å </button>
       </div>
       <div class="grid-4 mb-4">
-        <div class="stat-card"><div class="stat-label">売上合計</div><div class="stat-value" id="s-total">¥0</div></div>
-        <div class="stat-card"><div class="stat-label">目標差分</div><div class="stat-value" id="s-diff">¥0</div></div>
-        <div class="stat-card"><div class="stat-label">利益合計</div><div class="stat-value" id="s-profit">¥0</div></div>
-        <div class="stat-card"><div class="stat-label">入金済み</div><div class="stat-value" id="s-paid">0 / 0</div></div>
+        <div class="stat-card"><div class="stat-label">å£²ä¸åè¨</div><div class="stat-value" id="s-total">Â¥0</div></div>
+        <div class="stat-card"><div class="stat-label">ç®æ¨å·®å</div><div class="stat-value" id="s-diff">Â¥0</div></div>
+        <div class="stat-card"><div class="stat-label">å©çåè¨</div><div class="stat-value" id="s-profit">Â¥0</div></div>
+        <div class="stat-card"><div class="stat-label">å¥éæ¸ã¿</div><div class="stat-value" id="s-paid">0 / 0</div></div>
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>企業名（案件）</th><th>状況</th><th>振り込み月</th><th>金額</th><th>利益額</th><th>利益率</th><th>担当</th><th>入金</th><th>操作</th></tr></thead>
-          <tbody id="sales-tbody"><tr><td colspan="9" class="empty-state">データがありません</td></tr></tbody>
+          <thead><tr><th>ä¼æ¥­åï¼æ¡ä»¶ï¼</th><th>ç¶æ³</th><th>æ¯ãè¾¼ã¿æ</th><th>éé¡</th><th>å©çé¡</th><th>å©çç</th><th>æå½</th><th>å¥é</th><th>æä½</th></tr></thead>
+          <tbody id="sales-tbody"><tr><td colspan="9" class="empty-state">ãã¼ã¿ãããã¾ãã</td></tr></tbody>
         </table>
       </div>
     </div>
@@ -273,84 +273,85 @@ tbody tr:hover{background:var(--paper2);}
     <!-- ORDERS -->
     <div class="page" id="page-orders">
       <div class="tabs">
-        <div class="tab active" onclick="switchOTab('form')">発注フォーム</div>
-        <div class="tab" onclick="switchOTab('list')">発注台帳</div>
-        <div class="tab" onclick="switchOTab('dash')">外注ダッシュボード</div>
+        <div class="tab active" onclick="switchOTab('form')">çºæ³¨ãã©ã¼ã </div>
+        <div class="tab" onclick="switchOTab('list')">çºæ³¨å°å¸³</div>
+        <div class="tab" onclick="switchOTab('dash')">å¤æ³¨ããã·ã¥ãã¼ã</div>
       </div>
       <div id="otab-form">
         <div class="card" style="max-width:540px;">
           <div class="card-header"><span class="card-title">New Order</span></div>
           <div class="card-body">
             <div class="grid-2">
-              <div class="form-group"><label class="form-label">発注日</label><input type="date" class="form-control" id="o-date"></div>
-              <div class="form-group"><label class="form-label">担当者 *</label>
+              <div class="form-group"><label class="form-label">çºæ³¨æ¥</label><input type="date" class="form-control" id="o-date"></div>
+              <div class="form-group"><label class="form-label">æå½è *</label>
                 <select class="form-control" id="o-vendor">
-                  <option value="">選択してください</option>
-                  <option>西村 実奈歩</option><option>西村 純一</option><option>村上 エミリ</option>
-                  <option>Kemi</option><option>アンビ</option><option>山本 冬馬</option>
-                  <option>ねね</option><option>藤原</option><option>ISOさん</option><option>メディアスタンド</option>
+                  <option value="">é¸æãã¦ãã ãã</option>
+                  <option>è¥¿æ å®å¥æ­©</option><option>è¥¿æ ç´ä¸</option><option>æä¸ ã¨ããª</option>
+                  <option>Kemi</option><option>ã¢ã³ã</option><option>å±±æ¬ å¬é¦¬</option>
+                  <option>ã­ã­</option><option>è¤å</option><option>ISOãã</option><option>ã¡ãã£ã¢ã¹ã¿ã³ã</option>
                 </select>
               </div>
             </div>
             <div class="form-group">
-              <label class="form-label">案件名 <span style="color:var(--sage);font-family:'Noto Sans JP',sans-serif;text-transform:none;font-size:10px;letter-spacing:0;">— 売上から自動取得</span></label>
-              <select class="form-control" id="o-project"><option value="">選択してください</option></select>
+              <label class="form-label">æ¡ä»¶å <span style="color:var(--sage);font-family:'Noto Sans JP',sans-serif;text-transform:none;font-size:10px;letter-spacing:0;">â å£²ä¸ããèªååå¾</span></label>
+              <select class="form-control" id="o-project"><option value="">é¸æãã¦ãã ãã</option></select>
             </div>
-            <div class="form-group"><label class="form-label">内容 *</label><input type="text" class="form-control" id="o-task" placeholder="例：撮影補助、編集、3Dモデリング等"></div>
+            <div class="form-group"><label class="form-label">åå®¹ *</label><input type="text" class="form-control" id="o-task" placeholder="ä¾ï¼æ®å½±è£å©ãç·¨éã3Dã¢ããªã³ã°ç­"></div>
             <div class="grid-2">
-              <div class="form-group"><label class="form-label">金額（税抜）</label><input type="number" class="form-control" id="o-amount" placeholder="50000"></div>
-              <div class="form-group"><label class="form-label">納期</label><input type="date" class="form-control" id="o-due"></div>
+              <div class="form-group"><label class="form-label">éé¡ï¼ç¨æï¼</label><input type="number" class="form-control" id="o-amount" placeholder="50000"></div>
+              <div class="form-group"><label class="form-label">ç´æ</label><input type="date" class="form-control" id="o-due"></div>
             </div>
-            <button class="btn btn-accent w-full" style="justify-content:center;padding:10px;" onclick="submitOrder()">✉ 発注登録 ＆ メール送信</button>
-            <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--dim);margin-top:8px;text-align:center;letter-spacing:0.05em;">CLICK TO OPEN MAIL APP — 宛先・件名・本文が自動入力されます</div>
+            <button class="btn btn-accent w-full" style="justify-content:center;padding:10px;" onclick="submitOrder()">â çºæ³¨ç»é² ï¼ ã¡ã¼ã«éä¿¡</button>
+            <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--dim);margin-top:8px;text-align:center;letter-spacing:0.05em;">CLICK TO OPEN MAIL APP â å®åã»ä»¶åã»æ¬æãèªåå¥åããã¾ã</div>
           </div>
         </div>
       </div>
       <div id="otab-list" style="display:none;">
         <div class="filter-bar">
-          <select id="o-mf" onchange="renderOrders()"><option value="">全期間</option></select>
+          <select id="o-mf" onchange="renderOrders()"><option value="">å¨æé</option></select>
           <select id="o-vf" onchange="renderOrders()">
-            <option value="">全担当者</option>
-            <option>西村 実奈歩</option><option>西村 純一</option><option>村上 エミリ</option>
-            <option>Kemi</option><option>アンビ</option><option>山本 冬馬</option>
-            <option>ねね</option><option>藤原</option><option>ISOさん</option><option>メディアスタンド</option>
+            <option value="">å¨æå½è</option>
+            <option>è¥¿æ å®å¥æ­©</option><option>è¥¿æ ç´ä¸</option><option>æä¸ ã¨ããª</option>
+            <option>Kemi</option><option>ã¢ã³ã</option><option>å±±æ¬ å¬é¦¬</option>
+            <option>ã­ã­</option><option>è¤å</option><option>ISOãã</option><option>ã¡ãã£ã¢ã¹ã¿ã³ã</option>
           </select>
+          <button class="btn btn-primary" onclick="openOrderModal()">ï¼ çºæ³¨è¿½å </button>
         </div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>発注ID</th><th>発注日</th><th>案件名</th><th>内容</th><th>金額</th><th>納期</th><th>担当者</th><th>操作</th></tr></thead>
-            <tbody id="orders-tbody"><tr><td colspan="8" class="empty-state">発注データがありません</td></tr></tbody>
+            <thead><tr><th>çºæ³¨ID</th><th>çºæ³¨æ¥</th><th>æ¡ä»¶å</th><th>åå®¹</th><th>éé¡</th><th>ç´æ</th><th>æå½è</th><th>æä½</th></tr></thead>
+            <tbody id="orders-tbody"><tr><td colspan="8" class="empty-state">çºæ³¨ãã¼ã¿ãããã¾ãã</td></tr></tbody>
           </table>
         </div>
       </div>
       <div id="otab-dash" style="display:none;">
-        <div class="card"><div class="card-header"><span class="card-title">Monthly Order Summary</span></div><div id="o-dash-content" class="card-body"><div class="empty-state">発注データを登録すると表示されます</div></div></div>
+        <div class="card"><div class="card-header"><span class="card-title">Monthly Order Summary</span></div><div id="o-dash-content" class="card-body"><div class="empty-state">çºæ³¨ãã¼ã¿ãç»é²ããã¨è¡¨ç¤ºããã¾ã</div></div></div>
       </div>
     </div>
 
     <!-- COSTS -->
     <div class="page" id="page-costs">
       <div class="filter-bar">
-        <select id="costFilter" onchange="renderCosts()"><option value="">案件を選択してください</option></select>
-        <button class="btn btn-primary" onclick="openNewCostModal()">＋ 新規案件作成</button>
+        <select id="costFilter" onchange="renderCosts()"><option value="">æ¡ä»¶ãé¸æãã¦ãã ãã</option></select>
+        <button class="btn btn-primary" onclick="openNewCostModal()">ï¼ æ°è¦æ¡ä»¶ä½æ</button>
       </div>
-      <div id="cost-placeholder"><div class="empty-state" style="padding:70px;"><div style="font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:0.08em;color:var(--line2);margin-bottom:8px;">COSTS</div><div>売上に登録された案件、または新規作成した案件を選択してください</div></div></div>
+      <div id="cost-placeholder"><div class="empty-state" style="padding:70px;"><div style="font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:0.08em;color:var(--line2);margin-bottom:8px;">COSTS</div><div>å£²ä¸ã«ç»é²ãããæ¡ä»¶ãã¾ãã¯æ°è¦ä½æããæ¡ä»¶ãé¸æãã¦ãã ãã</div></div></div>
       <div id="cost-main" style="display:none;">
         <div class="grid-4 mb-4">
-          <div class="stat-card"><div class="stat-label">案件金額</div><div class="stat-value" id="c-amount">¥0</div></div>
-          <div class="stat-card"><div class="stat-label">経費予算</div><div class="stat-value" id="c-budget">¥0</div><div class="stat-sub" id="c-budget-rate">0%</div></div>
-          <div class="stat-card"><div class="stat-label">実際経費</div><div class="stat-value" id="c-actual">¥0</div></div>
-          <div class="stat-card"><div class="stat-label">残予算</div><div class="stat-value" id="c-remaining">¥0</div><div class="stat-sub" id="c-usage"></div></div>
+          <div class="stat-card"><div class="stat-label">æ¡ä»¶éé¡</div><div class="stat-value" id="c-amount">Â¥0</div></div>
+          <div class="stat-card"><div class="stat-label">çµè²»äºç®</div><div class="stat-value" id="c-budget">Â¥0</div><div class="stat-sub" id="c-budget-rate">0%</div></div>
+          <div class="stat-card"><div class="stat-label">å®éçµè²»</div><div class="stat-value" id="c-actual">Â¥0</div></div>
+          <div class="stat-card"><div class="stat-label">æ®äºç®</div><div class="stat-value" id="c-remaining">Â¥0</div><div class="stat-sub" id="c-usage"></div></div>
         </div>
         <div class="progress-wrap mb-4" style="height:6px;"><div class="progress-bar" id="c-bar" style="width:0%;"></div></div>
         <div class="section-head">
-          <div class="section-title">費目明細</div>
-          <button class="btn btn-primary" onclick="openCostItemModal()">＋ 費目追加</button>
+          <div class="section-title">è²»ç®æç´°</div>
+          <button class="btn btn-primary" onclick="openCostItemModal()">ï¼ è²»ç®è¿½å </button>
         </div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>費目</th><th>金額</th><th>メモ</th><th>操作</th></tr></thead>
-            <tbody id="costs-tbody"><tr><td colspan="4" class="empty-state">費目がありません</td></tr></tbody>
+            <thead><tr><th>è²»ç®</th><th>éé¡</th><th>ã¡ã¢</th><th>æä½</th></tr></thead>
+            <tbody id="costs-tbody"><tr><td colspan="4" class="empty-state">è²»ç®ãããã¾ãã</td></tr></tbody>
           </table>
         </div>
       </div>
@@ -360,50 +361,82 @@ tbody tr:hover{background:var(--paper2);}
 </div>
 
 <!-- MODALS -->
+<div class="modal-overlay" id="orderModal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title" id="oModalTitle">çºæ³¨è¿½å </div><button class="modal-close" onclick="closeOrderModal()">â</button></div>
+    <div class="modal-body">
+      <div class="grid-2">
+        <div class="form-group"><label class="form-label">çºæ³¨æ¥</label><input type="date" class="form-control" id="om-date"></div>
+        <div class="form-group"><label class="form-label">æå½è *</label>
+          <select class="form-control" id="om-vendor">
+            <option value="">é¸æãã¦ãã ãã</option>
+            <option>è¥¿æ å®å¥æ­©</option><option>è¥¿æ ç´ä¸</option><option>æä¸ ã¨ããª</option>
+            <option>Kemi</option><option>ã¢ã³ã</option><option>å±±æ¬ å¬é¦¬</option>
+            <option>ã­ã­</option><option>è¤å</option><option>ISOãã</option><option>ã¡ãã£ã¢ã¹ã¿ã³ã</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">æ¡ä»¶å <span style="color:var(--sage);font-family:'Noto Sans JP',sans-serif;text-transform:none;font-size:10px;letter-spacing:0;">â å£²ä¸ããèªååå¾</span></label>
+        <select class="form-control" id="om-project"><option value="">é¸æãã¦ãã ãã</option></select>
+      </div>
+      <div class="form-group"><label class="form-label">åå®¹ *</label><input type="text" class="form-control" id="om-task" placeholder="ä¾ï¼æ®å½±è£å©ãç·¨éã3Dã¢ããªã³ã°ç­"></div>
+      <div class="grid-2">
+        <div class="form-group"><label class="form-label">éé¡ï¼ç¨æï¼</label><input type="number" class="form-control" id="om-amount" placeholder="50000"></div>
+        <div class="form-group"><label class="form-label">ç´æ</label><input type="date" class="form-control" id="om-due"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeOrderModal()">ã­ã£ã³ã»ã«</button>
+      <button class="btn btn-primary" onclick="saveOrderDirect()">ç»é²ï¼ã¡ã¼ã«ãªãï¼</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="salesModal">
   <div class="modal">
-    <div class="modal-header"><div class="modal-title" id="sModalTitle">SALES ENTRY</div><button class="modal-close" onclick="closeSalesModal()">✕</button></div>
+    <div class="modal-header"><div class="modal-title" id="sModalTitle">SALES ENTRY</div><button class="modal-close" onclick="closeSalesModal()">â</button></div>
     <div class="modal-body">
-      <div class="form-group"><label class="form-label">企業名（＝案件名）*</label><input type="text" class="form-control" id="s-company" placeholder="例：GU株式会社"></div>
+      <div class="form-group"><label class="form-label">ä¼æ¥­åï¼ï¼æ¡ä»¶åï¼*</label><input type="text" class="form-control" id="s-company" placeholder="ä¾ï¼GUæ ªå¼ä¼ç¤¾"></div>
       <div class="grid-2">
-        <div class="form-group"><label class="form-label">状況</label><select class="form-control" id="s-status"><option>実行中</option><option>確定前</option></select></div>
-        <div class="form-group"><label class="form-label">振り込み月</label><input type="text" class="form-control" id="s-month"></div>
+        <div class="form-group"><label class="form-label">ç¶æ³</label><select class="form-control" id="s-status"><option>å®è¡ä¸­</option><option>ç¢ºå®å</option></select></div>
+        <div class="form-group"><label class="form-label">æ¯ãè¾¼ã¿æ</label><input type="text" class="form-control" id="s-month"></div>
       </div>
       <div class="grid-2">
-        <div class="form-group"><label class="form-label">金額（税抜）</label><input type="number" class="form-control" id="s-amount" placeholder="1000000" oninput="calcProfitRate()"></div>
-        <div class="form-group"><label class="form-label">利益額</label><input type="number" class="form-control" id="s-profit" placeholder="300000" oninput="calcProfitRate()"></div>
+        <div class="form-group"><label class="form-label">éé¡ï¼ç¨æï¼</label><input type="number" class="form-control" id="s-amount" placeholder="1000000" oninput="calcProfitRate()"></div>
+        <div class="form-group"><label class="form-label">å©çé¡</label><input type="number" class="form-control" id="s-profit" placeholder="300000" oninput="calcProfitRate()"></div>
       </div>
       <div class="grid-2">
-        <div class="form-group"><label class="form-label">利益率（自動計算）</label><input type="text" class="form-control" id="s-rate" readonly></div>
-        <div class="form-group"><label class="form-label">担当</label><select class="form-control" id="s-person"><option>じゅん</option><option>みなほ</option></select></div>
+        <div class="form-group"><label class="form-label">å©ççï¼èªåè¨ç®ï¼</label><input type="text" class="form-control" id="s-rate" readonly></div>
+        <div class="form-group"><label class="form-label">æå½</label><select class="form-control" id="s-person"><option>ããã</option><option>ã¿ãªã»</option></select></div>
       </div>
-      <div class="form-group"><label class="form-label">今後の展開</label><input type="text" class="form-control" id="s-future"></div>
+      <div class="form-group"><label class="form-label">ä»å¾ã®å±é</label><input type="text" class="form-control" id="s-future"></div>
     </div>
-    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeSalesModal()">キャンセル</button><button class="btn btn-primary" onclick="saveSales()">保存</button></div>
+    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeSalesModal()">ã­ã£ã³ã»ã«</button><button class="btn btn-primary" onclick="saveSales()">ä¿å­</button></div>
   </div>
 </div>
 
 <div class="modal-overlay" id="costItemModal">
   <div class="modal" style="width:380px;">
-    <div class="modal-header"><div class="modal-title">COST ITEM</div><button class="modal-close" onclick="closeCostItemModal()">✕</button></div>
+    <div class="modal-header"><div class="modal-title">COST ITEM</div><button class="modal-close" onclick="closeCostItemModal()">â</button></div>
     <div class="modal-body">
-      <div class="form-group"><label class="form-label">費目名 *</label><input type="text" class="form-control" id="ci-name" placeholder="例：撮影スタジオ"></div>
-      <div class="form-group"><label class="form-label">金額（税抜）</label><input type="number" class="form-control" id="ci-amount"></div>
-      <div class="form-group"><label class="form-label">メモ</label><input type="text" class="form-control" id="ci-memo"></div>
+      <div class="form-group"><label class="form-label">è²»ç®å *</label><input type="text" class="form-control" id="ci-name" placeholder="ä¾ï¼æ®å½±ã¹ã¿ã¸ãª"></div>
+      <div class="form-group"><label class="form-label">éé¡ï¼ç¨æï¼</label><input type="number" class="form-control" id="ci-amount"></div>
+      <div class="form-group"><label class="form-label">ã¡ã¢</label><input type="text" class="form-control" id="ci-memo"></div>
     </div>
-    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeCostItemModal()">キャンセル</button><button class="btn btn-primary" onclick="saveCostItem()">保存</button></div>
+    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeCostItemModal()">ã­ã£ã³ã»ã«</button><button class="btn btn-primary" onclick="saveCostItem()">ä¿å­</button></div>
   </div>
 </div>
 
 <div class="modal-overlay" id="newCostModal">
   <div class="modal" style="width:400px;">
-    <div class="modal-header"><div class="modal-title">NEW PROJECT</div><button class="modal-close" onclick="closeNewCostModal()">✕</button></div>
+    <div class="modal-header"><div class="modal-title">NEW PROJECT</div><button class="modal-close" onclick="closeNewCostModal()">â</button></div>
     <div class="modal-body">
-      <div class="form-group"><label class="form-label">案件名 *</label><input type="text" class="form-control" id="nc-name"></div>
-      <div class="form-group"><label class="form-label">案件金額（税抜）</label><input type="number" class="form-control" id="nc-amount"></div>
-      <div class="form-group"><label class="form-label">経費予算率</label><select class="form-control" id="nc-rate"><option value="15">15%</option><option value="20" selected>20%</option><option value="25">25%</option><option value="30">30%</option></select></div>
+      <div class="form-group"><label class="form-label">æ¡ä»¶å *</label><input type="text" class="form-control" id="nc-name"></div>
+      <div class="form-group"><label class="form-label">æ¡ä»¶éé¡ï¼ç¨æï¼</label><input type="number" class="form-control" id="nc-amount"></div>
+      <div class="form-group"><label class="form-label">çµè²»äºç®ç</label><select class="form-control" id="nc-rate"><option value="15">15%</option><option value="20" selected>20%</option><option value="25">25%</option><option value="30">30%</option></select></div>
     </div>
-    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeNewCostModal()">キャンセル</button><button class="btn btn-primary" onclick="createNewCostProject()">作成</button></div>
+    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeNewCostModal()">ã­ã£ã³ã»ã«</button><button class="btn btn-primary" onclick="createNewCostProject()">ä½æ</button></div>
   </div>
 </div>
 
@@ -428,7 +461,7 @@ function setSyncStatus(status, text) {
 
 // LOAD from JSONBin
 async function loadFromCloud() {
-  setSyncStatus('syncing', '読み込み中...');
+  setSyncStatus('syncing', 'èª­ã¿è¾¼ã¿ä¸­...');
   try {
     const res = await fetch(BIN_URL + '/latest', {
       headers: { 'X-Master-Key': API_KEY }
@@ -436,15 +469,15 @@ async function loadFromCloud() {
     if (!res.ok) throw new Error('Load failed: ' + res.status);
     const json = await res.json();
     const record = json.record || {};
-    // マイグレーション: 古いデータ形式でも動くように
+    // ãã¤ã°ã¬ã¼ã·ã§ã³: å¤ããã¼ã¿å½¢å¼ã§ãåãããã«
     DB.sales  = record.sales  || {};
     DB.orders = record.orders || [];
     DB.costs  = record.costs  || {};
-    setSyncStatus('ok', '同期済み');
+    setSyncStatus('ok', 'åææ¸ã¿');
   } catch(e) {
     console.error(e);
-    setSyncStatus('error', '読み込みエラー');
-    // フォールバック: localStorageから
+    setSyncStatus('error', 'èª­ã¿è¾¼ã¿ã¨ã©ã¼');
+    // ãã©ã¼ã«ããã¯: localStorageãã
     try {
       const local = localStorage.getItem('sasuta_v2');
       if (local) DB = JSON.parse(local);
@@ -456,8 +489,8 @@ async function loadFromCloud() {
 async function saveToCloud() {
   if (_saving) { _pendingSave = true; return; }
   _saving = true;
-  setSyncStatus('syncing', '保存中...');
-  // localStorageにも保存（バックアップ）
+  setSyncStatus('syncing', 'ä¿å­ä¸­...');
+  // localStorageã«ãä¿å­ï¼ããã¯ã¢ããï¼
   try { localStorage.setItem('sasuta_v2', JSON.stringify(DB)); } catch(e) {}
   try {
     const res = await fetch(BIN_URL, {
@@ -466,10 +499,10 @@ async function saveToCloud() {
       body: JSON.stringify(DB)
     });
     if (!res.ok) throw new Error('Save failed: ' + res.status);
-    setSyncStatus('ok', '保存完了');
+    setSyncStatus('ok', 'ä¿å­å®äº');
   } catch(e) {
     console.error(e);
-    setSyncStatus('error', '保存エラー（ローカルに保存済み）');
+    setSyncStatus('error', 'ä¿å­ã¨ã©ã¼ï¼ã­ã¼ã«ã«ã«ä¿å­æ¸ã¿ï¼');
   } finally {
     _saving = false;
     if (_pendingSave) { _pendingSave = false; await saveToCloud(); }
@@ -483,16 +516,16 @@ async function forceSync() {
 
 // ===== VENDORS =====
 const VENDORS = {
-  '西村 実奈歩':'minahooo.1113.168@gmail.com','西村 純一':'junichi.i.nishimura@gmail.com',
-  '村上 エミリ':'214d0189@gmail.com','Kemi':'kemithx@gmail.com','アンビ':'hiroshi0505andou@gmail.com',
-  '山本 冬馬':'futa.hiradate@gmail.com','ねね':'snjjjns@gmail.com','藤原':'gengen0916@gmail.com',
-  'ISOさん':'jougosan@gmail.com','メディアスタンド':'shimizutatsuroh721@gmail.com'
+  'è¥¿æ å®å¥æ­©':'minahooo.1113.168@gmail.com','è¥¿æ ç´ä¸':'junichi.i.nishimura@gmail.com',
+  'æä¸ ã¨ããª':'214d0189@gmail.com','Kemi':'kemithx@gmail.com','ã¢ã³ã':'hiroshi0505andou@gmail.com',
+  'å±±æ¬ å¬é¦¬':'futa.hiradate@gmail.com','ã­ã­':'snjjjns@gmail.com','è¤å':'gengen0916@gmail.com',
+  'ISOãã':'jougosan@gmail.com','ã¡ãã£ã¢ã¹ã¿ã³ã':'shimizutatsuroh721@gmail.com'
 };
 const CC = 'info@sasuta.biz';
 
 // ===== HELPERS =====
-const fmt = n => (n||n===0) ? '¥'+Number(n).toLocaleString('ja-JP') : '—';
-const fmtD = d => d ? d.replace(/-/g,'/') : '—';
+const fmt = n => (n||n===0) ? 'Â¥'+Number(n).toLocaleString('ja-JP') : 'â';
+const fmtD = d => d ? d.replace(/-/g,'/') : 'â';
 const today = () => new Date().toISOString().slice(0,10);
 const save = () => saveToCloud();
 
@@ -510,10 +543,10 @@ function getSalesAmount(name) {
 
 // ===== NAV =====
 const PAGE_META = {
-  dashboard:{en:'DASHBOARD',ja:'ダッシュボード'},
-  sales:{en:'MONTHLY SALES',ja:'月次売上管理'},
-  orders:{en:'ORDERS',ja:'外注発注'},
-  costs:{en:'COST TRACKER',ja:'原価計算'}
+  dashboard:{en:'DASHBOARD',ja:'ããã·ã¥ãã¼ã'},
+  sales:{en:'MONTHLY SALES',ja:'ææ¬¡å£²ä¸ç®¡ç'},
+  orders:{en:'ORDERS',ja:'å¤æ³¨çºæ³¨'},
+  costs:{en:'COST TRACKER',ja:'åä¾¡è¨ç®'}
 };
 let currentPage = 'dashboard';
 
@@ -538,7 +571,7 @@ function renderCurrentPage() {
 
 // ===== DASHBOARD =====
 function renderDashboard() {
-  const month='26年4月';
+  const month='26å¹´4æ';
   const rows=DB.sales[month]||[];
   const total=rows.reduce((s,r)=>s+(Number(r.amount)||0),0);
   const profit=rows.reduce((s,r)=>s+(Number(r.profit)||0),0);
@@ -553,17 +586,17 @@ function renderDashboard() {
   const ext=DB.orders.filter(o=>(o.date||'').startsWith(ym)).reduce((s,o)=>s+(Number(o.amount)||0),0);
   document.getElementById('dash-ext').textContent=fmt(ext);
   document.getElementById('dash-profit').textContent=fmt(profit);
-  document.getElementById('dash-profit-rate').textContent='利益率 '+(total?Math.round(profit/total*100):0)+'%';
+  document.getElementById('dash-profit-rate').textContent='å©çç '+(total?Math.round(profit/total*100):0)+'%';
   document.getElementById('dash-paid').textContent=paid+' / '+rows.length;
-  const months12=['25年5月','25年6月','25年7月','25年8月','25年9月','25年10月','25年11月','25年12月','26年1月','26年2月','26年3月','26年4月'];
+  const months12=['25å¹´5æ','25å¹´6æ','25å¹´7æ','25å¹´8æ','25å¹´9æ','25å¹´10æ','25å¹´11æ','25å¹´12æ','26å¹´1æ','26å¹´2æ','26å¹´3æ','26å¹´4æ'];
   const data=months12.map(m=>(DB.sales[m]||[]).reduce((s,r)=>s+(Number(r.amount)||0),0));
   const ctx=document.getElementById('salesChart');
   if(ctx._chart) ctx._chart.destroy();
-  ctx._chart=new Chart(ctx,{type:'bar',data:{labels:months12.map(m=>m.replace('年','/').replace('月','')),datasets:[{data,backgroundColor:months12.map((_,i)=>i===11?'rgba(200,64,26,0.85)':'rgba(14,13,11,0.08)'),borderColor:months12.map((_,i)=>i===11?'rgba(200,64,26,1)':'rgba(14,13,11,0.15)'),borderWidth:1,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'¥'+(v>=1000000?(v/1000000).toFixed(1)+'M':v.toLocaleString()),font:{size:10,family:'DM Mono'},color:'#8c8579'},grid:{color:'#e4e0d8'},border:{display:false}},x:{ticks:{font:{size:10},color:'#8c8579'},grid:{display:false},border:{display:false}}}}});
+  ctx._chart=new Chart(ctx,{type:'bar',data:{labels:months12.map(m=>m.replace('å¹´','/').replace('æ','')),datasets:[{data,backgroundColor:months12.map((_,i)=>i===11?'rgba(200,64,26,0.85)':'rgba(14,13,11,0.08)'),borderColor:months12.map((_,i)=>i===11?'rgba(200,64,26,1)':'rgba(14,13,11,0.15)'),borderWidth:1,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'Â¥'+(v>=1000000?(v/1000000).toFixed(1)+'M':v.toLocaleString()),font:{size:10,family:'DM Mono'},color:'#8c8579'},grid:{color:'#e4e0d8'},border:{display:false}},x:{ticks:{font:{size:10},color:'#8c8579'},grid:{display:false},border:{display:false}}}}});
   const list=document.getElementById('dash-proj-list');
-  if(!rows.length){list.innerHTML='<div class="empty-state">売上データを追加すると表示されます</div>';return;}
-  list.innerHTML='<table><thead><tr><th>企業名</th><th>状況</th><th>金額</th><th>利益額</th><th>担当</th><th>入金</th></tr></thead><tbody>'+
-    rows.map(r=>`<tr><td><strong>${r.company}</strong></td><td><span class="badge ${r.status==='実行中'?'badge-teal':'badge-gold'}">${r.status}</span></td><td class="mono">${fmt(r.amount)}</td><td class="mono">${fmt(r.profit)}</td><td><span class="badge badge-gray">${r.person}</span></td><td>${r.paid?'<span class="badge badge-sage">✓ 入金済</span>':'<span class="badge badge-gray">未入金</span>'}</td></tr>`).join('')+
+  if(!rows.length){list.innerHTML='<div class="empty-state">å£²ä¸ãã¼ã¿ãè¿½å ããã¨è¡¨ç¤ºããã¾ã</div>';return;}
+  list.innerHTML='<table><thead><tr><th>ä¼æ¥­å</th><th>ç¶æ³</th><th>éé¡</th><th>å©çé¡</th><th>æå½</th><th>å¥é</th></tr></thead><tbody>'+
+    rows.map(r=>`<tr><td><strong>${r.company}</strong></td><td><span class="badge ${r.status==='å®è¡ä¸­'?'badge-teal':'badge-gold'}">${r.status}</span></td><td class="mono">${fmt(r.amount)}</td><td class="mono">${fmt(r.profit)}</td><td><span class="badge badge-gray">${r.person}</span></td><td>${r.paid?'<span class="badge badge-sage">â å¥éæ¸</span>':'<span class="badge badge-gray">æªå¥é</span>'}</td></tr>`).join('')+
     '</tbody></table>';
 }
 
@@ -580,26 +613,26 @@ function renderSales(){
   document.getElementById('s-profit').textContent=fmt(profit);
   document.getElementById('s-paid').textContent=paid+' / '+rows.length;
   const tbody=document.getElementById('sales-tbody');
-  if(!rows.length){tbody.innerHTML='<tr><td colspan="9" class="empty-state">データがありません</td></tr>';syncOrderProjects();syncCostProjects();return;}
+  if(!rows.length){tbody.innerHTML='<tr><td colspan="9" class="empty-state">ãã¼ã¿ãããã¾ãã</td></tr>';syncOrderProjects();syncCostProjects();return;}
   tbody.innerHTML=rows.map((r,i)=>`
     <tr>
       <td><strong>${r.company}</strong></td>
-      <td><span class="badge ${r.status==='実行中'?'badge-teal':'badge-gold'}">${r.status}</span></td>
-      <td class="mono" style="font-size:12px;">${r.month||'—'}</td>
+      <td><span class="badge ${r.status==='å®è¡ä¸­'?'badge-teal':'badge-gold'}">${r.status}</span></td>
+      <td class="mono" style="font-size:12px;">${r.month||'â'}</td>
       <td class="mono">${fmt(r.amount)}</td><td class="mono">${fmt(r.profit)}</td>
-      <td class="mono">${r.rate||'—'}</td>
+      <td class="mono">${r.rate||'â'}</td>
       <td><span class="badge badge-gray">${r.person}</span></td>
       <td><label class="toggle"><input type="checkbox" ${r.paid?'checked':''} onchange="togglePaid('${month}',${i})"><span class="toggle-slider"></span></label></td>
-      <td><div class="actions-cell"><button class="btn btn-ghost btn-sm" onclick="editSales('${month}',${i})">編集</button><button class="btn btn-danger btn-sm" onclick="deleteSales('${month}',${i})">削除</button></div></td>
+      <td><div class="actions-cell"><button class="btn btn-ghost btn-sm" onclick="editSales('${month}',${i})">ç·¨é</button><button class="btn btn-danger btn-sm" onclick="deleteSales('${month}',${i})">åé¤</button></div></td>
     </tr>`).join('');
   syncOrderProjects();syncCostProjects();
 }
-function openSalesModal(){editingSales=null;document.getElementById('sModalTitle').textContent='SALES ENTRY';['s-company','s-amount','s-profit','s-rate','s-future'].forEach(id=>document.getElementById(id).value='');document.getElementById('s-status').value='実行中';document.getElementById('s-month').value=document.getElementById('salesMonthFilter').value;document.getElementById('s-person').value='じゅん';document.getElementById('salesModal').classList.add('open');}
+function openSalesModal(){editingSales=null;document.getElementById('sModalTitle').textContent='SALES ENTRY';['s-company','s-amount','s-profit','s-rate','s-future'].forEach(id=>document.getElementById(id).value='');document.getElementById('s-status').value='å®è¡ä¸­';document.getElementById('s-month').value=document.getElementById('salesMonthFilter').value;document.getElementById('s-person').value='ããã';document.getElementById('salesModal').classList.add('open');}
 function editSales(month,idx){const r=DB.sales[month][idx];editingSales={month,idx};document.getElementById('sModalTitle').textContent='EDIT ENTRY';document.getElementById('s-company').value=r.company;document.getElementById('s-status').value=r.status;document.getElementById('s-month').value=r.month;document.getElementById('s-amount').value=r.amount;document.getElementById('s-profit').value=r.profit;document.getElementById('s-rate').value=r.rate;document.getElementById('s-person').value=r.person;document.getElementById('s-future').value=r.future||'';document.getElementById('salesModal').classList.add('open');}
 function closeSalesModal(){document.getElementById('salesModal').classList.remove('open');}
 function calcProfitRate(){const a=Number(document.getElementById('s-amount').value);const p=Number(document.getElementById('s-profit').value);document.getElementById('s-rate').value=(a&&p)?Math.round(p/a*100)+'%':'';}
 function saveSales(){
-  const company=document.getElementById('s-company').value.trim();if(!company){alert('企業名を入力してください');return;}
+  const company=document.getElementById('s-company').value.trim();if(!company){alert('ä¼æ¥­åãå¥åãã¦ãã ãã');return;}
   const month=editingSales?editingSales.month:document.getElementById('salesMonthFilter').value;
   if(!DB.sales[month]) DB.sales[month]=[];
   const row={company,status:document.getElementById('s-status').value,month:document.getElementById('s-month').value,amount:Number(document.getElementById('s-amount').value)||0,profit:Number(document.getElementById('s-profit').value)||0,rate:document.getElementById('s-rate').value,person:document.getElementById('s-person').value,future:document.getElementById('s-future').value,paid:editingSales?DB.sales[editingSales.month][editingSales.idx].paid:false};
@@ -608,15 +641,61 @@ function saveSales(){
   save();closeSalesModal();renderSales();
 }
 function togglePaid(month,idx){DB.sales[month][idx].paid=!DB.sales[month][idx].paid;save();renderSales();}
-function deleteSales(month,idx){if(!confirm('削除しますか？'))return;DB.sales[month].splice(idx,1);save();renderSales();}
+function deleteSales(month,idx){if(!confirm('åé¤ãã¾ããï¼'))return;DB.sales[month].splice(idx,1);save();renderSales();}
 
 // ===== SYNC =====
-function syncOrderProjects(){const sel=document.getElementById('o-project');const cur=sel.value;const p=getAllProjects();sel.innerHTML='<option value="">選択してください</option>'+p.map(x=>`<option value="${x}">${x}</option>`).join('');if(cur)sel.value=cur;}
-function syncCostProjects(){const sel=document.getElementById('costFilter');const cur=sel.value;const p=getAllProjects();const custom=Object.keys(DB.costs).filter(k=>!p.includes(k));const all=[...p,...custom];sel.innerHTML='<option value="">案件を選択してください</option>'+all.map(x=>`<option value="${x}">${x}</option>`).join('');if(cur)sel.value=cur;}
+function syncOrderProjects(){const sel=document.getElementById('o-project');const cur=sel.value;const p=getAllProjects();sel.innerHTML='<option value="">é¸æãã¦ãã ãã</option>'+p.map(x=>`<option value="${x}">${x}</option>`).join('');if(cur)sel.value=cur;}
+function syncCostProjects(){const sel=document.getElementById('costFilter');const cur=sel.value;const p=getAllProjects();const custom=Object.keys(DB.costs).filter(k=>!p.includes(k));const all=[...p,...custom];sel.innerHTML='<option value="">æ¡ä»¶ãé¸æãã¦ãã ãã</option>'+all.map(x=>`<option value="${x}">${x}</option>`).join('');if(cur)sel.value=cur;}
 
 // ===== ORDERS =====
 function switchOTab(tab){['form','list','dash'].forEach((t,i)=>{document.querySelectorAll('.tab')[i].classList.toggle('active',t===tab);document.getElementById('otab-'+t).style.display=t===tab?'':'none';});if(tab==='list')renderOrders();if(tab==='dash')renderOrderDash();}
 function genOrderId(date){const[y,m]=(date||today()).split('-');const same=DB.orders.filter(o=>o.orderId&&o.orderId.startsWith('ORD-'+y+'-'+m)).length;return 'ORD-'+y+'-'+m+'-'+String(same+1).padStart(4,'0');}
+
+// çºæ³¨å°å¸³ã¢ã¼ãã«
+let editingOrderIdx = null;
+function openOrderModal(idx){
+  editingOrderIdx = (idx !== undefined) ? idx : null;
+  const isEdit = editingOrderIdx !== null;
+  document.getElementById('oModalTitle').textContent = isEdit ? 'çºæ³¨ç·¨é' : 'çºæ³¨è¿½å ';
+  syncOrderProjectsModal();
+  if(isEdit){
+    const o = DB.orders[idx];
+    document.getElementById('om-date').value = o.date||today();
+    document.getElementById('om-vendor').value = o.vendor||'';
+    document.getElementById('om-project').value = o.project||'';
+    document.getElementById('om-task').value = o.task||'';
+    document.getElementById('om-amount').value = o.amount||'';
+    document.getElementById('om-due').value = o.due||'';
+  } else {
+    document.getElementById('om-date').value = today();
+    ['om-vendor','om-project','om-task','om-amount','om-due'].forEach(id=>document.getElementById(id).value='');
+  }
+  document.getElementById('orderModal').classList.add('open');
+}
+function closeOrderModal(){document.getElementById('orderModal').classList.remove('open');}
+function syncOrderProjectsModal(){
+  const sel=document.getElementById('om-project');const cur=sel.value;
+  const p=getAllProjects();
+  sel.innerHTML='<option value="">é¸æãã¦ãã ãã</option>'+p.map(x=>`<option value="${x}">${x}</option>`).join('');
+  if(cur)sel.value=cur;
+}
+function saveOrderDirect(){
+  const date=document.getElementById('om-date').value||today();
+  const vendor=document.getElementById('om-vendor').value;
+  const project=document.getElementById('om-project').value;
+  const task=document.getElementById('om-task').value.trim();
+  const amount=Number(document.getElementById('om-amount').value);
+  const due=document.getElementById('om-due').value;
+  if(!vendor||!task){alert('æå½èã¨åå®¹ãå¥åãã¦ãã ãã');return;}
+  const[y,m]=date.split('-');
+  if(editingOrderIdx !== null){
+    DB.orders[editingOrderIdx]={...DB.orders[editingOrderIdx],date,vendor,project,task,amount,due,monthKey:y+'/'+m+'/01'};
+  } else {
+    const orderId=genOrderId(date);
+    DB.orders.push({orderId,date,project,task,amount,due,vendor,status:'Sent',sentAt:new Date().toISOString(),monthKey:y+'/'+m+'/01'});
+  }
+  syncOrderMonths();save();closeOrderModal();renderOrders();
+}
 function submitOrder(){
   const date=document.getElementById('o-date').value||today();
   const project=document.getElementById('o-project').value;
@@ -624,34 +703,34 @@ function submitOrder(){
   const amount=Number(document.getElementById('o-amount').value);
   const due=document.getElementById('o-due').value;
   const vendor=document.getElementById('o-vendor').value;
-  if(!vendor||!task){alert('担当者と内容を入力してください');return;}
+  if(!vendor||!task){alert('æå½èã¨åå®¹ãå¥åãã¦ãã ãã');return;}
   const[y,m]=date.split('-');
   const orderId=genOrderId(date);
   DB.orders.push({orderId,date,project,task,amount,due,vendor,status:'Sent',sentAt:new Date().toISOString(),monthKey:y+'/'+m+'/01'});
   syncOrderMonths();save();
   const toEmail=VENDORS[vendor]||'';
   if(toEmail){
-    const subject=`【発注】${project?project+' / ':''}${task}`;
-    const body=[`${vendor} さん`,'','以下の内容でご依頼いたします。','ご確認・ご承諾のほどよろしくお願いいたします。','','━━━━━━━━━━━━━━━━',`発注ID　：${orderId}`,`発注日　：${date}`,`案件名　：${project||'—'}`,`内容　　：${task}`,`金額　　：${amount?'¥'+Number(amount).toLocaleString('ja-JP')+'（税抜）':'—'}`,`納期　　：${due||'—'}`,'━━━━━━━━━━━━━━━━','','ご不明点があればご連絡ください。','','sasuta合同会社'].join('\n');
+    const subject=`ãçºæ³¨ã${project?project+' / ':''}${task}`;
+    const body=[`${vendor} ãã`,'','ä»¥ä¸ã®åå®¹ã§ãä¾é ¼ãããã¾ãã','ãç¢ºèªã»ãæ¿è«¾ã®ã»ã©ãããããé¡ããããã¾ãã','','ââââââââââââââââ',`çºæ³¨IDãï¼${orderId}`,`çºæ³¨æ¥ãï¼${date}`,`æ¡ä»¶åãï¼${project||'â'}`,`åå®¹ããï¼${task}`,`éé¡ããï¼${amount?'Â¥'+Number(amount).toLocaleString('ja-JP')+'ï¼ç¨æï¼':'â'}`,`ç´æããï¼${due||'â'}`,'ââââââââââââââââ','','ãä¸æç¹ãããã°ãé£çµ¡ãã ããã','','sasutaååä¼ç¤¾'].join('\n');
     window.location.href=`mailto:${toEmail}?cc=${CC}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  }else{alert('⚠️ このベンダーのメールアドレスが見つかりません');}
+  }else{alert('â ï¸ ãã®ãã³ãã¼ã®ã¡ã¼ã«ã¢ãã¬ã¹ãè¦ã¤ããã¾ãã');}
   ['o-project','o-task','o-amount','o-due','o-vendor'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('o-date').value=today();
 }
-function syncOrderMonths(){const months=[...new Set(DB.orders.map(o=>o.monthKey))].sort().reverse();const sel=document.getElementById('o-mf');const cur=sel.value;sel.innerHTML='<option value="">全期間</option>'+months.map(m=>`<option value="${m}">${m.slice(0,7)}</option>`).join('');if(cur)sel.value=cur;}
+function syncOrderMonths(){const months=[...new Set(DB.orders.map(o=>o.monthKey))].sort().reverse();const sel=document.getElementById('o-mf');const cur=sel.value;sel.innerHTML='<option value="">å¨æé</option>'+months.map(m=>`<option value="${m}">${m.slice(0,7)}</option>`).join('');if(cur)sel.value=cur;}
 function renderOrders(){
   const mf=document.getElementById('o-mf').value;const vf=document.getElementById('o-vf').value;
   const rows=DB.orders.filter(o=>(!mf||o.monthKey===mf)&&(!vf||o.vendor===vf)).slice().reverse();
   const tbody=document.getElementById('orders-tbody');
-  if(!rows.length){tbody.innerHTML='<tr><td colspan="8" class="empty-state">発注データがありません</td></tr>';return;}
-  tbody.innerHTML=rows.map(o=>`<tr><td class="mono" style="font-size:11px;">${o.orderId}</td><td class="mono" style="font-size:12px;">${fmtD(o.date)}</td><td>${o.project||'—'}</td><td>${o.task}</td><td class="mono">${fmt(o.amount)}</td><td class="mono" style="font-size:12px;">${fmtD(o.due)}</td><td>${o.vendor}</td><td><button class="btn btn-danger btn-sm" onclick="deleteOrder(${DB.orders.indexOf(o)})">削除</button></td></tr>`).join('');
+  if(!rows.length){tbody.innerHTML='<tr><td colspan="8" class="empty-state">çºæ³¨ãã¼ã¿ãããã¾ãã</td></tr>';return;}
+  tbody.innerHTML=rows.map(o=>`<tr><td class="mono" style="font-size:11px;">${o.orderId||'â'}</td><td class="mono" style="font-size:12px;">${fmtD(o.date)}</td><td>${o.project||'â'}</td><td>${o.task}</td><td class="mono">${fmt(o.amount)}</td><td class="mono" style="font-size:12px;">${fmtD(o.due)}</td><td>${o.vendor}</td><td><div class="actions-cell"><button class="btn btn-ghost btn-sm" onclick="openOrderModal(${DB.orders.indexOf(o)})">ç·¨é</button><button class="btn btn-danger btn-sm" onclick="deleteOrder(${DB.orders.indexOf(o)})">åé¤</button></div></td></tr>`).join('');
 }
-function deleteOrder(idx){if(!confirm('削除しますか？'))return;DB.orders.splice(idx,1);save();renderOrders();}
+function deleteOrder(idx){if(!confirm('åé¤ãã¾ããï¼'))return;DB.orders.splice(idx,1);save();renderOrders();}
 function renderOrderDash(){
   const months=[...new Set(DB.orders.map(o=>o.monthKey))].sort().reverse();
   const c=document.getElementById('o-dash-content');
-  if(!months.length){c.innerHTML='<div class="empty-state">発注データを登録すると表示されます</div>';return;}
-  c.innerHTML='<div class="table-wrap"><table><thead><tr><th>Month</th><th>外注費合計</th><th>目安（30%）</th><th>利用率</th></tr></thead><tbody>'+
+  if(!months.length){c.innerHTML='<div class="empty-state">çºæ³¨ãã¼ã¿ãç»é²ããã¨è¡¨ç¤ºããã¾ã</div>';return;}
+  c.innerHTML='<div class="table-wrap"><table><thead><tr><th>Month</th><th>å¤æ³¨è²»åè¨</th><th>ç®å®ï¼30%ï¼</th><th>å©ç¨ç</th></tr></thead><tbody>'+
     months.map(mk=>{const t=DB.orders.filter(o=>o.monthKey===mk).reduce((s,o)=>s+(Number(o.amount)||0),0);const b=5000000*0.3;const r=Math.round(t/b*100);const color=r>100?'var(--accent)':r>80?'var(--gold)':'var(--sage)';return `<tr><td class="mono">${mk.slice(0,7)}</td><td class="mono">${fmt(t)}</td><td class="mono">${fmt(b)}</td><td><div style="display:flex;align-items:center;gap:10px;"><div class="progress-wrap" style="width:120px;height:4px;"><div class="progress-bar" style="width:${Math.min(r,100)}%;background:${color};"></div></div><span class="mono" style="font-size:11px;color:${r>100?'var(--accent)':'var(--muted)'};">${r}%</span></div></td></tr>`;}).join('')+'</tbody></table></div>';
 }
 
@@ -672,28 +751,28 @@ function renderCosts(){
   document.getElementById('c-budget-rate').textContent=p.budgetRate+'%';
   document.getElementById('c-actual').textContent=fmt(actual);
   document.getElementById('c-remaining').textContent=fmt(remaining);
-  document.getElementById('c-usage').innerHTML=`使用率 <span style="color:${rate>100?'var(--accent)':'var(--sage)'};font-weight:600;">${rate}%</span>`;
+  document.getElementById('c-usage').innerHTML=`ä½¿ç¨ç <span style="color:${rate>100?'var(--accent)':'var(--sage)'};font-weight:600;">${rate}%</span>`;
   const bar=document.getElementById('c-bar');bar.style.width=Math.min(rate,100)+'%';bar.style.background=rate>100?'var(--accent)':rate>80?'var(--gold)':'var(--sage)';
   const items=p.items||[];const tbody=document.getElementById('costs-tbody');
-  if(!items.length){tbody.innerHTML='<tr><td colspan="4" class="empty-state">費目がありません</td></tr>';return;}
-  tbody.innerHTML=items.map((item,i)=>`<tr><td><strong>${item.name}</strong></td><td class="mono">${fmt(item.amount)}</td><td style="color:var(--muted);font-size:12px;">${item.memo||'—'}</td><td><div class="actions-cell"><button class="btn btn-ghost btn-sm" onclick="editCostItem(${i})">編集</button><button class="btn btn-danger btn-sm" onclick="deleteCostItem(${i})">削除</button></div></td></tr>`).join('');
+  if(!items.length){tbody.innerHTML='<tr><td colspan="4" class="empty-state">è²»ç®ãããã¾ãã</td></tr>';return;}
+  tbody.innerHTML=items.map((item,i)=>`<tr><td><strong>${item.name}</strong></td><td class="mono">${fmt(item.amount)}</td><td style="color:var(--muted);font-size:12px;">${item.memo||'â'}</td><td><div class="actions-cell"><button class="btn btn-ghost btn-sm" onclick="editCostItem(${i})">ç·¨é</button><button class="btn btn-danger btn-sm" onclick="deleteCostItem(${i})">åé¤</button></div></td></tr>`).join('');
 }
 function openCostItemModal(){editingCostItem=null;['ci-name','ci-memo'].forEach(id=>document.getElementById(id).value='');document.getElementById('ci-amount').value='';document.getElementById('costItemModal').classList.add('open');}
 function editCostItem(idx){const name=document.getElementById('costFilter').value;const item=DB.costs[name].items[idx];editingCostItem=idx;document.getElementById('ci-name').value=item.name;document.getElementById('ci-amount').value=item.amount;document.getElementById('ci-memo').value=item.memo||'';document.getElementById('costItemModal').classList.add('open');}
 function closeCostItemModal(){document.getElementById('costItemModal').classList.remove('open');}
 function saveCostItem(){
   const name=document.getElementById('costFilter').value;if(!name)return;
-  const itemName=document.getElementById('ci-name').value.trim();if(!itemName){alert('費目名を入力してください');return;}
+  const itemName=document.getElementById('ci-name').value.trim();if(!itemName){alert('è²»ç®åãå¥åãã¦ãã ãã');return;}
   if(!DB.costs[name]) DB.costs[name]={name,amount:0,budgetRate:20,items:[]};
   const item={name:itemName,amount:Number(document.getElementById('ci-amount').value)||0,memo:document.getElementById('ci-memo').value};
   if(editingCostItem!==null) DB.costs[name].items[editingCostItem]=item;else DB.costs[name].items.push(item);
   save();closeCostItemModal();renderCosts();
 }
-function deleteCostItem(idx){if(!confirm('削除しますか？'))return;const name=document.getElementById('costFilter').value;DB.costs[name].items.splice(idx,1);save();renderCosts();}
+function deleteCostItem(idx){if(!confirm('åé¤ãã¾ããï¼'))return;const name=document.getElementById('costFilter').value;DB.costs[name].items.splice(idx,1);save();renderCosts();}
 function openNewCostModal(){document.getElementById('nc-name').value='';document.getElementById('nc-amount').value='';document.getElementById('nc-rate').value='20';document.getElementById('newCostModal').classList.add('open');}
 function closeNewCostModal(){document.getElementById('newCostModal').classList.remove('open');}
 function createNewCostProject(){
-  const name=document.getElementById('nc-name').value.trim();if(!name){alert('案件名を入力してください');return;}
+  const name=document.getElementById('nc-name').value.trim();if(!name){alert('æ¡ä»¶åãå¥åãã¦ãã ãã');return;}
   DB.costs[name]={name,amount:Number(document.getElementById('nc-amount').value)||0,budgetRate:Number(document.getElementById('nc-rate').value),items:[]};
   syncCostProjects();document.getElementById('costFilter').value=name;
   save();closeNewCostModal();renderCosts();
@@ -707,13 +786,13 @@ async function init(){
   document.getElementById('sidebarDate').textContent=dateStr;
   document.getElementById('o-date').value=today();
 
-  document.getElementById('loading-text').textContent='クラウドからデータを取得中...';
+  document.getElementById('loading-text').textContent='ã¯ã©ã¦ããããã¼ã¿ãåå¾ä¸­...';
   await loadFromCloud();
 
   syncOrderMonths();syncOrderProjects();syncCostProjects();
   renderDashboard();
 
-  // ローディング非表示
+  // ã­ã¼ãã£ã³ã°éè¡¨ç¤º
   const overlay=document.getElementById('loading-overlay');
   overlay.classList.add('hidden');
   setTimeout(()=>overlay.style.display='none',400);
