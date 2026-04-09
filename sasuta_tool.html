@@ -1731,13 +1731,24 @@ function prevMonthKey(mk) {
 
 // 資金繰り用: 振込月が一致する売上を集計
 // 売上データの「振り込み月」フィールド（例: "26年4月"）を使う
+// 月キーを正規化 "26年4月" / "2026年4月" / "26/4" などを統一
+function normalizeMk(s) {
+  if(!s) return '';
+  s = s.trim();
+  // "2026年4月" → "26年4月"
+  s = s.replace(/^20(\d{2})年/, '$1年');
+  // "26/4" や "26-4" → "26年4月"
+  s = s.replace(/^(\d{1,2})[\/\-](\d{1,2})$/, '$1年$2月');
+  return s;
+}
+
 function getSalesForMonthCF(mk) {
+  const targetMk = normalizeMk(mk);
   let total = 0;
   Object.values(DB.sales).forEach(rows => {
     rows.forEach(r => {
-      // 振り込み月が指定月と一致するものを集計
-      const transferMonth = (r.month || '').trim();
-      if(transferMonth === mk) {
+      const transferMonth = normalizeMk(r.month || '');
+      if(transferMonth === targetMk) {
         total += Number(r.amount) || 0;
       }
     });
