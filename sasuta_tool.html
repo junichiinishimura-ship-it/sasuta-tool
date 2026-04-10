@@ -759,9 +759,10 @@ tbody tr:hover{background:var(--paper2);}
       <div style="border-top:1px solid var(--line);padding-top:16px;">
         <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--muted);margin-bottom:8px;">振込シートからCSV貼り付け</div>
         <div style="font-size:11.5px;color:var(--muted);margin-bottom:8px;">
-          振込シートの「支払先・当月支払額・手数料・支払済・摘要」列をコピーして貼り付けてください（タブ区切り）
+          振込シートの「支払先・当月支払額・手数料・支払済・摘要」列をコピーして貼り付け（タブ区切り）
         </div>
-        <textarea class="form-control" id="pay-csv" rows="5" placeholder="支払先&#9;当月支払額&#9;手数料&#9;支払済&#9;摘要&#10;村上 エミリ&#9;50000&#9;220&#9;✓&#9;GU動画編集&#10;Kemi&#9;30000&#9;220&#9;&#9;ライオン撮影"></textarea>
+        <textarea class="form-control" id="pay-csv" rows="6" placeholder="支払先&#9;当月支払額&#9;手数料&#9;支払済&#9;摘要&#10;村上 憲次郎&#9;88000&#9;145&#9;✓&#9;アルファロメオ撮影&#10;藤原 ひと美&#9;6363&#9;145&#9;&#9;動画編集費&#10;安藤ひろし&#9;190000&#9;145&#9;✓&#9;2月分業務委託費"></textarea>
+        <div style="font-size:11px;color:var(--dim);margin-top:6px;">※ Googleスプレッドシートから列を選択してコピー→そのまま貼り付けでOK</div>
         <button class="btn btn-accent" style="width:100%;margin-top:8px;" onclick="importPaymentCSV()">CSVを取り込む</button>
       </div>
     </div>
@@ -1549,10 +1550,17 @@ function runSimulation() {
 
     // 売上は「振り込み月」が一致するものを集計
     const toolSales = getSalesForMonthCF(label);
-    const toolExt   = getExtForMonth(label);
-    const sales  = toolSales > 0 ? toolSales : monthlySales;
-    const ext    = toolExt   > 0 ? toolExt   : monthlyExt;
-    const other  = monthlyOther;
+    const sales = toolSales > 0 ? toolSales : monthlySales;
+
+    // 外注費: 実際の支払い（振込シート入力済み）があればそれを優先、なければ発注台帳の見込み
+    const paymentKey = ym.slice(0,4)+'/'+ym.slice(5,7)+'/01'; // "2026/04/01"
+    const actualPayments = (DB.payments||{})[paymentKey] || [];
+    const actualExt = actualPayments.reduce((s,p)=>s+(Number(p.amount)||0)+(Number(p.fee)||0), 0);
+    const forecastExt = getExtForMonth(label); // 発注台帳ベース
+    const ext = actualExt > 0 ? actualExt : (forecastExt > 0 ? forecastExt : monthlyExt);
+    const extSource = actualExt > 0 ? '実績' : forecastExt > 0 ? '見込み' : '入力値';
+
+    const other = monthlyOther;
 
     // その月のイベント支出
     const events = simEvents.filter(ev => ev.month === ym && ev.amount > 0);
@@ -1563,7 +1571,7 @@ function runSimulation() {
     const net = sales - totalOut;
     balance = openBal + net;
 
-    rows.push({ ym, label, openBal, sales, fixed: FIXED, salary: SALARY, ext, other, eventTotal, eventLabel, net, closeBal: balance });
+    rows.push({ ym, label, openBal, sales, fixed: FIXED, salary: SALARY, ext, extSource, other, eventTotal, eventLabel, net, closeBal: balance });
 
     if(balance < 0 && dangerMonth === null) dangerMonth = label;
   });
@@ -1615,7 +1623,7 @@ function runSimulation() {
       <td class="mono">${fmt(r.openBal)}</td>
       <td class="mono" style="color:var(--teal);">${fmt(r.sales)}</td>
       <td class="mono" style="color:var(--muted);font-size:12px;">${fmt(r.fixed+r.salary)}</td>
-      <td class="mono" style="color:var(--muted);font-size:12px;">${fmt(r.ext)}</td>
+      <td class="mono" style="color:var(--muted);font-size:12px;">${fmt(r.ext)}<div style="font-size:9px;color:${r.extSource==='実績'?'var(--teal)':r.extSource==='見込み'?'var(--gold)':'var(--dim)'}">${r.extSource}</div></td>
       <td class="mono" style="color:var(--muted);font-size:12px;">${fmt(r.other)}</td>
       <td class="mono" style="color:var(--accent);font-size:12px;">${r.eventTotal>0?'▼'+fmt(r.eventTotal)+(r.eventLabel?' ('+r.eventLabel+')':''):'—'}</td>
       <td class="mono" style="color:${r.net>=0?'var(--sage)':'var(--accent)'};">${r.net>=0?'+':''}${fmt(r.net)}</td>
