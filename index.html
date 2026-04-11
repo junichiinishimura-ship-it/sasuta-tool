@@ -1406,7 +1406,7 @@ function renderOrderDash(){
     : forecasts.map(o=>`<tr><td class="mono" style="font-size:11px;">${o.orderId||'—'}</td><td>${o.project||'—'}</td><td>${o.task}</td><td>${o.vendor}</td><td class="mono">${fmt(o.amount)}</td><td class="mono" style="font-size:12px;">${fmtD(o.due)}</td></tr>`).join('');
 }
 
-function function openPaymentImportModal(){
+function openPaymentImportModal(){
   ['pay-vendor','pay-amount','pay-fee','pay-note','pay-csv'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('pay-done').value='1';
   document.getElementById('paymentImportModal').classList.add('open');
