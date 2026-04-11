@@ -941,25 +941,31 @@ function setSyncStatus(status, text) {
 // LOAD from JSONBin
 async function loadFromCloud() {
   setSyncStatus('syncing', '読み込み中...');
+  // 8秒でタイムアウト → localStorageにフォールバック
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 8000);
   try {
     const res = await fetch(BIN_URL + '/latest', {
-      headers: { 'X-Master-Key': API_KEY }
+      headers: { 'X-Master-Key': API_KEY },
+      signal: controller.signal
     });
+    clearTimeout(timeoutId);
     if (!res.ok) throw new Error('Load failed: ' + res.status);
     const json = await res.json();
     const record = json.record || {};
-    // マイグレーション: 古いデータ形式でも動くように
-    DB.sales  = record.sales  || {};
-    DB.orders = record.orders || [];
-    DB.costs  = record.costs  || {};
+    DB.sales    = record.sales    || {};
+    DB.orders   = record.orders   || [];
+    DB.costs    = record.costs    || {};
     DB.cashflow = record.cashflow || {};
     DB.payments = record.payments || {};
-    DB.payments = record.payments || {};
+    // localStorageにバックアップ
+    try { localStorage.setItem('sasuta_v2', JSON.stringify(DB)); } catch(e) {}
     setSyncStatus('ok', '同期済み');
   } catch(e) {
-    console.error(e);
-    setSyncStatus('error', '読み込みエラー');
-    // フォールバック: localStorageから
+    clearTimeout(timeoutId);
+    console.error('Cloud load failed:', e.message);
+    setSyncStatus('error', 'オフライン（ローカルデータを使用）');
+    // localStorageからフォールバック
     try {
       const local = localStorage.getItem('sasuta_v2');
       if (local) DB = JSON.parse(local);
@@ -1973,17 +1979,30 @@ async function init(){
   document.getElementById('sidebarDate').textContent=dateStr;
   document.getElementById('o-date').value=today();
 
-  document.getElementById('loading-text').textContent='クラウドからデータを取得中...';
-  await loadFromCloud();
+  // Step1: localStorageから即読み込み → 即画面表示（ローディングは絶対止まらない）
+  try {
+    const local = localStorage.getItem('sasuta_v2');
+    if (local) DB = JSON.parse(local);
+  } catch(e) {}
 
   syncOrderMonths();syncOrderProjects();syncCostProjects();
   initMonthPickers();
   renderDashboard();
 
-  // ローディング非表示
   const overlay=document.getElementById('loading-overlay');
   overlay.classList.add('hidden');
-  setTimeout(()=>overlay.style.display='none',400);
+  setTimeout(()=>{overlay.style.display='none';}, 300);
+
+  // Step2: バックグラウンドでクラウド同期（失敗しても画面に影響しない）
+  setTimeout(async ()=>{
+    try {
+      await loadFromCloud();
+      syncOrderMonths();syncOrderProjects();syncCostProjects();
+      renderCurrentPage();
+    } catch(e) {
+      setSyncStatus('error','クラウド未接続');
+    }
+  }, 800);
 }
 
 init();
