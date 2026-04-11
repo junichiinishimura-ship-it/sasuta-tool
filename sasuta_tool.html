@@ -1792,8 +1792,8 @@ function getPaymentForMonth(mk) {
 }
 
 function getExtForMonth(mk) {
-  const ym = monthKeyToYM(mk); // "2026-04"
-  const mKey = ym.slice(0,4)+'/'+ym.slice(5,7)+'/01'; // "2026/04/01"
+  const ym = monthKeyToYM(mk);
+  const mKey = ym.slice(0,4)+'/'+ym.slice(5,7)+'/01';
   return DB.orders.filter(o => o.monthKey === mKey || (o.date||'').startsWith(ym)).reduce((s,o) => s+(Number(o.amount)||0), 0);
 }
 
