@@ -547,56 +547,23 @@ tbody tr:hover{background:var(--paper2);}
         </div>
       </div>
       <div id="otab-dash" style="display:none;">
-        <!-- 月選択 -->
         <div class="filter-bar mb-4">
           <select id="odash-month" onchange="renderOrderDash()"><option value="">月を選択</option></select>
         </div>
-
-        <!-- サマリーカード -->
-        <div class="grid-4 mb-4" id="odash-summary" style="display:none;">
-          <div class="stat-card">
-            <div class="stat-label">発注見込み合計</div>
-            <div class="stat-value" id="odash-forecast">¥0</div>
-            <div class="stat-sub">発注台帳から集計</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">実際の支払い合計</div>
-            <div class="stat-value" id="odash-actual">¥0</div>
-            <div class="stat-sub">振込シートから</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">差額（見込み－実際）</div>
-            <div class="stat-value" id="odash-diff">¥0</div>
-            <div class="stat-sub" id="odash-diff-note">—</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">支払済み件数</div>
-            <div class="stat-value" id="odash-paid-count">0 / 0</div>
-            <div class="stat-sub">件</div>
-          </div>
+        <div class="grid-2 mb-4" id="odash-summary" style="display:none;">
+          <div class="stat-card"><div class="stat-label">発注見込み合計</div><div class="stat-value" id="odash-forecast">¥0</div><div class="stat-sub">発注台帳から集計</div></div>
+          <div class="stat-card"><div class="stat-label">実際の支払い合計</div><div class="stat-value" id="odash-actual">¥0</div><div class="stat-sub">振込シートから（資金繰りに反映）</div></div>
         </div>
-
-        <!-- 見込みリスト -->
         <div class="section-head mt-4"><div class="section-title">発注見込み</div></div>
-        <div class="table-wrap mb-4">
+        <div class="table-wrap">
           <table>
             <thead><tr><th>発注ID</th><th>案件名</th><th>内容</th><th>担当者</th><th>見込み金額</th><th>納期</th></tr></thead>
             <tbody id="odash-forecast-tbody"><tr><td colspan="6" class="empty-state">月を選択してください</td></tr></tbody>
           </table>
         </div>
-
-        <!-- 実際の支払い入力 -->
-        <div class="section-head">
-          <div class="section-title">実際の支払い（振込シートから）</div>
-          <button class="btn btn-primary btn-sm" onclick="openPaymentImportModal()">＋ 支払い追加 / CSVインポート</button>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>支払先</th><th>当月支払額</th><th>手数料</th><th>合計</th><th>支払済</th><th>摘要</th><th>操作</th></tr></thead>
-            <tbody id="odash-payment-tbody"><tr><td colspan="7" class="empty-state">月を選択してください</td></tr></tbody>
-          </table>
-        </div>
       </div>
+
+    </div>
     </div>
 
     <!-- COSTS -->
@@ -781,11 +748,11 @@ tbody tr:hover{background:var(--paper2);}
         <div class="form-group"><label class="form-label">口座残高</label><input type="number" class="form-control" id="cf-bal" placeholder="例：8500000"></div>
       </div>
       <div style="padding:10px 12px;background:var(--teal-pale);border-radius:var(--r-sm);margin-bottom:14px;font-size:12px;color:var(--teal);">
-        💡 売上・外注費はツールのデータから自動取得されます。以下は手動で上書き入力できます。
+        💡 売上は振込月ベース、外注費は振込シートの実績金額を入力してください（空白=発注台帳の見込みを使用）
       </div>
       <div class="grid-2">
         <div class="form-group"><label class="form-label">売上（手動上書き）</label><input type="number" class="form-control" id="cf-sales-ow" placeholder="空白=自動取得"></div>
-        <div class="form-group"><label class="form-label">外注費（手動上書き）</label><input type="number" class="form-control" id="cf-ext-ow" placeholder="空白=自動取得"></div>
+        <div class="form-group"><label class="form-label">外注費実績（振込シートの合計）</label><input type="number" class="form-control" id="cf-ext-actual" placeholder="空白=見込みを使用"></div>
       </div>
       <div class="grid-2">
         <div class="form-group"><label class="form-label">固定費</label><input type="number" class="form-control" id="cf-fixed" placeholder="478539" value="478539"></div>
@@ -1417,36 +1384,23 @@ function renderOrderDash(){
   const mk = document.getElementById('odash-month').value;
   const summary = document.getElementById('odash-summary');
   const forecastTbody = document.getElementById('odash-forecast-tbody');
-  const paymentTbody = document.getElementById('odash-payment-tbody');
   if(!mk){
     if(summary) summary.style.display='none';
     if(forecastTbody) forecastTbody.innerHTML='<tr><td colspan="6" class="empty-state">月を選択してください</td></tr>';
-    if(paymentTbody) paymentTbody.innerHTML='<tr><td colspan="7" class="empty-state">月を選択してください</td></tr>';
     return;
   }
   const forecasts = DB.orders.filter(o=>o.monthKey===mk);
   const forecastTotal = forecasts.reduce((s,o)=>s+(Number(o.amount)||0),0);
-  if(!DB.payments) DB.payments={};
-  const payments = DB.payments[mk] || [];
-  const paymentTotal = payments.reduce((s,p)=>s+(Number(p.amount)||0)+(Number(p.fee)||0),0);
-  const paidCount = payments.filter(p=>p.done).length;
+  const paymentTotal = ((DB.payments||{})[mk]||[]).reduce((s,p)=>s+(Number(p.amount)||0)+(Number(p.fee)||0),0);
   if(summary) summary.style.display='';
   document.getElementById('odash-forecast').textContent = fmt(forecastTotal);
   document.getElementById('odash-actual').textContent = fmt(paymentTotal);
-  const diff = forecastTotal - paymentTotal;
-  document.getElementById('odash-diff').textContent = (diff>=0?'+':'')+fmt(diff);
-  document.getElementById('odash-diff').style.color = diff>0?'var(--gold)':diff<0?'var(--accent)':'var(--sage)';
-  document.getElementById('odash-diff-note').textContent = diff>0?'見込みより少ない':diff<0?'見込みを超過':'ぴったり';
-  document.getElementById('odash-paid-count').textContent = paidCount+' / '+payments.length;
   if(forecastTbody) forecastTbody.innerHTML = forecasts.length===0
     ? '<tr><td colspan="6" class="empty-state">この月の発注データがありません</td></tr>'
     : forecasts.map(o=>`<tr><td class="mono" style="font-size:11px;">${o.orderId||'—'}</td><td>${o.project||'—'}</td><td>${o.task}</td><td>${o.vendor}</td><td class="mono">${fmt(o.amount)}</td><td class="mono" style="font-size:12px;">${fmtD(o.due)}</td></tr>`).join('');
-  if(paymentTbody) paymentTbody.innerHTML = payments.length===0
-    ? '<tr><td colspan="7" class="empty-state">「＋ 支払い追加」から入力してください</td></tr>'
-    : payments.map((p,i)=>`<tr><td><strong>${p.vendor}</strong></td><td class="mono">${fmt(p.amount)}</td><td class="mono" style="color:var(--muted);">${p.fee?fmt(p.fee):'—'}</td><td class="mono">${fmt((Number(p.amount)||0)+(Number(p.fee)||0))}</td><td>${p.done?'<span class="badge badge-sage">✓ 支払済</span>':'<span class="badge badge-yellow">未払い</span>'}</td><td style="font-size:12px;color:var(--muted);">${p.note||'—'}</td><td><button class="btn btn-danger btn-sm" onclick="deletePayment('${mk}',${i})">削除</button></td></tr>`).join('');
 }
 
-function openPaymentImportModal(){
+function function openPaymentImportModal(){
   ['pay-vendor','pay-amount','pay-fee','pay-note','pay-csv'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('pay-done').value='1';
   document.getElementById('paymentImportModal').classList.add('open');
@@ -1972,7 +1926,11 @@ function openCfRowModal(mk) {
   document.getElementById('cf-month').value = mk ? monthKeyToYM(mk) : '';
   document.getElementById('cf-bal').value = cf.bal ?? '';
   document.getElementById('cf-sales-ow').value = cf.salesOw ?? '';
-  document.getElementById('cf-ext-ow').value = cf.extOw ?? '';
+  // 外注費実績: DB.paymentsから合計を取得して表示
+  const cfYm = mk ? monthKeyToYM(mk) : '';
+  const cfPayKey = cfYm ? cfYm.slice(0,4)+'/'+cfYm.slice(5,7)+'/01' : '';
+  const cfPayTotal = cfPayKey ? ((DB.payments||{})[cfPayKey]||[]).reduce((s,p)=>s+(Number(p.amount)||0)+(Number(p.fee)||0),0) : 0;
+  document.getElementById('cf-ext-actual').value = cfPayTotal > 0 ? cfPayTotal : '';
   document.getElementById('cf-fixed').value = cf.fixed ?? FIXED_COST;
   document.getElementById('cf-salary').value = cf.salary ?? 120000;
   document.getElementById('cf-other').value = cf.other ?? '';
@@ -1984,22 +1942,26 @@ function closeCfRowModal() { document.getElementById('cfRowModal').classList.rem
 function saveCfRow() {
   const ym = document.getElementById('cf-month').value; // "2026-04"
   if(!ym) { alert('年月を入力してください'); return; }
-  // "2026-04" → "26年4月"
   const [y, m] = ym.split('-');
   const mk = String(Number(y)-2000) + '年' + String(Number(m)) + '月';
+  const paymentKey = y + '/' + m + '/01'; // "2026/04/01"
   if(!DB.cashflow) DB.cashflow = {};
+  if(!DB.payments) DB.payments = {};
   const salesOw = document.getElementById('cf-sales-ow').value;
-  const extOw   = document.getElementById('cf-ext-ow').value;
   DB.cashflow[mk] = {
     bal:     document.getElementById('cf-bal').value !== '' ? Number(document.getElementById('cf-bal').value) : undefined,
     salesOw: salesOw !== '' ? Number(salesOw) : undefined,
-    extOw:   extOw   !== '' ? Number(extOw)   : undefined,
     fixed:   Number(document.getElementById('cf-fixed').value) || FIXED_COST,
     salary:  Number(document.getElementById('cf-salary').value) || 120000,
     other:   Number(document.getElementById('cf-other').value) || 0,
     bonus:   Number(document.getElementById('cf-bonus').value) || 0,
     memo:    document.getElementById('cf-memo').value,
   };
+  // 外注費実績をDB.paymentsに保存（シミュレーター・資金繰りに反映）
+  const extActual = document.getElementById('cf-ext-actual').value;
+  if(extActual !== '') {
+    DB.payments[paymentKey] = [{ vendor:'合計', amount: Number(extActual), fee:0, done:true, note:'資金繰りから入力' }];
+  }
   save(); closeCfRowModal(); renderCashflow();
 }
 
