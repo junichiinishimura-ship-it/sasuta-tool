@@ -433,7 +433,7 @@ tbody tr:hover{background:var(--paper2);}
       <div class="grid-4 mb-4">
         <div class="stat-card"><div class="stat-label">当月売上</div><div class="stat-value" id="dash-sales">¥0</div><div class="stat-sub">目標 ¥5,000,000&nbsp;<span class="badge" id="dash-rate">0%</span></div></div>
         <div class="stat-card"><div class="stat-label">外注費 / 当月</div><div class="stat-value" id="dash-ext">¥0</div><div class="stat-sub">発注データから集計</div></div>
-        <div class="stat-card"><div class="stat-label">粗利</div><div class="stat-value" id="dash-profit">¥0</div><div class="stat-sub" id="dash-profit-rate">利益率 —</div></div>
+        <div class="stat-card"><div class="stat-label">粗利（売上−外注費）</div><div class="stat-value" id="dash-profit">¥0</div><div class="stat-sub" id="dash-profit-rate">粗利率 —</div></div>
         <div class="stat-card"><div class="stat-label">入金済み</div><div class="stat-value" id="dash-paid">0 / 0</div><div class="stat-sub">件数</div></div>
       </div>
       <div class="dash-cards">
@@ -603,8 +603,8 @@ tbody tr:hover{background:var(--paper2);}
     <!-- ===== CASHFLOW ===== -->
     <div class="page" id="page-cashflow">
       <div class="grid-4 mb-4">
-        <div class="stat-card"><div class="stat-label">年間売上予想</div><div class="stat-value" id="cf-annual-sales">¥0</div><div class="stat-sub">全月合計（ツールデータ）</div></div>
-        <div class="stat-card"><div class="stat-label">年間外注費</div><div class="stat-value" id="cf-annual-ext">¥0</div><div class="stat-sub">全発注合計</div></div>
+        <div class="stat-card"><div class="stat-label">今期売上</div><div class="stat-value" id="cf-annual-sales">¥0</div><div class="stat-sub">9月〜8月（8月決算）</div></div>
+        <div class="stat-card"><div class="stat-label">今期外注費</div><div class="stat-value" id="cf-annual-ext">¥0</div><div class="stat-sub">9月〜8月</div></div>
         <div class="stat-card"><div class="stat-label">年間固定費</div><div class="stat-value">¥5,742,468</div><div class="stat-sub">¥478,539 × 12ヶ月</div></div>
         <div class="stat-card"><div class="stat-label">現在口座残高</div><div class="stat-value" id="cf-balance">—</div><div class="stat-sub" id="cf-balance-date">手入力で更新</div></div>
       </div>
@@ -1080,7 +1080,6 @@ function renderDashboard() {
   const month = getSelectedMonth('dashYearFilter', 'dashMonthFilter');
   const rows=DB.sales[month]||[];
   const total=rows.reduce((s,r)=>s+(Number(r.amount)||0),0);
-  const profit=rows.reduce((s,r)=>s+(Number(r.profit)||0),0);
   const paid=rows.filter(r=>r.paid).length;
   const rate=total?Math.round(total/5000000*100):0;
   document.getElementById('dash-sales').textContent=fmt(total);
@@ -1097,8 +1096,10 @@ function renderDashboard() {
   const extMKey = ym.slice(0,4)+'/'+ym.slice(5,7)+'/01';
   const ext=DB.orders.filter(o=>o.monthKey===extMKey||(o.date||'').startsWith(ym)).reduce((s,o)=>s+(Number(o.amount)||0),0);
   document.getElementById('dash-ext').textContent=fmt(ext);
-  document.getElementById('dash-profit').textContent=fmt(profit);
-  document.getElementById('dash-profit-rate').textContent='利益率 '+(total?Math.round(profit/total*100):0)+'%';
+  // 粗利 = 売上 - 外注費
+  const grossProfit = total - ext;
+  document.getElementById('dash-profit').textContent=fmt(grossProfit);
+  document.getElementById('dash-profit-rate').textContent='粗利率 '+(total?Math.round(grossProfit/total*100):0)+'%';
   document.getElementById('dash-paid').textContent=paid+' / '+rows.length;
   // データが入ってる月だけ取得して時系列順にソート
   const allSalesMonths = Object.keys(DB.sales).filter(mk => {
@@ -1472,7 +1473,8 @@ function createNewCostProject(){
 
 // ===== SIMULATION =====
 let simEvents = [
-  { month: '2026-06', label: 'ボーナス支給', amount: 13000000 }
+  { month: '2026-06', label: 'ボーナス支給（1回目）', amount: 11166350 },
+  { month: '2026-07', label: 'ボーナス支給（2回目）', amount: 1833650 }
 ];
 
 function addSimEvent() {
@@ -1529,7 +1531,7 @@ function runSimulation() {
     const openBal = balance;
 
     // 売上は「振り込み月」が一致するものを集計
-    const toolSales = getSalesForMonthCF(label);
+    const toolSales = getSalesForMonth(label);
     const sales = toolSales > 0 ? toolSales : monthlySales;
 
     // 外注費: 実際の支払い（振込シート入力済み）があればそれを優先、なければ発注台帳の見込み
@@ -1793,17 +1795,22 @@ function renderCashflow() {
   const mkToNum = mk => { const r=mk.match(/(\d+)年(\d+)月/); return r?(2000+Number(r[1]))*100+Number(r[2]):0; };
   const dynamicMonths = [...mkSet].sort((a,b)=>mkToNum(a)-mkToNum(b));
 
-  // 年間集計
-  const annualSales = dynamicMonths.reduce((s,m) => s + getSalesForMonth(m), 0);
-  const annualExt   = dynamicMonths.reduce((s,m) => s + getExtForMonth(m), 0);
+  // 年間集計（今期: 9月〜翌8月）
+  const now = new Date();
+  const fy = now.getMonth() >= 8 ? now.getFullYear() : now.getFullYear() - 1; // 8月決算 → 9月始まり
+  const fyStart = (fy - 2000) * 100 + 9;  // e.g. 2509
+  const fyEnd   = (fy - 2000 + 1) * 100 + 8; // e.g. 2608
+  const fyMonths = dynamicMonths.filter(m => { const n = mkToNum(m); return n >= fyStart && n <= fyEnd; });
+  const annualSales = fyMonths.reduce((s,m) => s + getSalesForMonth(m), 0);
+  const annualExt   = fyMonths.reduce((s,m) => s + getExtForMonth(m), 0);
   document.getElementById('cf-annual-sales').textContent = fmt(annualSales);
   document.getElementById('cf-annual-ext').textContent   = fmt(annualExt);
 
   // 月別収支計算
   const rows = dynamicMonths.map(mk => {
     const cf = DB.cashflow[mk] || {};
-    // 売上: 振込月ベースで自動集計
-    const sales = getSalesForMonthCF(mk);
+    // 売上: 発生月ベースで自動集計
+    const sales = getSalesForMonth(mk);
     // 外注費: 実際の支払いがあればそちら優先、なければ発注見込み
     const paymentActual = getPaymentForMonth(mk);
     const ext = paymentActual > 0 ? paymentActual : getExtForMonth(mk);
@@ -1843,7 +1850,7 @@ function renderCashflow() {
       const prevMk = prevMonthKey(r.mk);
       return `<tr>
         <td class="mono" style="font-weight:600;">${r.mk}</td>
-        <td class="mono">${fmt(r.sales)}<div style="font-size:9px;color:var(--dim);">振込月ベース</div></td>
+        <td class="mono">${fmt(r.sales)}<div style="font-size:9px;color:var(--dim);">発生月ベース</div></td>
         <td class="mono">${fmt(r.ext)}<div style="font-size:9px;color:${r.isActualExt?'var(--teal)':'var(--dim)'};">${r.isActualExt?'実績':'見込み'}</div></td>
         <td class="mono" style="color:var(--muted);">${fmt(r.fixed)}</td>
         <td class="mono" style="color:var(--muted);">${fmt(r.salary)}</td>
