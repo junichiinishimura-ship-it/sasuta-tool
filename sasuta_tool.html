@@ -481,7 +481,7 @@ tbody tr:hover{background:var(--paper2);}
       <div class="grid-4 mb-4">
         <div class="stat-card"><div class="stat-label">売上合計</div><div class="stat-value" id="s-total">¥0</div></div>
         <div class="stat-card"><div class="stat-label">目標差分</div><div class="stat-value" id="s-diff">¥0</div></div>
-        <div class="stat-card"><div class="stat-label">利益合計</div><div class="stat-value" id="s-profit">¥0</div></div>
+        <div class="stat-card"><div class="stat-label">利益（売上−外注−経費）</div><div class="stat-value" id="s-profit">¥0</div></div>
         <div class="stat-card"><div class="stat-label">入金済み</div><div class="stat-value" id="s-paid">0 / 0</div></div>
       </div>
       <div class="table-wrap">
@@ -1146,10 +1146,22 @@ function renderSales(){
   const month = getSelectedMonth('salesYearFilter', 'salesMonthFilter');
   const rows=DB.sales[month]||[];
   const total=rows.reduce((s,r)=>s+(Number(r.amount)||0),0);
-  const profit=rows.reduce((s,r)=>s+(Number(r.profit)||0),0);
   const paid=rows.filter(r=>r.paid).length;
+  // 外注費
+  const monthToYm = (m) => {
+    const match = m.match(/(\d+)年(\d+)月/);
+    if(!match) return '';
+    const y = Number(match[1]) < 100 ? 2000 + Number(match[1]) : Number(match[1]);
+    return y + '-' + String(match[2]).padStart(2,'0');
+  };
+  const ym = monthToYm(month);
+  const extMKey = ym.slice(0,4)+'/'+ym.slice(5,7)+'/01';
+  const ext=DB.orders.filter(o=>o.monthKey===extMKey||(o.date||'').startsWith(ym)).reduce((s,o)=>s+(Number(o.amount)||0),0);
+  const expense = getExpenseForMonth(month);
+  const profit = total - ext - expense;
   document.getElementById('s-total').textContent=fmt(total);
-  document.getElementById('s-diff').textContent=fmt(5000000-total);
+  const diff = total - 5000000;
+  document.getElementById('s-diff').textContent=(diff>=0?'+':'')+fmt(diff);
   document.getElementById('s-profit').textContent=fmt(profit);
   document.getElementById('s-paid').textContent=paid+' / '+rows.length;
   const tbody=document.getElementById('sales-tbody');
@@ -1795,14 +1807,15 @@ function renderCashflow() {
   const mkToNum = mk => { const r=mk.match(/(\d+)年(\d+)月/); return r?(2000+Number(r[1]))*100+Number(r[2]):0; };
   const dynamicMonths = [...mkSet].sort((a,b)=>mkToNum(a)-mkToNum(b));
 
-  // 年間集計（今期: 9月〜翌8月）
-  const now = new Date();
-  const fy = now.getMonth() >= 8 ? now.getFullYear() : now.getFullYear() - 1; // 8月決算 → 9月始まり
-  const fyStart = (fy - 2000) * 100 + 9;  // e.g. 2509
-  const fyEnd   = (fy - 2000 + 1) * 100 + 8; // e.g. 2608
-  const fyMonths = dynamicMonths.filter(m => { const n = mkToNum(m); return n >= fyStart && n <= fyEnd; });
+  // 年間集計（今期: 9月〜翌8月、8月決算）
+  const nowDate = new Date();
+  const fyYear = nowDate.getMonth() >= 8 ? nowDate.getFullYear() : nowDate.getFullYear() - 1;
+  const fyStartNum = (fyYear - 2000) * 100 + 9;
+  const fyEndNum   = (fyYear - 2000 + 1) * 100 + 8;
+  const fyMonths = dynamicMonths.filter(m => { const n = mkToNum(m); return n >= fyStartNum && n <= fyEndNum; });
   const annualSales = fyMonths.reduce((s,m) => s + getSalesForMonth(m), 0);
   const annualExt   = fyMonths.reduce((s,m) => s + getExtForMonth(m), 0);
+  const annualExpense = fyMonths.reduce((s,m) => s + getExpenseForMonth(m), 0);
   document.getElementById('cf-annual-sales').textContent = fmt(annualSales);
   document.getElementById('cf-annual-ext').textContent   = fmt(annualExt);
 
