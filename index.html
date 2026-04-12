@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SASUTA — 業務管理</title>
+<title>SASUTA â æ¥­åç®¡ç</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@300;400;500;700&family=DM+Mono:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
@@ -114,18 +114,18 @@ tbody tr:hover{background:var(--paper2);}
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(14,13,11,0.45);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(2px);}
 .modal-overlay.open{display:flex;}
 
-/* モーダル本体: flexで縦並び、高さを明示的に制限 */
+/* ã¢ã¼ãã«æ¬ä½: flexã§ç¸¦ä¸¦ã³ãé«ããæç¤ºçã«å¶é */
 .modal{
   background:var(--paper);
   border-radius:var(--r);
   box-shadow:var(--sh-md);
   width:500px;
   max-width:96vw;
-  max-height:88vh;       /* 高さ上限 */
+  max-height:88vh;       /* é«ãä¸é */
   border:1px solid var(--line);
   display:flex;
-  flex-direction:column; /* header / body / footer を縦並び */
-  overflow:hidden;       /* 子要素がはみ出さないよう */
+  flex-direction:column; /* header / body / footer ãç¸¦ä¸¦ã³ */
+  overflow:hidden;       /* å­è¦ç´ ãã¯ã¿åºããªããã */
 }
 .modal-header{
   padding:20px 24px 16px;
@@ -133,28 +133,28 @@ tbody tr:hover{background:var(--paper2);}
   display:flex;
   align-items:center;
   justify-content:space-between;
-  flex-shrink:0;          /* 縮まない */
+  flex-shrink:0;          /* ç¸®ã¾ãªã */
 }
 .modal-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:0.06em;color:var(--ink);}
 .modal-close{cursor:pointer;color:var(--muted);font-size:16px;background:none;border:none;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
 .modal-close:hover{background:var(--paper2);color:var(--ink);}
 
-/* bodyは残りスペースを使ってスクロール */
+/* bodyã¯æ®ãã¹ãã¼ã¹ãä½¿ã£ã¦ã¹ã¯ã­ã¼ã« */
 .modal-body{
   padding:22px 24px;
-  flex:1;                 /* 伸びる */
-  overflow-y:auto;        /* 縦スクロール */
+  flex:1;                 /* ä¼¸ã³ã */
+  overflow-y:auto;        /* ç¸¦ã¹ã¯ã­ã¼ã« */
   -webkit-overflow-scrolling:touch;
 }
 
-/* footerは常に下に固定 */
+/* footerã¯å¸¸ã«ä¸ã«åºå® */
 .modal-footer{
   padding:14px 24px;
   border-top:1px solid var(--line);
   display:flex;
   justify-content:flex-end;
   gap:8px;
-  flex-shrink:0;          /* 縮まない */
+  flex-shrink:0;          /* ç¸®ã¾ãªã */
   background:var(--paper);
 }
 
@@ -193,12 +193,12 @@ tbody tr:hover{background:var(--paper2);}
 .section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
 .section-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:0.06em;color:var(--ink);}
 
-/* ダッシュボード2カラム */
+/* ããã·ã¥ãã¼ã2ã«ã©ã  */
 .dash-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-/* 固定費リスト */
+/* åºå®è²»ãªã¹ã */
 .fixed-cost-list{display:flex;flex-direction:column;gap:8px;}
 .fc-row{display:flex;justify-content:space-between;align-items:center;font-size:13px;}
-/* 年月ピッカー */
+/* å¹´æããã«ã¼ */
 .month-picker{display:flex;align-items:center;gap:6px;}
 .month-picker select{padding:7px 10px;border:1px solid var(--line2);border-radius:var(--r-sm);font-size:13px;font-family:'Noto Sans JP',sans-serif;background:var(--paper);color:var(--ink);cursor:pointer;}
 .month-picker select:focus{outline:none;border-color:var(--ink);}
@@ -211,101 +211,101 @@ tbody tr:hover{background:var(--paper2);}
 /* ===== RESPONSIVE ===== */
 @media(max-width:768px){
 
-  /* ── 横はみ出し完全封じ ── */
+  /* ââ æ¨ªã¯ã¿åºãå®å¨å°ã ââ */
   html{overflow-x:hidden;}
   body{overflow-x:hidden;width:100%;max-width:100vw;}
   .main{overflow-x:hidden;min-width:0;width:100%;}
   .content{overflow-x:hidden;min-width:0;}
-  *{min-width:0;} /* flexbox/grid子要素の収縮を許可 */
+  *{min-width:0;} /* flexbox/gridå­è¦ç´ ã®åç¸®ãè¨±å¯ */
 
-  /* ── サイドバー非表示 ── */
+  /* ââ ãµã¤ããã¼éè¡¨ç¤º ââ */
   .sidebar{display:none;}
   .main{margin-left:0;}
 
-  /* ── トップバー ── */
+  /* ââ ããããã¼ ââ */
   .topbar{padding:0 14px;height:50px;}
   .page-title-en{font-size:18px;}
   .page-title-ja{display:none;}
   .topbar-right .sync-indicator span{display:none;}
   #currentDate{display:none;}
 
-  /* ── コンテンツ ── */
+  /* ââ ã³ã³ãã³ã ââ */
   .content{padding:14px 12px 84px;}
 
-  /* ── グリッド ── */
+  /* ââ ã°ãªãã ââ */
   .grid-4{grid-template-columns:1fr 1fr!important;gap:8px;}
   .grid-2{grid-template-columns:1fr!important;gap:10px;}
   .dash-cards{grid-template-columns:1fr!important;gap:10px;}
 
-  /* ── stat card ── */
+  /* ââ stat card ââ */
   .stat-card{padding:12px 14px;}
   .stat-value{font-size:19px;}
   .stat-label{font-size:9px;letter-spacing:0.1em;}
   .stat-sub{font-size:10px;}
 
-  /* ── テーブル：table-wrapの中だけスクロール、画面からははみ出さない ── */
+  /* ââ ãã¼ãã«ï¼table-wrapã®ä¸­ã ãã¹ã¯ã­ã¼ã«ãç»é¢ããã¯ã¯ã¿åºããªã ââ */
   .table-wrap{
     width:100%;
     overflow-x:auto;
     -webkit-overflow-scrolling:touch;
     border-radius:var(--r-sm);
   }
-  /* テーブル幅を列数に応じて最低限確保 → table-wrap内でスクロール */
+  /* ãã¼ãã«å¹ãåæ°ã«å¿ãã¦æä½éç¢ºä¿ â table-wrapåã§ã¹ã¯ã­ã¼ã« */
   table{font-size:11px;width:max-content;min-width:100%;}
   thead th{padding:6px 8px;font-size:9px;white-space:nowrap;}
   tbody td{padding:6px 8px;white-space:nowrap;}
 
-  /* ── カード ── */
+  /* ââ ã«ã¼ã ââ */
   .card-body{padding:12px;}
   .card-header{padding:10px 14px 9px;flex-wrap:wrap;gap:6px;}
   .card-title{font-size:9px;}
 
-  /* ── モーダル：下からスライドアップ ── */
+  /* ââ ã¢ã¼ãã«ï¼ä¸ããã¹ã©ã¤ãã¢ãã ââ */
   .modal-overlay.open{align-items:flex-end;}
   .modal{
     width:100%!important;
     max-width:100vw!important;
-    max-height:calc(88vh - 60px)!important; /* ボトムナビ60px分引く */
+    max-height:calc(88vh - 60px)!important; /* ããã ãã60pxåå¼ã */
     border-radius:16px 16px 0 0!important;
     position:fixed!important;
-    bottom:60px!important;  /* ボトムナビの上に表示 */
+    bottom:60px!important;  /* ããã ããã®ä¸ã«è¡¨ç¤º */
     left:0!important;right:0!important;
     margin:0!important;
   }
   .modal-body{padding:14px 16px;}
   .modal-header{padding:14px 16px 12px;}
   .modal-footer{
-    padding:12px 16px!important; /* 上書き */
+    padding:12px 16px!important; /* ä¸æ¸ã */
     padding-bottom:16px!important;
   }
   .grid-2.modal-grid{grid-template-columns:1fr!important;}
 
-  /* ── フィルターバー ── */
+  /* ââ ãã£ã«ã¿ã¼ãã¼ ââ */
   .filter-bar{gap:6px;flex-wrap:wrap;}
   .filter-bar select,.filter-bar input{
     font-size:12px;padding:7px 8px;
     max-width:100%;flex:1 1 auto;
   }
 
-  /* ── タブ ── */
+  /* ââ ã¿ã ââ */
   .tabs{overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap;}
   .tab{padding:8px 10px;font-size:9px;letter-spacing:0.04em;white-space:nowrap;flex-shrink:0;}
 
-  /* ── チャート ── */
+  /* ââ ãã£ã¼ã ââ */
   .chart-container{height:150px;}
 
-  /* ── section-head ── */
+  /* ââ section-head ââ */
   .section-head{flex-wrap:wrap;gap:8px;}
   .section-title{font-size:15px;}
 
-  /* ── mb/mt縮小 ── */
+  /* ââ mb/mtç¸®å° ââ */
   .mb-4{margin-bottom:10px;}
   .mt-4{margin-top:10px;}
 
-  /* ── 発注フォームのgrid ── */
+  /* ââ çºæ³¨ãã©ã¼ã ã®grid ââ */
   .card-body .grid-2{grid-template-columns:1fr!important;}
 
-  /* ── シミュレーター特別支出の行 ── */
+  /* ââ ã·ãã¥ã¬ã¼ã¿ã¼ç¹å¥æ¯åºã®è¡ ââ */
   #sim-events-list>div{
     display:flex!important;
     flex-direction:column!important;
@@ -313,7 +313,7 @@ tbody tr:hover{background:var(--paper2);}
     width:100%!important;
   }
 
-  /* ── 資金繰りページのインラインgrid ── */
+  /* ââ è³éç¹°ããã¼ã¸ã®ã¤ã³ã©ã¤ã³grid ââ */
   #page-cashflow .card-body>[style*="display:grid"],
   #page-cashflow .card-body>[style*="grid-template-columns"]{
     display:grid!important;
@@ -321,7 +321,7 @@ tbody tr:hover{background:var(--paper2);}
     gap:8px!important;
   }
 
-  /* ── ボトムナビ ── */
+  /* ââ ããã ãã ââ */
   .mobile-nav{
     display:flex;
     position:fixed;
@@ -372,7 +372,7 @@ tbody tr:hover{background:var(--paper2);}
 <div id="loading-overlay">
   <div class="loading-logo">SAS<span>U</span>TA</div>
   <div class="loading-bar-wrap"><div class="loading-bar"></div></div>
-  <div class="loading-text" id="loading-text">データを読み込み中...</div>
+  <div class="loading-text" id="loading-text">ãã¼ã¿ãèª­ã¿è¾¼ã¿ä¸­...</div>
 </div>
 
 <!-- SIDEBAR -->
@@ -380,19 +380,19 @@ tbody tr:hover{background:var(--paper2);}
   <div class="sidebar-logo">
     <div class="brand-top">Creative Management</div>
     <div class="brand-name">SAS<span>U</span>TA</div>
-    <div class="brand-sub">業務管理システム</div>
+    <div class="brand-sub">æ¥­åç®¡çã·ã¹ãã </div>
   </div>
-  <div class="sidebar-date" id="sidebarDate">—</div>
+  <div class="sidebar-date" id="sidebarDate">â</div>
   <div class="sidebar-nav">
     <div class="nav-section">Navigation</div>
-    <div class="nav-item active" onclick="showPage('dashboard')"><span class="nav-icon">◈</span>ダッシュボード</div>
-    <div class="nav-item" onclick="showPage('sales')"><span class="nav-icon">◇</span>月次売上</div>
-    <div class="nav-item" onclick="showPage('orders')"><span class="nav-icon">◉</span>外注発注</div>
-    <div class="nav-item" onclick="showPage('costs')"><span class="nav-icon">◫</span>原価計算</div>
-    <div class="nav-item" onclick="showPage('cashflow')"><span class="nav-icon">◐</span>資金繰り</div>
+    <div class="nav-item active" onclick="showPage('dashboard')"><span class="nav-icon">â</span>ããã·ã¥ãã¼ã</div>
+    <div class="nav-item" onclick="showPage('sales')"><span class="nav-icon">â</span>ææ¬¡å£²ä¸</div>
+    <div class="nav-item" onclick="showPage('orders')"><span class="nav-icon">â</span>å¤æ³¨çºæ³¨</div>
+    <div class="nav-item" onclick="showPage('costs')"><span class="nav-icon">â«</span>åä¾¡è¨ç®</div>
+    <div class="nav-item" onclick="showPage('cashflow')"><span class="nav-icon">â</span>è³éç¹°ã</div>
   </div>
   <div class="sidebar-footer">
-    <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.1em;color:rgba(255,255,255,0.15);text-transform:uppercase;">sasuta LLC — 2026</div>
+    <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.1em;color:rgba(255,255,255,0.15);text-transform:uppercase;">sasuta LLC â 2026</div>
   </div>
 </nav>
 
@@ -401,14 +401,14 @@ tbody tr:hover{background:var(--paper2);}
   <div class="topbar">
     <div class="topbar-left">
       <div class="page-title-en" id="pageTitleEn">DASHBOARD</div>
-      <div class="page-title-ja" id="pageTitleJa">ダッシュボード</div>
+      <div class="page-title-ja" id="pageTitleJa">ããã·ã¥ãã¼ã</div>
     </div>
     <div class="topbar-right">
       <div class="sync-indicator">
         <div class="sync-dot" id="syncDot"></div>
-        <span id="syncText">—</span>
+        <span id="syncText">â</span>
       </div>
-      <button class="btn btn-ghost btn-sm" onclick="forceSync()">↻ 更新</button>
+      <button class="btn btn-ghost btn-sm" onclick="forceSync()">â» æ´æ°</button>
       <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--dim);letter-spacing:0.1em;" id="currentDate"></span>
     </div>
   </div>
@@ -420,45 +420,45 @@ tbody tr:hover{background:var(--paper2);}
       <div class="filter-bar">
         <div class="month-picker">
           <select id="dashYearFilter" onchange="renderDashboard()"></select>
-          <span style="color:var(--muted);font-size:13px;">年</span>
+          <span style="color:var(--muted);font-size:13px;">å¹´</span>
           <select id="dashMonthFilter" onchange="renderDashboard()">
-            <option value="1">1月</option><option value="2">2月</option><option value="3">3月</option>
-            <option value="4">4月</option><option value="5">5月</option><option value="6">6月</option>
-            <option value="7">7月</option><option value="8">8月</option><option value="9">9月</option>
-            <option value="10">10月</option><option value="11">11月</option><option value="12">12月</option>
+            <option value="1">1æ</option><option value="2">2æ</option><option value="3">3æ</option>
+            <option value="4">4æ</option><option value="5">5æ</option><option value="6">6æ</option>
+            <option value="7">7æ</option><option value="8">8æ</option><option value="9">9æ</option>
+            <option value="10">10æ</option><option value="11">11æ</option><option value="12">12æ</option>
           </select>
-          <span style="color:var(--muted);font-size:13px;">月</span>
+          <span style="color:var(--muted);font-size:13px;">æ</span>
         </div>
       </div>
       <div class="grid-4 mb-4">
-        <div class="stat-card"><div class="stat-label">当月売上</div><div class="stat-value" id="dash-sales">¥0</div><div class="stat-sub">目標 ¥5,000,000&nbsp;<span class="badge" id="dash-rate">0%</span></div></div>
-        <div class="stat-card"><div class="stat-label">外注費 / 当月</div><div class="stat-value" id="dash-ext">¥0</div><div class="stat-sub">発注データから集計</div></div>
-        <div class="stat-card"><div class="stat-label">粗利（売上−外注費）</div><div class="stat-value" id="dash-profit">¥0</div><div class="stat-sub" id="dash-profit-rate">粗利率 —</div></div>
-        <div class="stat-card"><div class="stat-label">入金済み</div><div class="stat-value" id="dash-paid">0 / 0</div><div class="stat-sub">件数</div></div>
+        <div class="stat-card"><div class="stat-label">å½æå£²ä¸</div><div class="stat-value" id="dash-sales">Â¥0</div><div class="stat-sub">ç®æ¨ Â¥5,000,000&nbsp;<span class="badge" id="dash-rate">0%</span></div></div>
+        <div class="stat-card"><div class="stat-label">å¤æ³¨è²» / å½æ</div><div class="stat-value" id="dash-ext">Â¥0</div><div class="stat-sub">çºæ³¨ãã¼ã¿ããéè¨</div></div>
+        <div class="stat-card"><div class="stat-label">ç²å©ï¼å£²ä¸âå¤æ³¨è²»ï¼</div><div class="stat-value" id="dash-profit">Â¥0</div><div class="stat-sub" id="dash-profit-rate">ç²å©ç â</div></div>
+        <div class="stat-card"><div class="stat-label">å¥éæ¸ã¿</div><div class="stat-value" id="dash-paid">0 / 0</div><div class="stat-sub">ä»¶æ°</div></div>
       </div>
       <div class="dash-cards">
         <div class="card">
-          <div class="card-header"><span class="card-title">Sales Trend — 12 Months</span></div>
+          <div class="card-header"><span class="card-title">Sales Trend â 12 Months</span></div>
           <div class="card-body"><div class="chart-container"><canvas id="salesChart"></canvas></div></div>
         </div>
         <div class="card">
           <div class="card-header"><span class="card-title">Fixed Costs</span></div>
           <div class="card-body">
             <div class="fixed-cost-list">
-              <div class="fc-row"><span style="color:var(--muted)">家賃</span><span class="mono">¥288,070</span></div>
-              <div class="fc-row"><span style="color:var(--muted)">税理士</span><span class="mono">¥20,469</span></div>
-              <div class="fc-row"><span style="color:var(--muted)">役員報酬</span><span class="mono">¥120,000</span></div>
-              <div class="fc-row"><span style="color:var(--muted)">水道光熱</span><span class="mono">¥50,000</span></div>
+              <div class="fc-row"><span style="color:var(--muted)">å®¶è³</span><span class="mono">Â¥288,070</span></div>
+              <div class="fc-row"><span style="color:var(--muted)">ç¨çå£«</span><span class="mono">Â¥20,469</span></div>
+              <div class="fc-row"><span style="color:var(--muted)">å½¹å¡å ±é¬</span><span class="mono">Â¥120,000</span></div>
+              <div class="fc-row"><span style="color:var(--muted)">æ°´éåç±</span><span class="mono">Â¥50,000</span></div>
               <div class="fc-row" style="border-top:1px solid var(--line);padding-top:10px;margin-top:6px;">
-                <span style="font-weight:600;">合計</span><span class="mono" style="font-weight:600;">¥478,539</span>
+                <span style="font-weight:600;">åè¨</span><span class="mono" style="font-weight:600;">Â¥478,539</span>
               </div>
             </div>
           </div>
         </div>
       </div>
       <div class="card mt-4">
-        <div class="card-header"><span class="card-title">Current Month Projects</span><button class="btn btn-ghost btn-sm" onclick="showPage('sales')">売上管理へ →</button></div>
-        <div id="dash-proj-list"><div class="empty-state">売上データを追加すると表示されます</div></div>
+        <div class="card-header"><span class="card-title">Current Month Projects</span><button class="btn btn-ghost btn-sm" onclick="showPage('sales')">å£²ä¸ç®¡çã¸ â</button></div>
+        <div id="dash-proj-list"><div class="empty-state">å£²ä¸ãã¼ã¿ãè¿½å ããã¨è¡¨ç¤ºããã¾ã</div></div>
       </div>
     </div>
 
@@ -467,27 +467,27 @@ tbody tr:hover{background:var(--paper2);}
       <div class="filter-bar">
         <div class="month-picker">
           <select id="salesYearFilter" onchange="renderSales()"></select>
-          <span style="color:var(--muted);font-size:13px;">年</span>
+          <span style="color:var(--muted);font-size:13px;">å¹´</span>
           <select id="salesMonthFilter" onchange="renderSales()">
-            <option value="1">1月</option><option value="2">2月</option><option value="3">3月</option>
-            <option value="4">4月</option><option value="5">5月</option><option value="6">6月</option>
-            <option value="7">7月</option><option value="8">8月</option><option value="9">9月</option>
-            <option value="10">10月</option><option value="11">11月</option><option value="12">12月</option>
+            <option value="1">1æ</option><option value="2">2æ</option><option value="3">3æ</option>
+            <option value="4">4æ</option><option value="5">5æ</option><option value="6">6æ</option>
+            <option value="7">7æ</option><option value="8">8æ</option><option value="9">9æ</option>
+            <option value="10">10æ</option><option value="11">11æ</option><option value="12">12æ</option>
           </select>
-          <span style="color:var(--muted);font-size:13px;">月</span>
+          <span style="color:var(--muted);font-size:13px;">æ</span>
         </div>
-        <button class="btn btn-primary" onclick="openSalesModal()">＋ 売上追加</button>
+        <button class="btn btn-primary" onclick="openSalesModal()">ï¼ å£²ä¸è¿½å </button>
       </div>
       <div class="grid-4 mb-4">
-        <div class="stat-card"><div class="stat-label">売上合計</div><div class="stat-value" id="s-total">¥0</div></div>
-        <div class="stat-card"><div class="stat-label">目標差分</div><div class="stat-value" id="s-diff">¥0</div></div>
-        <div class="stat-card"><div class="stat-label">利益（売上−外注−経費）</div><div class="stat-value" id="s-profit">¥0</div></div>
-        <div class="stat-card"><div class="stat-label">入金済み</div><div class="stat-value" id="s-paid">0 / 0</div></div>
+        <div class="stat-card"><div class="stat-label">å£²ä¸åè¨</div><div class="stat-value" id="s-total">Â¥0</div></div>
+        <div class="stat-card"><div class="stat-label">ç®æ¨å·®å</div><div class="stat-value" id="s-diff">Â¥0</div></div>
+        <div class="stat-card"><div class="stat-label">å©çï¼å£²ä¸âå¤æ³¨âçµè²»ï¼</div><div class="stat-value" id="s-profit">Â¥0</div></div>
+        <div class="stat-card"><div class="stat-label">å¥éæ¸ã¿</div><div class="stat-value" id="s-paid">0 / 0</div></div>
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>企業名（案件）</th><th>状況</th><th>振り込み月</th><th>金額</th><th>利益額</th><th>利益率</th><th>担当</th><th>入金</th><th>操作</th></tr></thead>
-          <tbody id="sales-tbody"><tr><td colspan="9" class="empty-state">データがありません</td></tr></tbody>
+          <thead><tr><th>ä¼æ¥­åï¼æ¡ä»¶ï¼</th><th>ç¶æ³</th><th>æ¯ãè¾¼ã¿æ</th><th>éé¡</th><th>å©çé¡</th><th>å©çç</th><th>æå½</th><th>å¥é</th><th>æä½</th></tr></thead>
+          <tbody id="sales-tbody"><tr><td colspan="9" class="empty-state">ãã¼ã¿ãããã¾ãã</td></tr></tbody>
         </table>
       </div>
     </div>
@@ -495,77 +495,77 @@ tbody tr:hover{background:var(--paper2);}
     <!-- ORDERS -->
     <div class="page" id="page-orders">
       <div class="tabs">
-        <div class="tab active" onclick="switchOTab('form')">発注フォーム</div>
-        <div class="tab" onclick="switchOTab('list')">発注台帳</div>
-        <div class="tab" onclick="switchOTab('dash')">外注ダッシュボード</div>
+        <div class="tab active" onclick="switchOTab('form')">çºæ³¨ãã©ã¼ã </div>
+        <div class="tab" onclick="switchOTab('list')">çºæ³¨å°å¸³</div>
+        <div class="tab" onclick="switchOTab('dash')">å¤æ³¨ããã·ã¥ãã¼ã</div>
       </div>
       <div id="otab-form">
         <div class="card" style="max-width:540px;">
           <div class="card-header"><span class="card-title">New Order</span></div>
           <div class="card-body">
             <div class="grid-2">
-              <div class="form-group"><label class="form-label">発注日</label><input type="date" class="form-control" id="o-date"></div>
-              <div class="form-group"><label class="form-label">担当者 *</label>
+              <div class="form-group"><label class="form-label">çºæ³¨æ¥</label><input type="date" class="form-control" id="o-date"></div>
+              <div class="form-group"><label class="form-label">æå½è *</label>
                 <select class="form-control" id="o-vendor">
-                  <option value="">選択してください</option>
-                  <option>西村 実奈歩</option><option>西村 純一</option><option>村上 エミリ</option>
-                  <option>Kemi</option><option>アンビ</option><option>山本 冬馬</option>
-                  <option>ねね</option><option>藤原</option><option>ISOさん</option><option>メディアスタンド</option>
+                  <option value="">é¸æãã¦ãã ãã</option>
+                  <option>è¥¿æ å®å¥æ­©</option><option>è¥¿æ ç´ä¸</option><option>æä¸ ã¨ããª</option>
+                  <option>Kemi</option><option>ã¢ã³ã</option><option>å±±æ¬ å¬é¦¬</option>
+                  <option>ã­ã­</option><option>è¤å</option><option>ISOãã</option><option>ã¡ãã£ã¢ã¹ã¿ã³ã</option>
                 </select>
               </div>
             </div>
             <div class="form-group">
-              <label class="form-label">案件名 <span style="color:var(--sage);font-family:'Noto Sans JP',sans-serif;text-transform:none;font-size:10px;letter-spacing:0;">— 売上から自動取得</span></label>
-              <select class="form-control" id="o-project"><option value="">選択してください</option></select>
+              <label class="form-label">æ¡ä»¶å <span style="color:var(--sage);font-family:'Noto Sans JP',sans-serif;text-transform:none;font-size:10px;letter-spacing:0;">â å£²ä¸ããèªååå¾</span></label>
+              <select class="form-control" id="o-project"><option value="">é¸æãã¦ãã ãã</option></select>
             </div>
-            <div class="form-group"><label class="form-label">内容 *</label><input type="text" class="form-control" id="o-task" placeholder="例：撮影補助、編集、3Dモデリング等"></div>
+            <div class="form-group"><label class="form-label">åå®¹ *</label><input type="text" class="form-control" id="o-task" placeholder="ä¾ï¼æ®å½±è£å©ãç·¨éã3Dã¢ããªã³ã°ç­"></div>
             <div class="grid-2">
-              <div class="form-group"><label class="form-label">金額（税抜）</label><input type="number" class="form-control" id="o-amount" placeholder="50000"></div>
-              <div class="form-group"><label class="form-label">納期</label><input type="date" class="form-control" id="o-due"></div>
+              <div class="form-group"><label class="form-label">éé¡ï¼ç¨æï¼</label><input type="number" class="form-control" id="o-amount" placeholder="50000"></div>
+              <div class="form-group"><label class="form-label">ç´æ</label><input type="date" class="form-control" id="o-due"></div>
             </div>
-            <button class="btn btn-accent w-full" style="justify-content:center;padding:10px;" onclick="submitOrder()">✉ 発注登録 ＆ メール送信</button>
-            <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--dim);margin-top:8px;text-align:center;letter-spacing:0.05em;">CLICK TO OPEN MAIL APP — 宛先・件名・本文が自動入力されます</div>
+            <button class="btn btn-accent w-full" style="justify-content:center;padding:10px;" onclick="submitOrder()">â çºæ³¨ç»é² ï¼ ã¡ã¼ã«éä¿¡</button>
+            <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--dim);margin-top:8px;text-align:center;letter-spacing:0.05em;">CLICK TO OPEN MAIL APP â å®åã»ä»¶åã»æ¬æãèªåå¥åããã¾ã</div>
           </div>
         </div>
       </div>
       <div id="otab-list" style="display:none;">
         <div class="filter-bar">
-          <select id="o-mf" onchange="renderOrders()"><option value="">全期間</option></select>
+          <select id="o-mf" onchange="renderOrders()"><option value="">å¨æé</option></select>
           <select id="o-vf" onchange="renderOrders()">
-            <option value="">全担当者</option>
-            <option>西村 実奈歩</option><option>西村 純一</option><option>村上 エミリ</option>
-            <option>Kemi</option><option>アンビ</option><option>山本 冬馬</option>
-            <option>ねね</option><option>藤原</option><option>ISOさん</option><option>メディアスタンド</option>
+            <option value="">å¨æå½è</option>
+            <option>è¥¿æ å®å¥æ­©</option><option>è¥¿æ ç´ä¸</option><option>æä¸ ã¨ããª</option>
+            <option>Kemi</option><option>ã¢ã³ã</option><option>å±±æ¬ å¬é¦¬</option>
+            <option>ã­ã­</option><option>è¤å</option><option>ISOãã</option><option>ã¡ãã£ã¢ã¹ã¿ã³ã</option>
           </select>
-          <button class="btn btn-primary" onclick="openOrderModal()">＋ 発注追加</button>
+          <button class="btn btn-primary" onclick="openOrderModal()">ï¼ çºæ³¨è¿½å </button>
         </div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>発注ID</th><th>発注日</th><th>案件名</th><th>内容</th><th>金額</th><th>納期</th><th>担当者</th><th>操作</th></tr></thead>
-            <tbody id="orders-tbody"><tr><td colspan="8" class="empty-state">発注データがありません</td></tr></tbody>
+            <thead><tr><th>çºæ³¨ID</th><th>çºæ³¨æ¥</th><th>æ¡ä»¶å</th><th>åå®¹</th><th>éé¡</th><th>ç´æ</th><th>æå½è</th><th>æä½</th></tr></thead>
+            <tbody id="orders-tbody"><tr><td colspan="8" class="empty-state">çºæ³¨ãã¼ã¿ãããã¾ãã</td></tr></tbody>
           </table>
         </div>
       </div>
       <div id="otab-dash" style="display:none;">
         <div class="filter-bar mb-4">
-          <select id="odash-month" onchange="renderOrderDash()"><option value="">月を選択</option></select>
+          <select id="odash-month" onchange="renderOrderDash()"><option value="">æãé¸æ</option></select>
           <select id="odash-vendor" onchange="renderOrderDash()">
-            <option value="">全担当者</option>
-            <option>西村 実奈歩</option><option>西村 純一</option><option>村上 エミリ</option>
-            <option>Kemi</option><option>アンビ</option><option>山本 冬馬</option>
-            <option>ねね</option><option>藤原</option><option>ISOさん</option><option>メディアスタンド</option>
+            <option value="">å¨æå½è</option>
+            <option>è¥¿æ å®å¥æ­©</option><option>è¥¿æ ç´ä¸</option><option>æä¸ ã¨ããª</option>
+            <option>Kemi</option><option>ã¢ã³ã</option><option>å±±æ¬ å¬é¦¬</option>
+            <option>ã­ã­</option><option>è¤å</option><option>ISOãã</option><option>ã¡ãã£ã¢ã¹ã¿ã³ã</option>
           </select>
-          <select id="odash-project" onchange="renderOrderDash()"><option value="">全案件</option></select>
+          <select id="odash-project" onchange="renderOrderDash()"><option value="">å¨æ¡ä»¶</option></select>
         </div>
         <div class="grid-2 mb-4" id="odash-summary" style="display:none;">
-          <div class="stat-card"><div class="stat-label">発注見込み合計</div><div class="stat-value" id="odash-forecast">¥0</div><div class="stat-sub">発注台帳から集計</div></div>
-          <div class="stat-card"><div class="stat-label">実際の支払い合計</div><div class="stat-value" id="odash-actual">¥0</div><div class="stat-sub">振込シートから（資金繰りに反映）</div></div>
+          <div class="stat-card"><div class="stat-label">çºæ³¨è¦è¾¼ã¿åè¨</div><div class="stat-value" id="odash-forecast">Â¥0</div><div class="stat-sub">çºæ³¨å°å¸³ããéè¨</div></div>
+          <div class="stat-card"><div class="stat-label">å®éã®æ¯æãåè¨</div><div class="stat-value" id="odash-actual">Â¥0</div><div class="stat-sub">æ¯è¾¼ã·ã¼ãããï¼è³éç¹°ãã«åæ ï¼</div></div>
         </div>
-        <div class="section-head mt-4"><div class="section-title">発注見込み</div></div>
+        <div class="section-head mt-4"><div class="section-title">çºæ³¨è¦è¾¼ã¿</div></div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>発注ID</th><th>案件名</th><th>内容</th><th>担当者</th><th>見込み金額</th><th>納期</th></tr></thead>
-            <tbody id="odash-forecast-tbody"><tr><td colspan="6" class="empty-state">月を選択してください</td></tr></tbody>
+            <thead><tr><th>çºæ³¨ID</th><th>æ¡ä»¶å</th><th>åå®¹</th><th>æå½è</th><th>è¦è¾¼ã¿éé¡</th><th>ç´æ</th></tr></thead>
+            <tbody id="odash-forecast-tbody"><tr><td colspan="6" class="empty-state">æãé¸æãã¦ãã ãã</td></tr></tbody>
           </table>
         </div>
       </div>
@@ -575,26 +575,26 @@ tbody tr:hover{background:var(--paper2);}
     <!-- COSTS -->
     <div class="page" id="page-costs">
       <div class="filter-bar">
-        <select id="costFilter" onchange="renderCosts()"><option value="">案件を選択してください</option></select>
-        <button class="btn btn-primary" onclick="openNewCostModal()">＋ 新規案件作成</button>
+        <select id="costFilter" onchange="renderCosts()"><option value="">æ¡ä»¶ãé¸æãã¦ãã ãã</option></select>
+        <button class="btn btn-primary" onclick="openNewCostModal()">ï¼ æ°è¦æ¡ä»¶ä½æ</button>
       </div>
-      <div id="cost-placeholder"><div class="empty-state" style="padding:70px;"><div style="font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:0.08em;color:var(--line2);margin-bottom:8px;">COSTS</div><div>売上に登録された案件、または新規作成した案件を選択してください</div></div></div>
+      <div id="cost-placeholder"><div class="empty-state" style="padding:70px;"><div style="font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:0.08em;color:var(--line2);margin-bottom:8px;">COSTS</div><div>å£²ä¸ã«ç»é²ãããæ¡ä»¶ãã¾ãã¯æ°è¦ä½æããæ¡ä»¶ãé¸æãã¦ãã ãã</div></div></div>
       <div id="cost-main" style="display:none;">
         <div class="grid-4 mb-4">
-          <div class="stat-card"><div class="stat-label">案件金額</div><div class="stat-value" id="c-amount">¥0</div></div>
-          <div class="stat-card"><div class="stat-label">経費予算</div><div class="stat-value" id="c-budget">¥0</div><div class="stat-sub" id="c-budget-rate">0%</div></div>
-          <div class="stat-card"><div class="stat-label">実際経費</div><div class="stat-value" id="c-actual">¥0</div></div>
-          <div class="stat-card"><div class="stat-label">残予算</div><div class="stat-value" id="c-remaining">¥0</div><div class="stat-sub" id="c-usage"></div></div>
+          <div class="stat-card"><div class="stat-label">æ¡ä»¶éé¡</div><div class="stat-value" id="c-amount">Â¥0</div></div>
+          <div class="stat-card"><div class="stat-label">çµè²»äºç®</div><div class="stat-value" id="c-budget">Â¥0</div><div class="stat-sub" id="c-budget-rate">0%</div></div>
+          <div class="stat-card"><div class="stat-label">å®éçµè²»</div><div class="stat-value" id="c-actual">Â¥0</div></div>
+          <div class="stat-card"><div class="stat-label">æ®äºç®</div><div class="stat-value" id="c-remaining">Â¥0</div><div class="stat-sub" id="c-usage"></div></div>
         </div>
         <div class="progress-wrap mb-4" style="height:6px;"><div class="progress-bar" id="c-bar" style="width:0%;"></div></div>
         <div class="section-head">
-          <div class="section-title">費目明細</div>
-          <button class="btn btn-primary" onclick="openCostItemModal()">＋ 費目追加</button>
+          <div class="section-title">è²»ç®æç´°</div>
+          <button class="btn btn-primary" onclick="openCostItemModal()">ï¼ è²»ç®è¿½å </button>
         </div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>費目</th><th>金額</th><th>メモ</th><th>操作</th></tr></thead>
-            <tbody id="costs-tbody"><tr><td colspan="4" class="empty-state">費目がありません</td></tr></tbody>
+            <thead><tr><th>è²»ç®</th><th>éé¡</th><th>ã¡ã¢</th><th>æä½</th></tr></thead>
+            <tbody id="costs-tbody"><tr><td colspan="4" class="empty-state">è²»ç®ãããã¾ãã</td></tr></tbody>
           </table>
         </div>
       </div>
@@ -603,111 +603,111 @@ tbody tr:hover{background:var(--paper2);}
     <!-- ===== CASHFLOW ===== -->
     <div class="page" id="page-cashflow">
       <div class="grid-4 mb-4">
-        <div class="stat-card"><div class="stat-label">今期売上</div><div class="stat-value" id="cf-annual-sales">¥0</div><div class="stat-sub">9月〜8月（8月決算）</div></div>
-        <div class="stat-card"><div class="stat-label">今期外注費</div><div class="stat-value" id="cf-annual-ext">¥0</div><div class="stat-sub">9月〜8月</div></div>
-        <div class="stat-card"><div class="stat-label">年間固定費</div><div class="stat-value">¥5,742,468</div><div class="stat-sub">¥478,539 × 12ヶ月</div></div>
-        <div class="stat-card"><div class="stat-label">現在口座残高</div><div class="stat-value" id="cf-balance">—</div><div class="stat-sub" id="cf-balance-date">手入力で更新</div></div>
+        <div class="stat-card"><div class="stat-label">ä»æå£²ä¸</div><div class="stat-value" id="cf-annual-sales">Â¥0</div><div class="stat-sub">9æã8æï¼8ææ±ºç®ï¼</div></div>
+        <div class="stat-card"><div class="stat-label">ä»æå¤æ³¨è²»</div><div class="stat-value" id="cf-annual-ext">Â¥0</div><div class="stat-sub">9æã8æ</div></div>
+        <div class="stat-card"><div class="stat-label">å¹´éåºå®è²»</div><div class="stat-value">Â¥5,742,468</div><div class="stat-sub">Â¥478,539 Ã 12ã¶æ</div></div>
+        <div class="stat-card"><div class="stat-label">ç¾å¨å£åº§æ®é«</div><div class="stat-value" id="cf-balance">â</div><div class="stat-sub" id="cf-balance-date">æå¥åã§æ´æ°</div></div>
       </div>
       <div class="grid-2 mb-4">
         <div class="card">
-          <div class="card-header"><span class="card-title">Monthly Cash Flow — 月次純増減</span></div>
+          <div class="card-header"><span class="card-title">Monthly Cash Flow â ææ¬¡ç´å¢æ¸</span></div>
           <div class="card-body"><div class="chart-container"><canvas id="cfChart"></canvas></div></div>
         </div>
         <div class="card">
-          <div class="card-header"><span class="card-title">Balance — 口座残高推移</span></div>
+          <div class="card-header"><span class="card-title">Balance â å£åº§æ®é«æ¨ç§»</span></div>
           <div class="card-body"><div class="chart-container"><canvas id="balanceChart"></canvas></div></div>
         </div>
       </div>
       <div class="section-head">
-        <div class="section-title">月別収支明細</div>
-        <button class="btn btn-primary" onclick="openExpenseImportModal()">＋ 経費CSV取り込み</button>
+        <div class="section-title">æå¥åæ¯æç´°</div>
+        <button class="btn btn-primary" onclick="openExpenseImportModal()">ï¼ çµè²»CSVåãè¾¼ã¿</button>
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>年月</th><th>売上</th><th>外注費</th><th>固定費</th><th>役員給与</th><th>その他経費</th><th>経費合計</th><th>月次純増減</th><th>口座残高</th><th>メモ</th></tr></thead>
-          <tbody id="cf-tbody"><tr><td colspan="10" class="empty-state">売上データを登録すると自動反映されます</td></tr></tbody>
+          <thead><tr><th>å¹´æ</th><th>å£²ä¸</th><th>å¤æ³¨è²»</th><th>åºå®è²»</th><th>å½¹å¡çµ¦ä¸</th><th>ãã®ä»çµè²»</th><th>çµè²»åè¨</th><th>ææ¬¡ç´å¢æ¸</th><th>å£åº§æ®é«</th><th>ã¡ã¢</th></tr></thead>
+          <tbody id="cf-tbody"><tr><td colspan="10" class="empty-state">å£²ä¸ãã¼ã¿ãç»é²ããã¨èªååæ ããã¾ã</td></tr></tbody>
         </table>
       </div>
       <div id="expense-summary" style="display:none;margin-top:16px;">
         <div class="card">
           <div class="card-header">
-            <span class="card-title">取り込み済み経費データ</span>
+            <span class="card-title">åãè¾¼ã¿æ¸ã¿çµè²»ãã¼ã¿</span>
             <div style="display:flex;gap:6px;">
-              <span class="badge badge-teal" id="expense-count">0件</span>
-              <button class="btn btn-danger btn-xs" onclick="clearExpenses()">全削除</button>
+              <span class="badge badge-teal" id="expense-count">0ä»¶</span>
+              <button class="btn btn-danger btn-xs" onclick="clearExpenses()">å¨åé¤</button>
             </div>
           </div>
         </div>
       </div>
       <div style="margin-top:16px;padding:14px 18px;background:var(--teal-pale);border-radius:var(--r);border:1px solid #c0dde0;">
         <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.1em;color:var(--teal);margin-bottom:4px;">AUTO SYNC</div>
-        <div style="font-size:12px;color:var(--teal);">売上・外注費は月次売上・発注台帳から自動集計。その他経費はCSV取り込みから反映されます。</div>
+        <div style="font-size:12px;color:var(--teal);">å£²ä¸ã»å¤æ³¨è²»ã¯ææ¬¡å£²ä¸ã»çºæ³¨å°å¸³ããèªåéè¨ããã®ä»çµè²»ã¯CSVåãè¾¼ã¿ããåæ ããã¾ãã</div>
       </div>
 
-      <!-- 予測シミュレーター -->
+      <!-- äºæ¸¬ã·ãã¥ã¬ã¼ã¿ã¼ -->
       <div style="margin-top:32px;">
         <div class="section-head">
-          <div class="section-title">⚡ 資金予測シミュレーター</div>
-          <button class="btn btn-ghost btn-sm" onclick="runSimulation()">↻ 再計算</button>
+          <div class="section-title">â¡ è³éäºæ¸¬ã·ãã¥ã¬ã¼ã¿ã¼</div>
+          <button class="btn btn-ghost btn-sm" onclick="runSimulation()">â» åè¨ç®</button>
         </div>
 
-        <!-- シミュレーター入力 -->
+        <!-- ã·ãã¥ã¬ã¼ã¿ã¼å¥å -->
         <div class="card mb-4">
-          <div class="card-header"><span class="card-title">Simulation Settings — 予測パラメーター</span></div>
+          <div class="card-header"><span class="card-title">Simulation Settings â äºæ¸¬ãã©ã¡ã¼ã¿ã¼</span></div>
           <div class="card-body">
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px;">
               <div class="form-group">
-                <label class="form-label">現在口座残高 *</label>
-                <input type="number" class="form-control" id="sim-start-bal" placeholder="例：6500000" oninput="runSimulation()">
+                <label class="form-label">ç¾å¨å£åº§æ®é« *</label>
+                <input type="number" class="form-control" id="sim-start-bal" placeholder="ä¾ï¼6500000" oninput="runSimulation()">
               </div>
               <div class="form-group">
-                <label class="form-label">月間売上予想（平均）</label>
-                <input type="number" class="form-control" id="sim-monthly-sales" placeholder="例：3500000" oninput="runSimulation()">
+                <label class="form-label">æéå£²ä¸äºæ³ï¼å¹³åï¼</label>
+                <input type="number" class="form-control" id="sim-monthly-sales" placeholder="ä¾ï¼3500000" oninput="runSimulation()">
               </div>
               <div class="form-group">
-                <label class="form-label">月間外注費予想</label>
-                <input type="number" class="form-control" id="sim-monthly-ext" placeholder="例：700000" oninput="runSimulation()">
+                <label class="form-label">æéå¤æ³¨è²»äºæ³</label>
+                <input type="number" class="form-control" id="sim-monthly-ext" placeholder="ä¾ï¼700000" oninput="runSimulation()">
               </div>
               <div class="form-group">
-                <label class="form-label">月間その他経費</label>
-                <input type="number" class="form-control" id="sim-monthly-other" placeholder="例：500000" oninput="runSimulation()">
+                <label class="form-label">æéãã®ä»çµè²»</label>
+                <input type="number" class="form-control" id="sim-monthly-other" placeholder="ä¾ï¼500000" oninput="runSimulation()">
               </div>
             </div>
             <div style="margin-top:8px;">
-              <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.1em;color:var(--muted);margin-bottom:10px;">SCHEDULED EVENTS — スケジュール済み特別支出</div>
+              <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.1em;color:var(--muted);margin-bottom:10px;">SCHEDULED EVENTS â ã¹ã±ã¸ã¥ã¼ã«æ¸ã¿ç¹å¥æ¯åº</div>
               <div id="sim-events-list" style="display:flex;flex-direction:column;gap:8px;"></div>
-              <button class="btn btn-ghost btn-sm" style="margin-top:8px;" onclick="addSimEvent()">＋ 特別支出を追加</button>
+              <button class="btn btn-ghost btn-sm" style="margin-top:8px;" onclick="addSimEvent()">ï¼ ç¹å¥æ¯åºãè¿½å </button>
             </div>
           </div>
         </div>
 
-        <!-- 判定バナー -->
+        <!-- å¤å®ããã¼ -->
         <div id="sim-verdict" style="display:none;margin-bottom:16px;"></div>
 
-        <!-- 予測グラフ -->
+        <!-- äºæ¸¬ã°ã©ã -->
         <div class="card mb-4">
-          <div class="card-header"><span class="card-title">Forecast Chart — 6ヶ月先までの残高予測</span></div>
+          <div class="card-header"><span class="card-title">Forecast Chart â 6ã¶æåã¾ã§ã®æ®é«äºæ¸¬</span></div>
           <div class="card-body"><div style="position:relative;height:240px;"><canvas id="simChart"></canvas></div></div>
         </div>
 
-        <!-- 予測テーブル -->
+        <!-- äºæ¸¬ãã¼ãã« -->
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
-                <th>月</th>
-                <th>期首残高</th>
-                <th>入金（振込月）</th>
-                <th>固定費</th>
-                <th>外注費</th>
-                <th>その他</th>
-                <th>特別支出</th>
-                <th>月次増減</th>
-                <th>期末残高</th>
-                <th>判定</th>
+                <th>æ</th>
+                <th>æé¦æ®é«</th>
+                <th>å¥éï¼æ¯è¾¼æï¼</th>
+                <th>åºå®è²»</th>
+                <th>å¤æ³¨è²»</th>
+                <th>ãã®ä»</th>
+                <th>ç¹å¥æ¯åº</th>
+                <th>ææ¬¡å¢æ¸</th>
+                <th>ææ«æ®é«</th>
+                <th>å¤å®</th>
               </tr>
             </thead>
-            <tbody id="sim-tbody"><tr><td colspan="10" class="empty-state">上の「現在口座残高」を入力すると予測が表示されます</td></tr></tbody>
+            <tbody id="sim-tbody"><tr><td colspan="10" class="empty-state">ä¸ã®ãç¾å¨å£åº§æ®é«ããå¥åããã¨äºæ¸¬ãè¡¨ç¤ºããã¾ã</td></tr></tbody>
           </table>
         </div>
       </div>
@@ -720,38 +720,38 @@ tbody tr:hover{background:var(--paper2);}
 <div class="modal-overlay" id="paymentImportModal">
   <div class="modal" style="width:560px;">
     <div class="modal-header">
-      <div class="modal-title">支払い追加 / CSVインポート</div>
-      <button class="modal-close" onclick="document.getElementById('paymentImportModal').classList.remove('open')">✕</button>
+      <div class="modal-title">æ¯æãè¿½å  / CSVã¤ã³ãã¼ã</div>
+      <button class="modal-close" onclick="document.getElementById('paymentImportModal').classList.remove('open')">â</button>
     </div>
     <div class="modal-body">
-      <!-- 1件手入力 -->
-      <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--muted);margin-bottom:10px;">1件ずつ手入力</div>
+      <!-- 1ä»¶æå¥å -->
+      <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--muted);margin-bottom:10px;">1ä»¶ãã¤æå¥å</div>
       <div class="grid-2">
-        <div class="form-group"><label class="form-label">支払先</label><input type="text" class="form-control" id="pay-vendor" placeholder="例：村上 エミリ"></div>
-        <div class="form-group"><label class="form-label">当月支払額</label><input type="number" class="form-control" id="pay-amount" placeholder="50000"></div>
+        <div class="form-group"><label class="form-label">æ¯æå</label><input type="text" class="form-control" id="pay-vendor" placeholder="ä¾ï¼æä¸ ã¨ããª"></div>
+        <div class="form-group"><label class="form-label">å½ææ¯æé¡</label><input type="number" class="form-control" id="pay-amount" placeholder="50000"></div>
       </div>
       <div class="grid-2">
-        <div class="form-group"><label class="form-label">手数料</label><input type="number" class="form-control" id="pay-fee" placeholder="0"></div>
-        <div class="form-group"><label class="form-label">支払済</label>
-          <select class="form-control" id="pay-done"><option value="1">✓ 支払済</option><option value="0">未払い</option></select>
+        <div class="form-group"><label class="form-label">ææ°æ</label><input type="number" class="form-control" id="pay-fee" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">æ¯ææ¸</label>
+          <select class="form-control" id="pay-done"><option value="1">â æ¯ææ¸</option><option value="0">æªæã</option></select>
         </div>
       </div>
-      <div class="form-group"><label class="form-label">摘要</label><input type="text" class="form-control" id="pay-note" placeholder="案件名・作業内容など"></div>
-      <button class="btn btn-primary" style="width:100%;margin-bottom:20px;" onclick="addPaymentRow()">追加</button>
+      <div class="form-group"><label class="form-label">æè¦</label><input type="text" class="form-control" id="pay-note" placeholder="æ¡ä»¶åã»ä½æ¥­åå®¹ãªã©"></div>
+      <button class="btn btn-primary" style="width:100%;margin-bottom:20px;" onclick="addPaymentRow()">è¿½å </button>
 
-      <!-- CSVインポート -->
+      <!-- CSVã¤ã³ãã¼ã -->
       <div style="border-top:1px solid var(--line);padding-top:16px;">
-        <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--muted);margin-bottom:8px;">振込シートからCSV貼り付け</div>
+        <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--muted);margin-bottom:8px;">æ¯è¾¼ã·ã¼ãããCSVè²¼ãä»ã</div>
         <div style="font-size:11.5px;color:var(--muted);margin-bottom:8px;">
-          振込シートの「支払先・当月支払額・手数料・支払済・摘要」列をコピーして貼り付け（タブ区切り）
+          æ¯è¾¼ã·ã¼ãã®ãæ¯æåã»å½ææ¯æé¡ã»ææ°æã»æ¯ææ¸ã»æè¦ãåãã³ãã¼ãã¦è²¼ãä»ãï¼ã¿ãåºåãï¼
         </div>
-        <textarea class="form-control" id="pay-csv" rows="6" placeholder="支払先&#9;当月支払額&#9;手数料&#9;支払済&#9;摘要&#10;村上 憲次郎&#9;88000&#9;145&#9;✓&#9;アルファロメオ撮影&#10;藤原 ひと美&#9;6363&#9;145&#9;&#9;動画編集費&#10;安藤ひろし&#9;190000&#9;145&#9;✓&#9;2月分業務委託費"></textarea>
-        <div style="font-size:11px;color:var(--dim);margin-top:6px;">※ Googleスプレッドシートから列を選択してコピー→そのまま貼り付けでOK</div>
-        <button class="btn btn-accent" style="width:100%;margin-top:8px;" onclick="importPaymentCSV()">CSVを取り込む</button>
+        <textarea class="form-control" id="pay-csv" rows="6" placeholder="æ¯æå&#9;å½ææ¯æé¡&#9;ææ°æ&#9;æ¯ææ¸&#9;æè¦&#10;æä¸ æ²æ¬¡é&#9;88000&#9;145&#9;â&#9;ã¢ã«ãã¡ã­ã¡ãªæ®å½±&#10;è¤å ã²ã¨ç¾&#9;6363&#9;145&#9;&#9;åç»ç·¨éè²»&#10;å®è¤ã²ãã&#9;190000&#9;145&#9;â&#9;2æåæ¥­åå§è¨è²»"></textarea>
+        <div style="font-size:11px;color:var(--dim);margin-top:6px;">â» Googleã¹ãã¬ããã·ã¼ãããåãé¸æãã¦ã³ãã¼âãã®ã¾ã¾è²¼ãä»ãã§OK</div>
+        <button class="btn btn-accent" style="width:100%;margin-top:8px;" onclick="importPaymentCSV()">CSVãåãè¾¼ã</button>
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-secondary" onclick="document.getElementById('paymentImportModal').classList.remove('open')">閉じる</button>
+      <button class="btn btn-secondary" onclick="document.getElementById('paymentImportModal').classList.remove('open')">éãã</button>
     </div>
   </div>
 </div>
@@ -761,148 +761,148 @@ tbody tr:hover{background:var(--paper2);}
 <div class="modal-overlay" id="paymentImportModal">
   <div class="modal" style="width:560px;">
     <div class="modal-header">
-      <div class="modal-title">支払い追加 / CSVインポート</div>
-      <button class="modal-close" onclick="document.getElementById('paymentImportModal').classList.remove('open')">✕</button>
+      <div class="modal-title">æ¯æãè¿½å  / CSVã¤ã³ãã¼ã</div>
+      <button class="modal-close" onclick="document.getElementById('paymentImportModal').classList.remove('open')">â</button>
     </div>
     <div class="modal-body">
-      <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--muted);margin-bottom:10px;">1件ずつ手入力</div>
+      <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--muted);margin-bottom:10px;">1ä»¶ãã¤æå¥å</div>
       <div class="grid-2">
-        <div class="form-group"><label class="form-label">支払先</label><input type="text" class="form-control" id="pay-vendor" placeholder="例：村上 エミリ"></div>
-        <div class="form-group"><label class="form-label">当月支払額</label><input type="number" class="form-control" id="pay-amount" placeholder="50000"></div>
+        <div class="form-group"><label class="form-label">æ¯æå</label><input type="text" class="form-control" id="pay-vendor" placeholder="ä¾ï¼æä¸ ã¨ããª"></div>
+        <div class="form-group"><label class="form-label">å½ææ¯æé¡</label><input type="number" class="form-control" id="pay-amount" placeholder="50000"></div>
       </div>
       <div class="grid-2">
-        <div class="form-group"><label class="form-label">手数料</label><input type="number" class="form-control" id="pay-fee" placeholder="0"></div>
-        <div class="form-group"><label class="form-label">支払済</label>
-          <select class="form-control" id="pay-done"><option value="1">✓ 支払済</option><option value="0">未払い</option></select>
+        <div class="form-group"><label class="form-label">ææ°æ</label><input type="number" class="form-control" id="pay-fee" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">æ¯ææ¸</label>
+          <select class="form-control" id="pay-done"><option value="1">â æ¯ææ¸</option><option value="0">æªæã</option></select>
         </div>
       </div>
-      <div class="form-group"><label class="form-label">摘要</label><input type="text" class="form-control" id="pay-note" placeholder="案件名・作業内容など"></div>
-      <button class="btn btn-primary" style="width:100%;margin-bottom:20px;" onclick="addPaymentRow()">追加</button>
+      <div class="form-group"><label class="form-label">æè¦</label><input type="text" class="form-control" id="pay-note" placeholder="æ¡ä»¶åã»ä½æ¥­åå®¹ãªã©"></div>
+      <button class="btn btn-primary" style="width:100%;margin-bottom:20px;" onclick="addPaymentRow()">è¿½å </button>
       <div style="border-top:1px solid var(--line);padding-top:16px;">
-        <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--muted);margin-bottom:8px;">振込シートからCSV貼り付け</div>
-        <div style="font-size:11.5px;color:var(--muted);margin-bottom:8px;">振込シートの「支払先・当月支払額・手数料・支払済・摘要」列をコピーして貼り付け（タブ区切り）</div>
-        <textarea class="form-control" id="pay-csv" rows="6" placeholder="支払先&#9;当月支払額&#9;手数料&#9;支払済&#9;摘要&#10;村上 憲次郎&#9;88000&#9;145&#9;✓&#9;アルファロメオ撮影&#10;藤原 ひと美&#9;6363&#9;145&#9;&#9;動画編集費"></textarea>
-        <div style="font-size:11px;color:var(--dim);margin-top:6px;">※ Googleスプレッドシートから列を選択してコピー→そのまま貼り付けでOK</div>
-        <button class="btn btn-accent" style="width:100%;margin-top:8px;" onclick="importPaymentCSV()">CSVを取り込む</button>
+        <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--muted);margin-bottom:8px;">æ¯è¾¼ã·ã¼ãããCSVè²¼ãä»ã</div>
+        <div style="font-size:11.5px;color:var(--muted);margin-bottom:8px;">æ¯è¾¼ã·ã¼ãã®ãæ¯æåã»å½ææ¯æé¡ã»ææ°æã»æ¯ææ¸ã»æè¦ãåãã³ãã¼ãã¦è²¼ãä»ãï¼ã¿ãåºåãï¼</div>
+        <textarea class="form-control" id="pay-csv" rows="6" placeholder="æ¯æå&#9;å½ææ¯æé¡&#9;ææ°æ&#9;æ¯ææ¸&#9;æè¦&#10;æä¸ æ²æ¬¡é&#9;88000&#9;145&#9;â&#9;ã¢ã«ãã¡ã­ã¡ãªæ®å½±&#10;è¤å ã²ã¨ç¾&#9;6363&#9;145&#9;&#9;åç»ç·¨éè²»"></textarea>
+        <div style="font-size:11px;color:var(--dim);margin-top:6px;">â» Googleã¹ãã¬ããã·ã¼ãããåãé¸æãã¦ã³ãã¼âãã®ã¾ã¾è²¼ãä»ãã§OK</div>
+        <button class="btn btn-accent" style="width:100%;margin-top:8px;" onclick="importPaymentCSV()">CSVãåãè¾¼ã</button>
       </div>
     </div>
-    <div class="modal-footer"><button class="btn btn-secondary" onclick="document.getElementById('paymentImportModal').classList.remove('open')">閉じる</button></div>
+    <div class="modal-footer"><button class="btn btn-secondary" onclick="document.getElementById('paymentImportModal').classList.remove('open')">éãã</button></div>
   </div>
 </div>
 
 <div class="modal-overlay" id="orderModal">
   <div class="modal">
-    <div class="modal-header"><div class="modal-title" id="oModalTitle">発注追加</div><button class="modal-close" onclick="closeOrderModal()">✕</button></div>
+    <div class="modal-header"><div class="modal-title" id="oModalTitle">çºæ³¨è¿½å </div><button class="modal-close" onclick="closeOrderModal()">â</button></div>
     <div class="modal-body">
       <div class="grid-2">
-        <div class="form-group"><label class="form-label">発注日</label><input type="date" class="form-control" id="om-date"></div>
-        <div class="form-group"><label class="form-label">担当者 *</label>
+        <div class="form-group"><label class="form-label">çºæ³¨æ¥</label><input type="date" class="form-control" id="om-date"></div>
+        <div class="form-group"><label class="form-label">æå½è *</label>
           <select class="form-control" id="om-vendor">
-            <option value="">選択してください</option>
-            <option>西村 実奈歩</option><option>西村 純一</option><option>村上 エミリ</option>
-            <option>Kemi</option><option>アンビ</option><option>山本 冬馬</option>
-            <option>ねね</option><option>藤原</option><option>ISOさん</option><option>メディアスタンド</option>
+            <option value="">é¸æãã¦ãã ãã</option>
+            <option>è¥¿æ å®å¥æ­©</option><option>è¥¿æ ç´ä¸</option><option>æä¸ ã¨ããª</option>
+            <option>Kemi</option><option>ã¢ã³ã</option><option>å±±æ¬ å¬é¦¬</option>
+            <option>ã­ã­</option><option>è¤å</option><option>ISOãã</option><option>ã¡ãã£ã¢ã¹ã¿ã³ã</option>
           </select>
         </div>
       </div>
       <div class="form-group">
-        <label class="form-label">案件名 <span style="color:var(--sage);font-family:'Noto Sans JP',sans-serif;text-transform:none;font-size:10px;letter-spacing:0;">— 売上から自動取得</span></label>
-        <select class="form-control" id="om-project"><option value="">選択してください</option></select>
+        <label class="form-label">æ¡ä»¶å <span style="color:var(--sage);font-family:'Noto Sans JP',sans-serif;text-transform:none;font-size:10px;letter-spacing:0;">â å£²ä¸ããèªååå¾</span></label>
+        <select class="form-control" id="om-project"><option value="">é¸æãã¦ãã ãã</option></select>
       </div>
-      <div class="form-group"><label class="form-label">内容 *</label><input type="text" class="form-control" id="om-task" placeholder="例：撮影補助、編集、3Dモデリング等"></div>
+      <div class="form-group"><label class="form-label">åå®¹ *</label><input type="text" class="form-control" id="om-task" placeholder="ä¾ï¼æ®å½±è£å©ãç·¨éã3Dã¢ããªã³ã°ç­"></div>
       <div class="grid-2">
-        <div class="form-group"><label class="form-label">金額（税抜）</label><input type="number" class="form-control" id="om-amount" placeholder="50000"></div>
-        <div class="form-group"><label class="form-label">納期</label><input type="date" class="form-control" id="om-due"></div>
+        <div class="form-group"><label class="form-label">éé¡ï¼ç¨æï¼</label><input type="number" class="form-control" id="om-amount" placeholder="50000"></div>
+        <div class="form-group"><label class="form-label">ç´æ</label><input type="date" class="form-control" id="om-due"></div>
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-secondary" onclick="closeOrderModal()">キャンセル</button>
-      <button class="btn btn-primary" onclick="saveOrderDirect()">登録（メールなし）</button>
+      <button class="btn btn-secondary" onclick="closeOrderModal()">ã­ã£ã³ã»ã«</button>
+      <button class="btn btn-primary" onclick="saveOrderDirect()">ç»é²ï¼ã¡ã¼ã«ãªãï¼</button>
     </div>
   </div>
 </div>
 
 <div class="modal-overlay" id="salesModal">
   <div class="modal">
-    <div class="modal-header"><div class="modal-title" id="sModalTitle">SALES ENTRY</div><button class="modal-close" onclick="closeSalesModal()">✕</button></div>
+    <div class="modal-header"><div class="modal-title" id="sModalTitle">SALES ENTRY</div><button class="modal-close" onclick="closeSalesModal()">â</button></div>
     <div class="modal-body">
-      <div class="form-group"><label class="form-label">企業名（＝案件名）*</label><input type="text" class="form-control" id="s-company" placeholder="例：サスタ合同会社"></div>
+      <div class="form-group"><label class="form-label">ä¼æ¥­åï¼ï¼æ¡ä»¶åï¼*</label><input type="text" class="form-control" id="s-company" placeholder="ä¾ï¼ãµã¹ã¿ååä¼ç¤¾"></div>
       <div class="grid-2">
-        <div class="form-group"><label class="form-label">状況</label><select class="form-control" id="s-status"><option>実行中</option><option>確定前</option></select></div>
+        <div class="form-group"><label class="form-label">ç¶æ³</label><select class="form-control" id="s-status"><option>å®è¡ä¸­</option><option>ç¢ºå®å</option></select></div>
         <div class="form-group">
-          <label class="form-label">振り込み月</label>
+          <label class="form-label">æ¯ãè¾¼ã¿æ</label>
           <div class="month-picker">
             <select class="form-control" id="s-month-year" style="flex:1;"></select>
-            <span style="color:var(--muted);font-size:13px;white-space:nowrap;">年</span>
+            <span style="color:var(--muted);font-size:13px;white-space:nowrap;">å¹´</span>
             <select class="form-control" id="s-month-month" style="flex:1;">
-              <option value="1">1月</option><option value="2">2月</option><option value="3">3月</option>
-              <option value="4">4月</option><option value="5">5月</option><option value="6">6月</option>
-              <option value="7">7月</option><option value="8">8月</option><option value="9">9月</option>
-              <option value="10">10月</option><option value="11">11月</option><option value="12">12月</option>
+              <option value="1">1æ</option><option value="2">2æ</option><option value="3">3æ</option>
+              <option value="4">4æ</option><option value="5">5æ</option><option value="6">6æ</option>
+              <option value="7">7æ</option><option value="8">8æ</option><option value="9">9æ</option>
+              <option value="10">10æ</option><option value="11">11æ</option><option value="12">12æ</option>
             </select>
-            <span style="color:var(--muted);font-size:13px;white-space:nowrap;">月</span>
+            <span style="color:var(--muted);font-size:13px;white-space:nowrap;">æ</span>
           </div>
         </div>
       </div>
       <div class="grid-2">
-        <div class="form-group"><label class="form-label">金額（税抜）</label><input type="number" class="form-control" id="s-amount" placeholder="1000000" oninput="calcProfitRate()"></div>
-        <div class="form-group"><label class="form-label">利益額</label><input type="number" class="form-control" id="s-profit" placeholder="300000" oninput="calcProfitRate()"></div>
+        <div class="form-group"><label class="form-label">éé¡ï¼ç¨æï¼</label><input type="number" class="form-control" id="s-amount" placeholder="1000000" oninput="calcProfitRate()"></div>
+        <div class="form-group"><label class="form-label">å©çé¡</label><input type="number" class="form-control" id="s-profit" placeholder="300000" oninput="calcProfitRate()"></div>
       </div>
       <div class="grid-2">
-        <div class="form-group"><label class="form-label">利益率（自動計算）</label><input type="text" class="form-control" id="s-rate" readonly></div>
-        <div class="form-group"><label class="form-label">担当</label><select class="form-control" id="s-person"><option>じゅん</option><option>みなほ</option></select></div>
+        <div class="form-group"><label class="form-label">å©ççï¼èªåè¨ç®ï¼</label><input type="text" class="form-control" id="s-rate" readonly></div>
+        <div class="form-group"><label class="form-label">æå½</label><select class="form-control" id="s-person"><option>ããã</option><option>ã¿ãªã»</option></select></div>
       </div>
-      <div class="form-group"><label class="form-label">今後の展開</label><input type="text" class="form-control" id="s-future"></div>
+      <div class="form-group"><label class="form-label">ä»å¾ã®å±é</label><input type="text" class="form-control" id="s-future"></div>
     </div>
-    <div class="modal-footer sticky-footer"><button class="btn btn-secondary" onclick="closeSalesModal()">キャンセル</button><button class="btn btn-primary" onclick="saveSales()">保存</button></div>
+    <div class="modal-footer sticky-footer"><button class="btn btn-secondary" onclick="closeSalesModal()">ã­ã£ã³ã»ã«</button><button class="btn btn-primary" onclick="saveSales()">ä¿å­</button></div>
   </div>
 </div>
 
 <div class="modal-overlay" id="costItemModal">
   <div class="modal" style="width:380px;">
-    <div class="modal-header"><div class="modal-title">COST ITEM</div><button class="modal-close" onclick="closeCostItemModal()">✕</button></div>
+    <div class="modal-header"><div class="modal-title">COST ITEM</div><button class="modal-close" onclick="closeCostItemModal()">â</button></div>
     <div class="modal-body">
-      <div class="form-group"><label class="form-label">費目名 *</label><input type="text" class="form-control" id="ci-name" placeholder="例：撮影スタジオ"></div>
-      <div class="form-group"><label class="form-label">金額（税抜）</label><input type="number" class="form-control" id="ci-amount"></div>
-      <div class="form-group"><label class="form-label">メモ</label><input type="text" class="form-control" id="ci-memo"></div>
+      <div class="form-group"><label class="form-label">è²»ç®å *</label><input type="text" class="form-control" id="ci-name" placeholder="ä¾ï¼æ®å½±ã¹ã¿ã¸ãª"></div>
+      <div class="form-group"><label class="form-label">éé¡ï¼ç¨æï¼</label><input type="number" class="form-control" id="ci-amount"></div>
+      <div class="form-group"><label class="form-label">ã¡ã¢</label><input type="text" class="form-control" id="ci-memo"></div>
     </div>
-    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeCostItemModal()">キャンセル</button><button class="btn btn-primary" onclick="saveCostItem()">保存</button></div>
+    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeCostItemModal()">ã­ã£ã³ã»ã«</button><button class="btn btn-primary" onclick="saveCostItem()">ä¿å­</button></div>
   </div>
 </div>
 
 <div class="modal-overlay" id="newCostModal">
   <div class="modal" style="width:400px;">
-    <div class="modal-header"><div class="modal-title">NEW PROJECT</div><button class="modal-close" onclick="closeNewCostModal()">✕</button></div>
+    <div class="modal-header"><div class="modal-title">NEW PROJECT</div><button class="modal-close" onclick="closeNewCostModal()">â</button></div>
     <div class="modal-body">
-      <div class="form-group"><label class="form-label">案件名 *</label><input type="text" class="form-control" id="nc-name"></div>
-      <div class="form-group"><label class="form-label">案件金額（税抜）</label><input type="number" class="form-control" id="nc-amount"></div>
-      <div class="form-group"><label class="form-label">経費予算率</label><select class="form-control" id="nc-rate"><option value="15">15%</option><option value="20" selected>20%</option><option value="25">25%</option><option value="30">30%</option></select></div>
+      <div class="form-group"><label class="form-label">æ¡ä»¶å *</label><input type="text" class="form-control" id="nc-name"></div>
+      <div class="form-group"><label class="form-label">æ¡ä»¶éé¡ï¼ç¨æï¼</label><input type="number" class="form-control" id="nc-amount"></div>
+      <div class="form-group"><label class="form-label">çµè²»äºç®ç</label><select class="form-control" id="nc-rate"><option value="15">15%</option><option value="20" selected>20%</option><option value="25">25%</option><option value="30">30%</option></select></div>
     </div>
-    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeNewCostModal()">キャンセル</button><button class="btn btn-primary" onclick="createNewCostProject()">作成</button></div>
+    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeNewCostModal()">ã­ã£ã³ã»ã«</button><button class="btn btn-primary" onclick="createNewCostProject()">ä½æ</button></div>
   </div>
 </div>
 
 <div class="modal-overlay" id="expenseImportModal">
   <div class="modal" style="width:580px;">
-    <div class="modal-header"><div class="modal-title">経費CSV取り込み</div><button class="modal-close" onclick="closeExpenseImportModal()">✕</button></div>
+    <div class="modal-header"><div class="modal-title">çµè²»CSVåãè¾¼ã¿</div><button class="modal-close" onclick="closeExpenseImportModal()">â</button></div>
     <div class="modal-body">
       <div style="padding:10px 12px;background:var(--teal-pale);border-radius:var(--r-sm);margin-bottom:14px;font-size:12px;color:var(--teal);">
-        💡 freeeの取引エクスポートCSV、またはカード明細CSVを貼り付けてください。<br>
-        日付と金額の列を自動検出します。（カンマ区切り or タブ区切り対応）
+        ð¡ freeeã®åå¼ã¨ã¯ã¹ãã¼ãCSVãã¾ãã¯ã«ã¼ãæç´°CSVãè²¼ãä»ãã¦ãã ããã<br>
+        æ¥ä»ã¨éé¡ã®åãèªåæ¤åºãã¾ããï¼ã«ã³ãåºåã or ã¿ãåºåãå¯¾å¿ï¼
       </div>
       <div class="form-group">
-        <label class="form-label">CSVデータを貼り付け</label>
-        <textarea class="form-control" id="expense-csv" rows="10" placeholder="発生日,勘定科目,税区分,金額,備考&#10;2026-04-01,消耗品費,課対仕入,5000,文房具&#10;2026-04-15,交通費,課対仕入,12000,タクシー" style="font-family:'DM Mono',monospace;font-size:11px;"></textarea>
+        <label class="form-label">CSVãã¼ã¿ãè²¼ãä»ã</label>
+        <textarea class="form-control" id="expense-csv" rows="10" placeholder="çºçæ¥,åå®ç§ç®,ç¨åºå,éé¡,åè&#10;2026-04-01,æ¶èåè²»,èª²å¯¾ä»å¥,5000,ææ¿å·&#10;2026-04-15,äº¤éè²»,èª²å¯¾ä»å¥,12000,ã¿ã¯ã·ã¼" style="font-family:'DM Mono',monospace;font-size:11px;"></textarea>
       </div>
       <div id="expense-preview" style="display:none;margin-bottom:14px;">
-        <div class="form-label">プレビュー</div>
+        <div class="form-label">ãã¬ãã¥ã¼</div>
         <div id="expense-preview-content" style="max-height:150px;overflow-y:auto;font-size:12px;"></div>
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-secondary" onclick="closeExpenseImportModal()">キャンセル</button>
-      <button class="btn btn-ghost" onclick="previewExpenseCSV()">プレビュー</button>
-      <button class="btn btn-primary" onclick="importExpenseCSV()">取り込む</button>
+      <button class="btn btn-secondary" onclick="closeExpenseImportModal()">ã­ã£ã³ã»ã«</button>
+      <button class="btn btn-ghost" onclick="previewExpenseCSV()">ãã¬ãã¥ã¼</button>
+      <button class="btn btn-primary" onclick="importExpenseCSV()">åãè¾¼ã</button>
     </div>
   </div>
 </div>
@@ -910,24 +910,24 @@ tbody tr:hover{background:var(--paper2);}
 <!-- MOBILE BOTTOM NAV -->
 <nav class="mobile-nav">
   <button class="mobile-nav-item active" id="mnav-dashboard" onclick="showPage('dashboard')">
-    <span class="mnav-icon">◈</span>
+    <span class="mnav-icon">â</span>
     <span class="mnav-label">HOME</span>
   </button>
   <button class="mobile-nav-item" id="mnav-sales" onclick="showPage('sales')">
-    <span class="mnav-icon">◇</span>
-    <span class="mnav-label">売上</span>
+    <span class="mnav-icon">â</span>
+    <span class="mnav-label">å£²ä¸</span>
   </button>
   <button class="mobile-nav-item" id="mnav-orders" onclick="showPage('orders')">
-    <span class="mnav-icon">◉</span>
-    <span class="mnav-label">発注</span>
+    <span class="mnav-icon">â</span>
+    <span class="mnav-label">çºæ³¨</span>
   </button>
   <button class="mobile-nav-item" id="mnav-costs" onclick="showPage('costs')">
-    <span class="mnav-icon">◫</span>
-    <span class="mnav-label">原価</span>
+    <span class="mnav-icon">â«</span>
+    <span class="mnav-label">åä¾¡</span>
   </button>
   <button class="mobile-nav-item" id="mnav-cashflow" onclick="showPage('cashflow')">
-    <span class="mnav-icon">◐</span>
-    <span class="mnav-label">資金繰り</span>
+    <span class="mnav-icon">â</span>
+    <span class="mnav-label">è³éç¹°ã</span>
   </button>
 </nav>
 
@@ -952,8 +952,8 @@ function setSyncStatus(status, text) {
 
 // LOAD from JSONBin
 async function loadFromCloud() {
-  setSyncStatus('syncing', '読み込み中...');
-  // 8秒でタイムアウト → localStorageにフォールバック
+  setSyncStatus('syncing', 'èª­ã¿è¾¼ã¿ä¸­...');
+  // 8ç§ã§ã¿ã¤ã ã¢ã¦ã â localStorageã«ãã©ã¼ã«ããã¯
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 8000);
   try {
@@ -971,14 +971,14 @@ async function loadFromCloud() {
     DB.cashflow = record.cashflow || {};
     DB.payments = record.payments || {};
     DB.expenses = record.expenses || [];
-    // localStorageにバックアップ
+    // localStorageã«ããã¯ã¢ãã
     try { localStorage.setItem('sasuta_v2', JSON.stringify(DB)); } catch(e) {}
-    setSyncStatus('ok', '同期済み');
+    setSyncStatus('ok', 'åææ¸ã¿');
   } catch(e) {
     clearTimeout(timeoutId);
     console.error('Cloud load failed:', e.message);
-    setSyncStatus('error', 'オフライン（ローカルデータを使用）');
-    // localStorageからフォールバック
+    setSyncStatus('error', 'ãªãã©ã¤ã³ï¼ã­ã¼ã«ã«ãã¼ã¿ãä½¿ç¨ï¼');
+    // localStorageãããã©ã¼ã«ããã¯
     try {
       const local = localStorage.getItem('sasuta_v2');
       if (local) DB = JSON.parse(local);
@@ -990,8 +990,8 @@ async function loadFromCloud() {
 async function saveToCloud() {
   if (_saving) { _pendingSave = true; return; }
   _saving = true;
-  setSyncStatus('syncing', '保存中...');
-  // localStorageにも保存（バックアップ）
+  setSyncStatus('syncing', 'ä¿å­ä¸­...');
+  // localStorageã«ãä¿å­ï¼ããã¯ã¢ããï¼
   try { localStorage.setItem('sasuta_v2', JSON.stringify(DB)); } catch(e) {}
   try {
     const res = await fetch(BIN_URL, {
@@ -1000,10 +1000,10 @@ async function saveToCloud() {
       body: JSON.stringify(DB)
     });
     if (!res.ok) throw new Error('Save failed: ' + res.status);
-    setSyncStatus('ok', '保存完了');
+    setSyncStatus('ok', 'ä¿å­å®äº');
   } catch(e) {
     console.error(e);
-    setSyncStatus('error', '保存エラー（ローカルに保存済み）');
+    setSyncStatus('error', 'ä¿å­ã¨ã©ã¼ï¼ã­ã¼ã«ã«ã«ä¿å­æ¸ã¿ï¼');
   } finally {
     _saving = false;
     if (_pendingSave) { _pendingSave = false; await saveToCloud(); }
@@ -1017,16 +1017,16 @@ async function forceSync() {
 
 // ===== VENDORS =====
 const VENDORS = {
-  '西村 実奈歩':'minahooo.1113.168@gmail.com','西村 純一':'junichi.i.nishimura@gmail.com',
-  '村上 エミリ':'214d0189@gmail.com','Kemi':'kemithx@gmail.com','アンビ':'hiroshi0505andou@gmail.com',
-  '山本 冬馬':'futa.hiradate@gmail.com','ねね':'snjjjns@gmail.com','藤原':'gengen0916@gmail.com',
-  'ISOさん':'jougosan@gmail.com','メディアスタンド':'shimizutatsuroh721@gmail.com'
+  'è¥¿æ å®å¥æ­©':'minahooo.1113.168@gmail.com','è¥¿æ ç´ä¸':'junichi.i.nishimura@gmail.com',
+  'æä¸ ã¨ããª':'214d0189@gmail.com','Kemi':'kemithx@gmail.com','ã¢ã³ã':'hiroshi0505andou@gmail.com',
+  'å±±æ¬ å¬é¦¬':'futa.hiradate@gmail.com','ã­ã­':'snjjjns@gmail.com','è¤å':'gengen0916@gmail.com',
+  'ISOãã':'jougosan@gmail.com','ã¡ãã£ã¢ã¹ã¿ã³ã':'shimizutatsuroh721@gmail.com'
 };
 const CC = 'info@sasuta.biz';
 
 // ===== HELPERS =====
-const fmt = n => (n||n===0) ? '¥'+Number(n).toLocaleString('ja-JP') : '—';
-const fmtD = d => d ? d.replace(/-/g,'/') : '—';
+const fmt = n => (n||n===0) ? 'Â¥'+Number(n).toLocaleString('ja-JP') : 'â';
+const fmtD = d => d ? d.replace(/-/g,'/') : 'â';
 const today = () => new Date().toISOString().slice(0,10);
 const save = () => saveToCloud();
 
@@ -1044,11 +1044,11 @@ function getSalesAmount(name) {
 
 // ===== NAV =====
 const PAGE_META = {
-  dashboard:{en:'DASHBOARD',ja:'ダッシュボード'},
-  sales:{en:'MONTHLY SALES',ja:'月次売上管理'},
-  orders:{en:'ORDERS',ja:'外注発注'},
-  costs:{en:'COST TRACKER',ja:'原価計算'},
-  cashflow:{en:'CASH FLOW',ja:'資金繰り'}
+  dashboard:{en:'DASHBOARD',ja:'ããã·ã¥ãã¼ã'},
+  sales:{en:'MONTHLY SALES',ja:'ææ¬¡å£²ä¸ç®¡ç'},
+  orders:{en:'ORDERS',ja:'å¤æ³¨çºæ³¨'},
+  costs:{en:'COST TRACKER',ja:'åä¾¡è¨ç®'},
+  cashflow:{en:'CASH FLOW',ja:'è³éç¹°ã'}
 };
 let currentPage = 'dashboard';
 
@@ -1088,27 +1088,27 @@ function renderDashboard() {
   rb.className='badge '+(rate>=100?'badge-sage':rate>=60?'badge-gold':'badge-red');
   const now=new Date();
   const monthToYm = (m) => {
-    const y = m.includes('26年') ? '2026' : '2025';
-    const mo = m.replace(/\d+年/,'').replace('月','').padStart(2,'0');
+    const y = m.includes('26å¹´') ? '2026' : '2025';
+    const mo = m.replace(/\d+å¹´/,'').replace('æ','').padStart(2,'0');
     return y + '-' + mo;
   };
   const ym = monthToYm(month);
   const extMKey = ym.slice(0,4)+'/'+ym.slice(5,7)+'/01';
   const ext=DB.orders.filter(o=>o.monthKey===extMKey||(o.date||'').startsWith(ym)).reduce((s,o)=>s+(Number(o.amount)||0),0);
   document.getElementById('dash-ext').textContent=fmt(ext);
-  // 粗利 = 売上 - 外注費
+  // ç²å© = å£²ä¸ - å¤æ³¨è²»
   const grossProfit = total - ext;
   document.getElementById('dash-profit').textContent=fmt(grossProfit);
-  document.getElementById('dash-profit-rate').textContent='粗利率 '+(total?Math.round(grossProfit/total*100):0)+'%';
+  document.getElementById('dash-profit-rate').textContent='ç²å©ç '+(total?Math.round(grossProfit/total*100):0)+'%';
   document.getElementById('dash-paid').textContent=paid+' / '+rows.length;
-  // データが入ってる月だけ取得して時系列順にソート
+  // ãã¼ã¿ãå¥ã£ã¦ãæã ãåå¾ãã¦æç³»åé ã«ã½ã¼ã
   const allSalesMonths = Object.keys(DB.sales).filter(mk => {
     const r = DB.sales[mk];
     return Array.isArray(r) && r.length > 0;
   });
-  // "26年4月" → ソート用数値変換
+  // "26å¹´4æ" â ã½ã¼ãç¨æ°å¤å¤æ
   const mkToNum = mk => {
-    const match = mk.match(/(\d+)年(\d+)月/);
+    const match = mk.match(/(\d+)å¹´(\d+)æ/);
     if(!match) return 0;
     return (2000 + Number(match[1])) * 100 + Number(match[2]);
   };
@@ -1121,7 +1121,7 @@ function renderDashboard() {
     ctx._chart = null;
   } else {
     ctx._chart=new Chart(ctx,{type:'bar',data:{
-      labels:chartMonths.map(m=>m.replace('年','/').replace('月','')),
+      labels:chartMonths.map(m=>m.replace('å¹´','/').replace('æ','')),
       datasets:[{
         data,
         backgroundColor:chartMonths.map(m=>m===month?'rgba(200,64,26,0.85)':'rgba(14,13,11,0.08)'),
@@ -1129,14 +1129,14 @@ function renderDashboard() {
         borderWidth:1,borderRadius:3
       }]
     },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{
-      y:{beginAtZero:true,ticks:{callback:v=>'¥'+(v>=1000000?(v/1000000).toFixed(1)+'M':v.toLocaleString()),font:{size:10,family:'DM Mono'},color:'#8c8579'},grid:{color:'#e4e0d8'},border:{display:false}},
+      y:{beginAtZero:true,ticks:{callback:v=>'Â¥'+(v>=1000000?(v/1000000).toFixed(1)+'M':v.toLocaleString()),font:{size:10,family:'DM Mono'},color:'#8c8579'},grid:{color:'#e4e0d8'},border:{display:false}},
       x:{ticks:{font:{size:10},color:'#8c8579'},grid:{display:false},border:{display:false}}
     }}});
   }
   const list=document.getElementById('dash-proj-list');
-  if(!rows.length){list.innerHTML='<div class="empty-state">売上データを追加すると表示されます</div>';return;}
-  list.innerHTML='<div class="table-wrap"><table><thead><tr><th>企業名</th><th>状況</th><th>金額</th><th>利益額</th><th>担当</th><th>入金</th></tr></thead><tbody>'+
-    rows.map(r=>`<tr><td><strong>${r.company}</strong></td><td><span class="badge ${r.status==='実行中'?'badge-teal':'badge-gold'}">${r.status}</span></td><td class="mono">${fmt(r.amount)}</td><td class="mono">${fmt(r.profit)}</td><td><span class="badge badge-gray">${r.person}</span></td><td>${r.paid?'<span class="badge badge-sage">✓ 入金済</span>':'<span class="badge badge-gray">未入金</span>'}</td></tr>`).join('')+
+  if(!rows.length){list.innerHTML='<div class="empty-state">å£²ä¸ãã¼ã¿ãè¿½å ããã¨è¡¨ç¤ºããã¾ã</div>';return;}
+  list.innerHTML='<div class="table-wrap"><table><thead><tr><th>ä¼æ¥­å</th><th>ç¶æ³</th><th>éé¡</th><th>å©çé¡</th><th>æå½</th><th>å¥é</th></tr></thead><tbody>'+
+    rows.map(r=>`<tr><td><strong>${r.company}</strong></td><td><span class="badge ${r.status==='å®è¡ä¸­'?'badge-teal':'badge-gold'}">${r.status}</span></td><td class="mono">${fmt(r.amount)}</td><td class="mono">${fmt(r.profit)}</td><td><span class="badge badge-gray">${r.person}</span></td><td>${r.paid?'<span class="badge badge-sage">â å¥éæ¸</span>':'<span class="badge badge-gray">æªå¥é</span>'}</td></tr>`).join('')+
     '</tbody></table></div>';
 }
 
@@ -1147,9 +1147,9 @@ function renderSales(){
   const rows=DB.sales[month]||[];
   const total=rows.reduce((s,r)=>s+(Number(r.amount)||0),0);
   const paid=rows.filter(r=>r.paid).length;
-  // 外注費
+  // å¤æ³¨è²»
   const monthToYm = (m) => {
-    const match = m.match(/(\d+)年(\d+)月/);
+    const match = m.match(/(\d+)å¹´(\d+)æ/);
     if(!match) return '';
     const y = Number(match[1]) < 100 ? 2000 + Number(match[1]) : Number(match[1]);
     return y + '-' + String(match[2]).padStart(2,'0');
@@ -1165,43 +1165,43 @@ function renderSales(){
   document.getElementById('s-profit').textContent=fmt(profit);
   document.getElementById('s-paid').textContent=paid+' / '+rows.length;
   const tbody=document.getElementById('sales-tbody');
-  if(!rows.length){tbody.innerHTML='<tr><td colspan="9" class="empty-state">データがありません</td></tr>';syncOrderProjects();syncCostProjects();return;}
+  if(!rows.length){tbody.innerHTML='<tr><td colspan="9" class="empty-state">ãã¼ã¿ãããã¾ãã</td></tr>';syncOrderProjects();syncCostProjects();return;}
   tbody.innerHTML=rows.map((r,i)=>`
     <tr>
       <td><strong>${r.company}</strong></td>
-      <td><span class="badge ${r.status==='実行中'?'badge-teal':'badge-gold'}">${r.status}</span></td>
-      <td class="mono" style="font-size:12px;">${r.month||'—'}</td>
+      <td><span class="badge ${r.status==='å®è¡ä¸­'?'badge-teal':'badge-gold'}">${r.status}</span></td>
+      <td class="mono" style="font-size:12px;">${r.month||'â'}</td>
       <td class="mono">${fmt(r.amount)}</td><td class="mono">${fmt(r.profit)}</td>
-      <td class="mono">${r.rate||'—'}</td>
+      <td class="mono">${r.rate||'â'}</td>
       <td><span class="badge badge-gray">${r.person}</span></td>
       <td><label class="toggle"><input type="checkbox" ${r.paid?'checked':''} onchange="togglePaid('${month}',${i})"><span class="toggle-slider"></span></label></td>
-      <td><div class="actions-cell"><button class="btn btn-ghost btn-sm" onclick="editSales('${month}',${i})">編集</button><button class="btn btn-danger btn-sm" onclick="deleteSales('${month}',${i})">削除</button></div></td>
+      <td><div class="actions-cell"><button class="btn btn-ghost btn-sm" onclick="editSales('${month}',${i})">ç·¨é</button><button class="btn btn-danger btn-sm" onclick="deleteSales('${month}',${i})">åé¤</button></div></td>
     </tr>`).join('');
   syncOrderProjects();syncCostProjects();
 }
-// 振込月セレクトの初期化（年オプション設定）
+// æ¯è¾¼æã»ã¬ã¯ãã®åæåï¼å¹´ãªãã·ã§ã³è¨­å®ï¼
 function initSaleMonthPicker() {
   const sel = document.getElementById('s-month-year');
   if(!sel) return;
-  if(sel.options.length > 0) return; // 既に初期化済み
+  if(sel.options.length > 0) return; // æ¢ã«åæåæ¸ã¿
   for(let y = 2024; y <= 2030; y++) {
     const opt = document.createElement('option');
     opt.value = y;
-    opt.textContent = y + '年';
+    opt.textContent = y + 'å¹´';
     sel.appendChild(opt);
   }
 }
 
-// 振込月セレクトの値を取得 → "26年4月" 形式
+// æ¯è¾¼æã»ã¬ã¯ãã®å¤ãåå¾ â "26å¹´4æ" å½¢å¼
 function getSaleMonth() {
   const y = Number(document.getElementById('s-month-year').value);
   const m = Number(document.getElementById('s-month-month').value);
-  return String(y - 2000) + '年' + m + '月';
+  return String(y - 2000) + 'å¹´' + m + 'æ';
 }
 
-// 振込月セレクトに値をセット（"26年4月" → year=2026, month=4）
+// æ¯è¾¼æã»ã¬ã¯ãã«å¤ãã»ããï¼"26å¹´4æ" â year=2026, month=4ï¼
 function setSaleMonth(mk) {
-  const match = (mk||'').match(/(\d+)年(\d+)月/);
+  const match = (mk||'').match(/(\d+)å¹´(\d+)æ/);
   if(!match) return;
   const y = Number(match[1]) < 100 ? 2000 + Number(match[1]) : Number(match[1]);
   const m = Number(match[2]);
@@ -1213,17 +1213,17 @@ function openSalesModal(){
   editingSales=null;
   document.getElementById('sModalTitle').textContent='SALES ENTRY';
   ['s-company','s-amount','s-profit','s-rate','s-future'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('s-status').value='実行中';
-  document.getElementById('s-person').value='じゅん';
+  document.getElementById('s-status').value='å®è¡ä¸­';
+  document.getElementById('s-person').value='ããã';
   initSaleMonthPicker();
-  // 振込月のデフォルト = 発生月（現在選択月）の翌月
+  // æ¯è¾¼æã®ããã©ã«ã = çºçæï¼ç¾å¨é¸ææï¼ã®ç¿æ
   const curMk = getSelectedMonth('salesYearFilter','salesMonthFilter');
-  const match = curMk.match(/(\d+)年(\d+)月/);
+  const match = curMk.match(/(\d+)å¹´(\d+)æ/);
   if(match) {
     let y = Number(match[1]) < 100 ? 2000 + Number(match[1]) : Number(match[1]);
     let m = Number(match[2]) + 1;
     if(m > 12){ m = 1; y++; }
-    setSaleMonth(String(y - 2000) + '年' + m + '月');
+    setSaleMonth(String(y - 2000) + 'å¹´' + m + 'æ');
   }
   document.getElementById('salesModal').classList.add('open');
 }
@@ -1240,39 +1240,39 @@ function editSales(month,idx){
   document.getElementById('s-person').value=r.person;
   document.getElementById('s-future').value=r.future||'';
   initSaleMonthPicker();
-  setSaleMonth(r.month || month); // 保存済みの振込月をセット
+  setSaleMonth(r.month || month); // ä¿å­æ¸ã¿ã®æ¯è¾¼æãã»ãã
   document.getElementById('salesModal').classList.add('open');
 }
 
 function closeSalesModal(){document.getElementById('salesModal').classList.remove('open');}
 function calcProfitRate(){const a=Number(document.getElementById('s-amount').value);const p=Number(document.getElementById('s-profit').value);document.getElementById('s-rate').value=(a&&p)?Math.round(p/a*100)+'%':'';}
 function saveSales(){
-  const company=document.getElementById('s-company').value.trim();if(!company){alert('企業名を入力してください');return;}
+  const company=document.getElementById('s-company').value.trim();if(!company){alert('ä¼æ¥­åãå¥åãã¦ãã ãã');return;}
   const month=editingSales?editingSales.month:getSelectedMonth('salesYearFilter','salesMonthFilter');
   if(!DB.sales[month]) DB.sales[month]=[];
-  const transferMonth = getSaleMonth(); // 振込月セレクトから取得
+  const transferMonth = getSaleMonth(); // æ¯è¾¼æã»ã¬ã¯ãããåå¾
   const row={company,status:document.getElementById('s-status').value,month:transferMonth,amount:Number(document.getElementById('s-amount').value)||0,profit:Number(document.getElementById('s-profit').value)||0,rate:document.getElementById('s-rate').value,person:document.getElementById('s-person').value,future:document.getElementById('s-future').value,paid:editingSales?DB.sales[editingSales.month][editingSales.idx].paid:false};
   if(editingSales) DB.sales[editingSales.month][editingSales.idx]=row;
   else DB.sales[month].push(row);
   save();closeSalesModal();renderSales();
 }
 function togglePaid(month,idx){DB.sales[month][idx].paid=!DB.sales[month][idx].paid;save();renderSales();}
-function deleteSales(month,idx){if(!confirm('削除しますか？'))return;DB.sales[month].splice(idx,1);save();renderSales();}
+function deleteSales(month,idx){if(!confirm('åé¤ãã¾ããï¼'))return;DB.sales[month].splice(idx,1);save();renderSales();}
 
 // ===== SYNC =====
-function syncOrderProjects(){const sel=document.getElementById('o-project');const cur=sel.value;const p=getAllProjects();sel.innerHTML='<option value="">選択してください</option>'+p.map(x=>`<option value="${x}">${x}</option>`).join('');if(cur)sel.value=cur;}
-function syncCostProjects(){const sel=document.getElementById('costFilter');const cur=sel.value;const p=getAllProjects();const custom=Object.keys(DB.costs).filter(k=>!p.includes(k));const all=[...p,...custom];sel.innerHTML='<option value="">案件を選択してください</option>'+all.map(x=>`<option value="${x}">${x}</option>`).join('');if(cur)sel.value=cur;}
+function syncOrderProjects(){const sel=document.getElementById('o-project');const cur=sel.value;const p=getAllProjects();sel.innerHTML='<option value="">é¸æãã¦ãã ãã</option>'+p.map(x=>`<option value="${x}">${x}</option>`).join('');if(cur)sel.value=cur;}
+function syncCostProjects(){const sel=document.getElementById('costFilter');const cur=sel.value;const p=getAllProjects();const custom=Object.keys(DB.costs).filter(k=>!p.includes(k));const all=[...p,...custom];sel.innerHTML='<option value="">æ¡ä»¶ãé¸æãã¦ãã ãã</option>'+all.map(x=>`<option value="${x}">${x}</option>`).join('');if(cur)sel.value=cur;}
 
 // ===== ORDERS =====
 function switchOTab(tab){['form','list','dash'].forEach((t,i)=>{document.querySelectorAll('.tab')[i].classList.toggle('active',t===tab);document.getElementById('otab-'+t).style.display=t===tab?'':'none';});if(tab==='list')renderOrders();if(tab==='dash')renderOrderDash();}
 function genOrderId(date){const[y,m]=(date||today()).split('-');const same=DB.orders.filter(o=>o.orderId&&o.orderId.startsWith('ORD-'+y+'-'+m)).length;return 'ORD-'+y+'-'+m+'-'+String(same+1).padStart(4,'0');}
 
-// 発注台帳モーダル
+// çºæ³¨å°å¸³ã¢ã¼ãã«
 let editingOrderIdx = null;
 function openOrderModal(idx){
   editingOrderIdx = (idx !== undefined) ? idx : null;
   const isEdit = editingOrderIdx !== null;
-  document.getElementById('oModalTitle').textContent = isEdit ? '発注編集' : '発注追加';
+  document.getElementById('oModalTitle').textContent = isEdit ? 'çºæ³¨ç·¨é' : 'çºæ³¨è¿½å ';
   syncOrderProjectsModal();
   if(isEdit){
     const o = DB.orders[idx];
@@ -1292,7 +1292,7 @@ function closeOrderModal(){document.getElementById('orderModal').classList.remov
 function syncOrderProjectsModal(){
   const sel=document.getElementById('om-project');const cur=sel.value;
   const p=getAllProjects();
-  sel.innerHTML='<option value="">選択してください</option>'+p.map(x=>`<option value="${x}">${x}</option>`).join('');
+  sel.innerHTML='<option value="">é¸æãã¦ãã ãã</option>'+p.map(x=>`<option value="${x}">${x}</option>`).join('');
   if(cur)sel.value=cur;
 }
 function saveOrderDirect(){
@@ -1302,7 +1302,7 @@ function saveOrderDirect(){
   const task=document.getElementById('om-task').value.trim();
   const amount=Number(document.getElementById('om-amount').value);
   const due=document.getElementById('om-due').value;
-  if(!vendor||!task){alert('担当者と内容を入力してください');return;}
+  if(!vendor||!task){alert('æå½èã¨åå®¹ãå¥åãã¦ãã ãã');return;}
   const[y,m]=date.split('-');
   if(editingOrderIdx !== null){
     DB.orders[editingOrderIdx]={...DB.orders[editingOrderIdx],date,vendor,project,task,amount,due,monthKey:y+'/'+m+'/01'};
@@ -1319,30 +1319,30 @@ function submitOrder(){
   const amount=Number(document.getElementById('o-amount').value);
   const due=document.getElementById('o-due').value;
   const vendor=document.getElementById('o-vendor').value;
-  if(!vendor||!task){alert('担当者と内容を入力してください');return;}
+  if(!vendor||!task){alert('æå½èã¨åå®¹ãå¥åãã¦ãã ãã');return;}
   const[y,m]=date.split('-');
   const orderId=genOrderId(date);
   DB.orders.push({orderId,date,project,task,amount,due,vendor,status:'Sent',sentAt:new Date().toISOString(),monthKey:y+'/'+m+'/01'});
   syncOrderMonths();save();
   const toEmail=VENDORS[vendor]||'';
   if(toEmail){
-    const subject=`【発注】${project?project+' / ':''}${task}`;
-    const body=[`${vendor} さん`,'','以下の内容でご依頼いたします。','ご確認・ご承諾のほどよろしくお願いいたします。','','━━━━━━━━━━━━━━━━',`発注ID　：${orderId}`,`発注日　：${date}`,`案件名　：${project||'—'}`,`内容　　：${task}`,`金額　　：${amount?'¥'+Number(amount).toLocaleString('ja-JP')+'（税抜）':'—'}`,`納期　　：${due||'—'}`,'━━━━━━━━━━━━━━━━','','ご不明点があればご連絡ください。','','sasuta合同会社'].join('\n');
+    const subject=`ãçºæ³¨ã${project?project+' / ':''}${task}`;
+    const body=[`${vendor} ãã`,'','ä»¥ä¸ã®åå®¹ã§ãä¾é ¼ãããã¾ãã','ãç¢ºèªã»ãæ¿è«¾ã®ã»ã©ãããããé¡ããããã¾ãã','','ââââââââââââââââ',`çºæ³¨IDãï¼${orderId}`,`çºæ³¨æ¥ãï¼${date}`,`æ¡ä»¶åãï¼${project||'â'}`,`åå®¹ããï¼${task}`,`éé¡ããï¼${amount?'Â¥'+Number(amount).toLocaleString('ja-JP')+'ï¼ç¨æï¼':'â'}`,`ç´æããï¼${due||'â'}`,'ââââââââââââââââ','','ãä¸æç¹ãããã°ãé£çµ¡ãã ããã','','sasutaååä¼ç¤¾'].join('\n');
     window.location.href=`mailto:${toEmail}?cc=${CC}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  }else{alert('⚠️ このベンダーのメールアドレスが見つかりません');}
+  }else{alert('â ï¸ ãã®ãã³ãã¼ã®ã¡ã¼ã«ã¢ãã¬ã¹ãè¦ã¤ããã¾ãã');}
   ['o-project','o-task','o-amount','o-due','o-vendor'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('o-date').value=today();
 }
 function syncOrderMonths(){
   const months=[...new Set(DB.orders.map(o=>o.monthKey))].sort().reverse();
   const sel=document.getElementById('o-mf');const cur=sel.value;
-  sel.innerHTML='<option value="">全期間</option>'+months.map(m=>`<option value="${m}">${m.slice(0,7)}</option>`).join('');
+  sel.innerHTML='<option value="">å¨æé</option>'+months.map(m=>`<option value="${m}">${m.slice(0,7)}</option>`).join('');
   if(cur)sel.value=cur;
 
-  // 外注ダッシュボードの月セレクタも同期
+  // å¤æ³¨ããã·ã¥ãã¼ãã®æã»ã¬ã¯ã¿ãåæ
   const odashSel = document.getElementById('odash-month');
   const odashCur = odashSel.value;
-  odashSel.innerHTML='<option value="">月を選択</option>'+months.map(m=>`<option value="${m}">${m.slice(0,7)}</option>`).join('');
+  odashSel.innerHTML='<option value="">æãé¸æ</option>'+months.map(m=>`<option value="${m}">${m.slice(0,7)}</option>`).join('');
   if(odashCur) odashSel.value = odashCur;
 }
 
@@ -1350,10 +1350,10 @@ function renderOrders(){
   const mf=document.getElementById('o-mf').value;const vf=document.getElementById('o-vf').value;
   const rows=DB.orders.filter(o=>(!mf||o.monthKey===mf)&&(!vf||o.vendor===vf)).slice().reverse();
   const tbody=document.getElementById('orders-tbody');
-  if(!rows.length){tbody.innerHTML='<tr><td colspan="8" class="empty-state">発注データがありません</td></tr>';return;}
-  tbody.innerHTML=rows.map(o=>`<tr><td class="mono" style="font-size:11px;">${o.orderId||'—'}</td><td class="mono" style="font-size:12px;">${fmtD(o.date)}</td><td>${o.project||'—'}</td><td>${o.task}</td><td class="mono">${fmt(o.amount)}</td><td class="mono" style="font-size:12px;">${fmtD(o.due)}</td><td>${o.vendor}</td><td><div class="actions-cell"><button class="btn btn-ghost btn-sm" onclick="openOrderModal(${DB.orders.indexOf(o)})">編集</button><button class="btn btn-danger btn-sm" onclick="deleteOrder(${DB.orders.indexOf(o)})">削除</button></div></td></tr>`).join('');
+  if(!rows.length){tbody.innerHTML='<tr><td colspan="8" class="empty-state">çºæ³¨ãã¼ã¿ãããã¾ãã</td></tr>';return;}
+  tbody.innerHTML=rows.map(o=>`<tr><td class="mono" style="font-size:11px;">${o.orderId||'â'}</td><td class="mono" style="font-size:12px;">${fmtD(o.date)}</td><td>${o.project||'â'}</td><td>${o.task}</td><td class="mono">${fmt(o.amount)}</td><td class="mono" style="font-size:12px;">${fmtD(o.due)}</td><td>${o.vendor}</td><td><div class="actions-cell"><button class="btn btn-ghost btn-sm" onclick="openOrderModal(${DB.orders.indexOf(o)})">ç·¨é</button><button class="btn btn-danger btn-sm" onclick="deleteOrder(${DB.orders.indexOf(o)})">åé¤</button></div></td></tr>`).join('');
 }
-function deleteOrder(idx){if(!confirm('削除しますか？'))return;DB.orders.splice(idx,1);save();renderOrders();}
+function deleteOrder(idx){if(!confirm('åé¤ãã¾ããï¼'))return;DB.orders.splice(idx,1);save();renderOrders();}
 function renderOrderDash(){
   const mk = document.getElementById('odash-month').value;
   const vf = document.getElementById('odash-vendor').value;
@@ -1361,16 +1361,16 @@ function renderOrderDash(){
   const summary = document.getElementById('odash-summary');
   const forecastTbody = document.getElementById('odash-forecast-tbody');
 
-  // プロジェクトフィルターの選択肢を更新
+  // ãã­ã¸ã§ã¯ããã£ã«ã¿ã¼ã®é¸æè¢ãæ´æ°
   const projSel = document.getElementById('odash-project');
   const curProj = projSel.value;
   const projects = [...new Set(DB.orders.map(o=>o.project).filter(Boolean))].sort();
-  projSel.innerHTML='<option value="">全案件</option>'+projects.map(p=>`<option value="${p}">${p}</option>`).join('');
+  projSel.innerHTML='<option value="">å¨æ¡ä»¶</option>'+projects.map(p=>`<option value="${p}">${p}</option>`).join('');
   if(curProj) projSel.value = curProj;
 
   if(!mk){
     if(summary) summary.style.display='none';
-    if(forecastTbody) forecastTbody.innerHTML='<tr><td colspan="6" class="empty-state">月を選択してください</td></tr>';
+    if(forecastTbody) forecastTbody.innerHTML='<tr><td colspan="6" class="empty-state">æãé¸æãã¦ãã ãã</td></tr>';
     return;
   }
   const allForecasts = DB.orders.filter(o=>o.monthKey===mk);
@@ -1382,8 +1382,8 @@ function renderOrderDash(){
   document.getElementById('odash-forecast').textContent = fmt(vf||pf ? filteredTotal : forecastTotal);
   document.getElementById('odash-actual').textContent = fmt(paymentTotal);
   if(forecastTbody) forecastTbody.innerHTML = forecasts.length===0
-    ? '<tr><td colspan="6" class="empty-state">この月の発注データがありません</td></tr>'
-    : forecasts.map(o=>`<tr><td class="mono" style="font-size:11px;">${o.orderId||'—'}</td><td>${o.project||'—'}</td><td>${o.task}</td><td>${o.vendor}</td><td class="mono">${fmt(o.amount)}</td><td class="mono" style="font-size:12px;">${fmtD(o.due)}</td></tr>`).join('');
+    ? '<tr><td colspan="6" class="empty-state">ãã®æã®çºæ³¨ãã¼ã¿ãããã¾ãã</td></tr>'
+    : forecasts.map(o=>`<tr><td class="mono" style="font-size:11px;">${o.orderId||'â'}</td><td>${o.project||'â'}</td><td>${o.task}</td><td>${o.vendor}</td><td class="mono">${fmt(o.amount)}</td><td class="mono" style="font-size:12px;">${fmtD(o.due)}</td></tr>`).join('');
 }
 
 function openPaymentImportModal(){
@@ -1394,9 +1394,9 @@ function openPaymentImportModal(){
 
 function addPaymentRow(){
   const mk = document.getElementById('odash-month').value;
-  if(!mk){alert('先に月を選択してください');return;}
+  if(!mk){alert('åã«æãé¸æãã¦ãã ãã');return;}
   const vendor = document.getElementById('pay-vendor').value.trim();
-  if(!vendor){alert('支払先を入力してください');return;}
+  if(!vendor){alert('æ¯æåãå¥åãã¦ãã ãã');return;}
   if(!DB.payments) DB.payments={};
   if(!DB.payments[mk]) DB.payments[mk]=[];
   DB.payments[mk].push({vendor,amount:Number(document.getElementById('pay-amount').value)||0,fee:Number(document.getElementById('pay-fee').value)||0,done:document.getElementById('pay-done').value==='1',note:document.getElementById('pay-note').value});
@@ -1407,9 +1407,9 @@ function addPaymentRow(){
 
 function importPaymentCSV(){
   const mk = document.getElementById('odash-month').value;
-  if(!mk){alert('先に月を選択してください');return;}
+  if(!mk){alert('åã«æãé¸æãã¦ãã ãã');return;}
   const csv = document.getElementById('pay-csv').value.trim();
-  if(!csv){alert('データを貼り付けてください');return;}
+  if(!csv){alert('ãã¼ã¿ãè²¼ãä»ãã¦ãã ãã');return;}
   if(!DB.payments) DB.payments={};
   if(!DB.payments[mk]) DB.payments[mk]=[];
   const lines = csv.split('\n').filter(l=>l.trim());
@@ -1419,22 +1419,22 @@ function importPaymentCSV(){
     if(cols.length < 2) return;
     const vendor = (cols[0]||'').trim();
     if(!vendor) return;
-    const amount = Number((cols[1]||'').replace(/[¥,]/g,''))||0;
-    const fee    = Number((cols[2]||'').replace(/[¥,]/g,''))||0;
+    const amount = Number((cols[1]||'').replace(/[Â¥,]/g,''))||0;
+    const fee    = Number((cols[2]||'').replace(/[Â¥,]/g,''))||0;
     const done   = !!(cols[3]||'').trim();
     const note   = (cols[4]||'').trim();
     DB.payments[mk].push({vendor,amount,fee,done,note});
     count++;
   });
-  if(count===0){alert('取り込める行がありませんでした');return;}
+  if(count===0){alert('åãè¾¼ããè¡ãããã¾ããã§ãã');return;}
   save();
   document.getElementById('paymentImportModal').classList.remove('open');
   renderOrderDash();
-  alert(`✅ ${count}件を取り込みました`);
+  alert(`â ${count}ä»¶ãåãè¾¼ã¿ã¾ãã`);
 }
 
 function deletePayment(mk,idx){
-  if(!confirm('削除しますか？'))return;
+  if(!confirm('åé¤ãã¾ããï¼'))return;
   DB.payments[mk].splice(idx,1);
   save();renderOrderDash();
 }
@@ -1456,28 +1456,28 @@ function renderCosts(){
   document.getElementById('c-budget-rate').textContent=p.budgetRate+'%';
   document.getElementById('c-actual').textContent=fmt(actual);
   document.getElementById('c-remaining').textContent=fmt(remaining);
-  document.getElementById('c-usage').innerHTML=`使用率 <span style="color:${rate>100?'var(--accent)':'var(--sage)'};font-weight:600;">${rate}%</span>`;
+  document.getElementById('c-usage').innerHTML=`ä½¿ç¨ç <span style="color:${rate>100?'var(--accent)':'var(--sage)'};font-weight:600;">${rate}%</span>`;
   const bar=document.getElementById('c-bar');bar.style.width=Math.min(rate,100)+'%';bar.style.background=rate>100?'var(--accent)':rate>80?'var(--gold)':'var(--sage)';
   const items=p.items||[];const tbody=document.getElementById('costs-tbody');
-  if(!items.length){tbody.innerHTML='<tr><td colspan="4" class="empty-state">費目がありません</td></tr>';return;}
-  tbody.innerHTML=items.map((item,i)=>`<tr><td><strong>${item.name}</strong></td><td class="mono">${fmt(item.amount)}</td><td style="color:var(--muted);font-size:12px;">${item.memo||'—'}</td><td><div class="actions-cell"><button class="btn btn-ghost btn-sm" onclick="editCostItem(${i})">編集</button><button class="btn btn-danger btn-sm" onclick="deleteCostItem(${i})">削除</button></div></td></tr>`).join('');
+  if(!items.length){tbody.innerHTML='<tr><td colspan="4" class="empty-state">è²»ç®ãããã¾ãã</td></tr>';return;}
+  tbody.innerHTML=items.map((item,i)=>`<tr><td><strong>${item.name}</strong></td><td class="mono">${fmt(item.amount)}</td><td style="color:var(--muted);font-size:12px;">${item.memo||'â'}</td><td><div class="actions-cell"><button class="btn btn-ghost btn-sm" onclick="editCostItem(${i})">ç·¨é</button><button class="btn btn-danger btn-sm" onclick="deleteCostItem(${i})">åé¤</button></div></td></tr>`).join('');
 }
 function openCostItemModal(){editingCostItem=null;['ci-name','ci-memo'].forEach(id=>document.getElementById(id).value='');document.getElementById('ci-amount').value='';document.getElementById('costItemModal').classList.add('open');}
 function editCostItem(idx){const name=document.getElementById('costFilter').value;const item=DB.costs[name].items[idx];editingCostItem=idx;document.getElementById('ci-name').value=item.name;document.getElementById('ci-amount').value=item.amount;document.getElementById('ci-memo').value=item.memo||'';document.getElementById('costItemModal').classList.add('open');}
 function closeCostItemModal(){document.getElementById('costItemModal').classList.remove('open');}
 function saveCostItem(){
   const name=document.getElementById('costFilter').value;if(!name)return;
-  const itemName=document.getElementById('ci-name').value.trim();if(!itemName){alert('費目名を入力してください');return;}
+  const itemName=document.getElementById('ci-name').value.trim();if(!itemName){alert('è²»ç®åãå¥åãã¦ãã ãã');return;}
   if(!DB.costs[name]) DB.costs[name]={name,amount:0,budgetRate:20,items:[]};
   const item={name:itemName,amount:Number(document.getElementById('ci-amount').value)||0,memo:document.getElementById('ci-memo').value};
   if(editingCostItem!==null) DB.costs[name].items[editingCostItem]=item;else DB.costs[name].items.push(item);
   save();closeCostItemModal();renderCosts();
 }
-function deleteCostItem(idx){if(!confirm('削除しますか？'))return;const name=document.getElementById('costFilter').value;DB.costs[name].items.splice(idx,1);save();renderCosts();}
+function deleteCostItem(idx){if(!confirm('åé¤ãã¾ããï¼'))return;const name=document.getElementById('costFilter').value;DB.costs[name].items.splice(idx,1);save();renderCosts();}
 function openNewCostModal(){document.getElementById('nc-name').value='';document.getElementById('nc-amount').value='';document.getElementById('nc-rate').value='20';document.getElementById('newCostModal').classList.add('open');}
 function closeNewCostModal(){document.getElementById('newCostModal').classList.remove('open');}
 function createNewCostProject(){
-  const name=document.getElementById('nc-name').value.trim();if(!name){alert('案件名を入力してください');return;}
+  const name=document.getElementById('nc-name').value.trim();if(!name){alert('æ¡ä»¶åãå¥åãã¦ãã ãã');return;}
   DB.costs[name]={name,amount:Number(document.getElementById('nc-amount').value)||0,budgetRate:Number(document.getElementById('nc-rate').value),items:[]};
   syncCostProjects();document.getElementById('costFilter').value=name;
   save();closeNewCostModal();renderCosts();
@@ -1485,8 +1485,8 @@ function createNewCostProject(){
 
 // ===== SIMULATION =====
 let simEvents = [
-  { month: '2026-06', label: 'ボーナス支給（1回目）', amount: 11166350 },
-  { month: '2026-07', label: 'ボーナス支給（2回目）', amount: 1833650 }
+  { month: '2026-06', label: 'ãã¼ãã¹æ¯çµ¦ï¼1åç®ï¼', amount: 11166350 },
+  { month: '2026-07', label: 'ãã¼ãã¹æ¯çµ¦ï¼2åç®ï¼', amount: 1833650 }
 ];
 
 function addSimEvent() {
@@ -1504,10 +1504,10 @@ function renderSimEvents() {
   const el = document.getElementById('sim-events-list');
   el.innerHTML = simEvents.map((ev, i) => `
     <div style="display:grid;grid-template-columns:150px 1fr 160px 36px;gap:8px;align-items:center;">
-      <input type="month" class="form-control" value="${ev.month}" placeholder="年月" oninput="simEvents[${i}].month=this.value;runSimulation()">
-      <input type="text" class="form-control" value="${ev.label}" placeholder="内容（例：ボーナス支給）" oninput="simEvents[${i}].label=this.value">
-      <input type="number" class="form-control" value="${ev.amount||''}" placeholder="金額（支出は正の数）" oninput="simEvents[${i}].amount=Number(this.value);runSimulation()">
-      <button class="btn btn-danger btn-sm" onclick="removeSimEvent(${i})" style="padding:6px 8px;">✕</button>
+      <input type="month" class="form-control" value="${ev.month}" placeholder="å¹´æ" oninput="simEvents[${i}].month=this.value;runSimulation()">
+      <input type="text" class="form-control" value="${ev.label}" placeholder="åå®¹ï¼ä¾ï¼ãã¼ãã¹æ¯çµ¦ï¼" oninput="simEvents[${i}].label=this.value">
+      <input type="number" class="form-control" value="${ev.amount||''}" placeholder="éé¡ï¼æ¯åºã¯æ­£ã®æ°ï¼" oninput="simEvents[${i}].amount=Number(this.value);runSimulation()">
+      <button class="btn btn-danger btn-sm" onclick="removeSimEvent(${i})" style="padding:6px 8px;">â</button>
     </div>`).join('');
 }
 
@@ -1515,7 +1515,7 @@ function runSimulation() {
   const startBal = Number(document.getElementById('sim-start-bal').value) || 0;
   if(!startBal) {
     document.getElementById('sim-verdict').style.display = 'none';
-    document.getElementById('sim-tbody').innerHTML = '<tr><td colspan="10" class="empty-state">現在口座残高を入力すると予測が表示されます</td></tr>';
+    document.getElementById('sim-tbody').innerHTML = '<tr><td colspan="10" class="empty-state">ç¾å¨å£åº§æ®é«ãå¥åããã¨äºæ¸¬ãè¡¨ç¤ºããã¾ã</td></tr>';
     return;
   }
 
@@ -1525,13 +1525,13 @@ function runSimulation() {
   const FIXED = FIXED_COST; // 478539
   const SALARY = 120000;
 
-  // 今月から6ヶ月分を予測
+  // ä»æãã6ã¶æåãäºæ¸¬
   const now = new Date();
   const months = [];
   for(let i = 0; i < 7; i++) {
     const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
     const ym = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
-    const label = String(d.getFullYear()-2000) + '年' + (d.getMonth()+1) + '月';
+    const label = String(d.getFullYear()-2000) + 'å¹´' + (d.getMonth()+1) + 'æ';
     months.push({ ym, label });
   }
 
@@ -1542,24 +1542,24 @@ function runSimulation() {
   months.forEach(({ ym, label }) => {
     const openBal = balance;
 
-    // 売上は「振り込み月」が一致するものを集計
+    // å£²ä¸ã¯ãæ¯ãè¾¼ã¿æããä¸è´ãããã®ãéè¨
     const toolSales = getSalesForMonth(label);
     const sales = toolSales > 0 ? toolSales : monthlySales;
 
-    // 外注費: 実際の支払い（振込シート入力済み）があればそれを優先、なければ発注台帳の見込み
+    // å¤æ³¨è²»: å®éã®æ¯æãï¼æ¯è¾¼ã·ã¼ãå¥åæ¸ã¿ï¼ãããã°ãããåªåããªããã°çºæ³¨å°å¸³ã®è¦è¾¼ã¿
     const paymentKey = ym.slice(0,4)+'/'+ym.slice(5,7)+'/01'; // "2026/04/01"
     const actualPayments = (DB.payments||{})[paymentKey] || [];
     const actualExt = actualPayments.reduce((s,p)=>s+(Number(p.amount)||0)+(Number(p.fee)||0), 0);
-    const forecastExt = getExtForMonth(label); // 発注台帳ベース
+    const forecastExt = getExtForMonth(label); // çºæ³¨å°å¸³ãã¼ã¹
     const ext = actualExt > 0 ? actualExt : (forecastExt > 0 ? forecastExt : monthlyExt);
-    const extSource = actualExt > 0 ? '実績' : forecastExt > 0 ? '見込み' : '入力値';
+    const extSource = actualExt > 0 ? 'å®ç¸¾' : forecastExt > 0 ? 'è¦è¾¼ã¿' : 'å¥åå¤';
 
     const other = monthlyOther;
 
-    // その月のイベント支出
+    // ãã®æã®ã¤ãã³ãæ¯åº
     const events = simEvents.filter(ev => ev.month === ym && ev.amount > 0);
     const eventTotal = events.reduce((s, ev) => s + ev.amount, 0);
-    const eventLabel = events.map(ev => ev.label).join('、');
+    const eventLabel = events.map(ev => ev.label).join('ã');
 
     const totalOut = FIXED + SALARY + ext + other + eventTotal;
     const net = sales - totalOut;
@@ -1570,7 +1570,7 @@ function runSimulation() {
     if(balance < 0 && dangerMonth === null) dangerMonth = label;
   });
 
-  // 判定バナー
+  // å¤å®ããã¼
   const verdict = document.getElementById('sim-verdict');
   verdict.style.display = '';
   const juneRow = rows.find(r => r.ym.endsWith('-06'));
@@ -1579,31 +1579,31 @@ function runSimulation() {
 
   if(overallOk) {
     verdict.innerHTML = `<div style="padding:16px 20px;background:var(--sage-pale);border:1px solid #a8c8b0;border-radius:var(--r);display:flex;align-items:center;gap:12px;">
-      <div style="font-size:24px;">✅</div>
+      <div style="font-size:24px;">â</div>
       <div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:0.05em;color:var(--sage);">6ヶ月間、資金は安全です</div>
-        <div style="font-size:12px;color:var(--sage);margin-top:2px;">このまま進めば赤字になる月はありません。${juneRow?'6月末残高：'+fmt(juneRow.closeBal):''}</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:0.05em;color:var(--sage);">6ã¶æéãè³éã¯å®å¨ã§ã</div>
+        <div style="font-size:12px;color:var(--sage);margin-top:2px;">ãã®ã¾ã¾é²ãã°èµ¤å­ã«ãªãæã¯ããã¾ããã${juneRow?'6ææ«æ®é«ï¼'+fmt(juneRow.closeBal):''}</div>
       </div>
     </div>`;
   } else if(!juneOk && juneRow) {
     verdict.innerHTML = `<div style="padding:16px 20px;background:var(--accent-pale);border:1px solid #f0b0a0;border-radius:var(--r);display:flex;align-items:center;gap:12px;">
-      <div style="font-size:24px;">🚨</div>
+      <div style="font-size:24px;">ð¨</div>
       <div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:0.05em;color:var(--accent);">6月の資金が不足します</div>
-        <div style="font-size:12px;color:var(--accent);margin-top:2px;">6月末の予測残高：${fmt(juneRow.closeBal)}（${fmt(Math.abs(juneRow.closeBal))} 不足）。売上増加または支出削減を検討してください。</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:0.05em;color:var(--accent);">6æã®è³éãä¸è¶³ãã¾ã</div>
+        <div style="font-size:12px;color:var(--accent);margin-top:2px;">6ææ«ã®äºæ¸¬æ®é«ï¼${fmt(juneRow.closeBal)}ï¼${fmt(Math.abs(juneRow.closeBal))} ä¸è¶³ï¼ãå£²ä¸å¢å ã¾ãã¯æ¯åºåæ¸ãæ¤è¨ãã¦ãã ããã</div>
       </div>
     </div>`;
   } else {
     verdict.innerHTML = `<div style="padding:16px 20px;background:var(--yellow-pale);border:1px solid #d4b870;border-radius:var(--r);display:flex;align-items:center;gap:12px;">
-      <div style="font-size:24px;">⚠️</div>
+      <div style="font-size:24px;">â ï¸</div>
       <div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:0.05em;color:var(--gold);">${dangerMonth} に資金が底をつく可能性があります</div>
-        <div style="font-size:12px;color:var(--gold);margin-top:2px;">6月自体は問題ありません（6月末残高：${juneRow?fmt(juneRow.closeBal):'—'}）が、${dangerMonth}に注意が必要です。</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:0.05em;color:var(--gold);">${dangerMonth} ã«è³éãåºãã¤ãå¯è½æ§ãããã¾ã</div>
+        <div style="font-size:12px;color:var(--gold);margin-top:2px;">6æèªä½ã¯åé¡ããã¾ããï¼6ææ«æ®é«ï¼${juneRow?fmt(juneRow.closeBal):'â'}ï¼ãã${dangerMonth}ã«æ³¨æãå¿è¦ã§ãã</div>
       </div>
     </div>`;
   }
 
-  // テーブル
+  // ãã¼ãã«
   const tbody = document.getElementById('sim-tbody');
   tbody.innerHTML = rows.map(r => {
     const danger = r.closeBal < 0;
@@ -1611,23 +1611,23 @@ function runSimulation() {
     const isJune = r.ym.endsWith('-06');
     const rowStyle = isJune ? 'background:var(--gold-pale);' : danger ? 'background:var(--accent-pale);' : '';
     const balColor = danger ? 'color:var(--accent);font-weight:700;' : warn ? 'color:var(--gold);font-weight:600;' : 'color:var(--sage);font-weight:600;';
-    const verdict2 = danger ? '<span class="badge badge-red">🚨 赤字</span>' : warn ? '<span class="badge badge-gold">⚠️ 注意</span>' : isJune ? '<span class="badge badge-gold">🎯 6月</span>' : '<span class="badge badge-sage">✓ 安全</span>';
+    const verdict2 = danger ? '<span class="badge badge-red">ð¨ èµ¤å­</span>' : warn ? '<span class="badge badge-gold">â ï¸ æ³¨æ</span>' : isJune ? '<span class="badge badge-gold">ð¯ 6æ</span>' : '<span class="badge badge-sage">â å®å¨</span>';
     return `<tr style="${rowStyle}">
-      <td style="font-weight:600;${isJune?'color:var(--gold);':''}">${r.label}${isJune?' 🎯':''}</td>
+      <td style="font-weight:600;${isJune?'color:var(--gold);':''}">${r.label}${isJune?' ð¯':''}</td>
       <td class="mono">${fmt(r.openBal)}</td>
       <td class="mono" style="color:var(--teal);">${fmt(r.sales)}</td>
       <td class="mono" style="color:var(--muted);font-size:12px;">${fmt(r.fixed+r.salary)}</td>
-      <td class="mono" style="color:var(--muted);font-size:12px;">${fmt(r.ext)}<div style="font-size:9px;color:${r.extSource==='実績'?'var(--teal)':r.extSource==='見込み'?'var(--gold)':'var(--dim)'}">${r.extSource}</div></td>
+      <td class="mono" style="color:var(--muted);font-size:12px;">${fmt(r.ext)}<div style="font-size:9px;color:${r.extSource==='å®ç¸¾'?'var(--teal)':r.extSource==='è¦è¾¼ã¿'?'var(--gold)':'var(--dim)'}">${r.extSource}</div></td>
       <td class="mono" style="color:var(--muted);font-size:12px;">${fmt(r.other)}</td>
-      <td class="mono" style="color:var(--accent);font-size:12px;">${r.eventTotal>0?'▼'+fmt(r.eventTotal)+(r.eventLabel?' ('+r.eventLabel+')':''):'—'}</td>
+      <td class="mono" style="color:var(--accent);font-size:12px;">${r.eventTotal>0?'â¼'+fmt(r.eventTotal)+(r.eventLabel?' ('+r.eventLabel+')':''):'â'}</td>
       <td class="mono" style="color:${r.net>=0?'var(--sage)':'var(--accent)'};">${r.net>=0?'+':''}${fmt(r.net)}</td>
       <td class="mono" style="${balColor}">${fmt(r.closeBal)}</td>
       <td>${verdict2}</td>
     </tr>`;
   }).join('');
 
-  // グラフ
-  const labels2 = rows.map(r => r.label.replace('年','/').replace('月',''));
+  // ã°ã©ã
+  const labels2 = rows.map(r => r.label.replace('å¹´','/').replace('æ',''));
   const balData2 = rows.map(r => r.closeBal);
   const zeroLine = rows.map(() => 0);
   const ctx = document.getElementById('simChart');
@@ -1638,7 +1638,7 @@ function runSimulation() {
       labels: labels2,
       datasets:[
         {
-          label:'予測残高',
+          label:'äºæ¸¬æ®é«',
           data: balData2,
           borderColor:'rgba(26,102,112,1)',
           backgroundColor:'rgba(26,102,112,0.08)',
@@ -1649,7 +1649,7 @@ function runSimulation() {
           pointBorderWidth: 2,
         },
         {
-          label:'0ライン',
+          label:'0ã©ã¤ã³',
           data: zeroLine,
           borderColor:'rgba(200,64,26,0.4)',
           borderWidth:1.5,
@@ -1664,13 +1664,13 @@ function runSimulation() {
         legend:{display:false},
         tooltip:{
           callbacks:{
-            label: ctx2 => ctx2.datasetIndex === 0 ? '残高: ¥' + Number(ctx2.raw).toLocaleString('ja-JP') : ''
+            label: ctx2 => ctx2.datasetIndex === 0 ? 'æ®é«: Â¥' + Number(ctx2.raw).toLocaleString('ja-JP') : ''
           }
         }
       },
       scales:{
         y:{
-          ticks:{callback:v=>Math.round(v/10000)+'万', font:{size:10,family:'DM Mono'}, color:'#8c8579'},
+          ticks:{callback:v=>Math.round(v/10000)+'ä¸', font:{size:10,family:'DM Mono'}, color:'#8c8579'},
           grid:{color:'#e4e0d8'}, border:{display:false}
         },
         x:{ticks:{font:{size:10},color:'#8c8579'},grid:{display:false},border:{display:false}}
@@ -1687,21 +1687,21 @@ function buildYearOptions(selId, defaultYear) {
   for(let y = 2024; y <= 2030; y++) {
     const opt = document.createElement('option');
     opt.value = y;
-    opt.textContent = y + '年';
+    opt.textContent = y + 'å¹´';
     if(y === defaultYear) opt.selected = true;
     sel.appendChild(opt);
   }
   if(cur) sel.value = cur;
 }
 
-// "26年4月" 形式の文字列を返す
+// "26å¹´4æ" å½¢å¼ã®æå­åãè¿ã
 function getSelectedMonth(yearId, monthId) {
   const y = Number(document.getElementById(yearId).value);
   const m = Number(document.getElementById(monthId).value);
-  return String(y - 2000) + '年' + m + '月';
+  return String(y - 2000) + 'å¹´' + m + 'æ';
 }
 
-// 現在の年月を各ピッカーにセット
+// ç¾å¨ã®å¹´æãåããã«ã¼ã«ã»ãã
 function initMonthPickers() {
   const now = new Date();
   const y = now.getFullYear();
@@ -1712,35 +1712,35 @@ function initMonthPickers() {
   document.getElementById('salesMonthFilter').value = m;
 }
 const FIXED_COST = 478539;
-const ALL_MONTHS = ['25年4月','25年5月','25年6月','25年7月','25年8月','25年9月','25年10月','25年11月','25年12月','26年1月','26年2月','26年3月','26年4月','26年5月','26年6月','26年7月'];
+const ALL_MONTHS = ['25å¹´4æ','25å¹´5æ','25å¹´6æ','25å¹´7æ','25å¹´8æ','25å¹´9æ','25å¹´10æ','25å¹´11æ','25å¹´12æ','26å¹´1æ','26å¹´2æ','26å¹´3æ','26å¹´4æ','26å¹´5æ','26å¹´6æ','26å¹´7æ'];
 
 function monthKeyToYM(mk) {
-  // "26年4月" → "2026-04"
-  const m = mk.match(/(\d+)年(\d+)月/);
+  // "26å¹´4æ" â "2026-04"
+  const m = mk.match(/(\d+)å¹´(\d+)æ/);
   if(!m) return '';
   const y = Number(m[1]) < 100 ? 2000 + Number(m[1]) : Number(m[1]);
   return y + '-' + String(m[2]).padStart(2,'0');
 }
 
-// 前の月のキーを返す（"26年4月" → "26年3月"）
+// åã®æã®ã­ã¼ãè¿ãï¼"26å¹´4æ" â "26å¹´3æ"ï¼
 function prevMonthKey(mk) {
-  const m = mk.match(/(\d+)年(\d+)月/);
+  const m = mk.match(/(\d+)å¹´(\d+)æ/);
   if(!m) return '';
   let y = Number(m[1]), mo = Number(m[2]);
   mo--; if(mo===0){mo=12;y--;}
-  return y+'年'+mo+'月';
+  return y+'å¹´'+mo+'æ';
 }
 
-// 資金繰り用: 振込月が一致する売上を集計
-// 売上データの「振り込み月」フィールド（例: "26年4月"）を使う
-// 月キーを正規化 "26年4月" / "2026年4月" / "26/4" などを統一
+// è³éç¹°ãç¨: æ¯è¾¼æãä¸è´ããå£²ä¸ãéè¨
+// å£²ä¸ãã¼ã¿ã®ãæ¯ãè¾¼ã¿æããã£ã¼ã«ãï¼ä¾: "26å¹´4æ"ï¼ãä½¿ã
+// æã­ã¼ãæ­£è¦å "26å¹´4æ" / "2026å¹´4æ" / "26/4" ãªã©ãçµ±ä¸
 function normalizeMk(s) {
   if(!s) return '';
   s = s.trim();
-  // "2026年4月" → "26年4月"
-  s = s.replace(/^20(\d{2})年/, '$1年');
-  // "26/4" や "26-4" → "26年4月"
-  s = s.replace(/^(\d{1,2})[\/\-](\d{1,2})$/, '$1年$2月');
+  // "2026å¹´4æ" â "26å¹´4æ"
+  s = s.replace(/^20(\d{2})å¹´/, '$1å¹´');
+  // "26/4" ã "26-4" â "26å¹´4æ"
+  s = s.replace(/^(\d{1,2})[\/\-](\d{1,2})$/, '$1å¹´$2æ');
   return s;
 }
 
@@ -1763,7 +1763,7 @@ function getSalesForMonth(mk) {
   return rows.reduce((s,r) => s + (Number(r.amount)||0), 0);
 }
 
-// 実際の支払い合計を取得
+// å®éã®æ¯æãåè¨ãåå¾
 function getPaymentForMonth(mk) {
   const ym = monthKeyToYM(mk); // "2026-04"
   const monthKey = ym.slice(0,4)+'/'+ym.slice(5,7)+'/01';
@@ -1782,32 +1782,32 @@ function renderCashflow() {
   if(!DB.payments) DB.payments = {};
   renderSimEvents();
 
-  // ALL_MONTHSを動的生成: sales/cashflow/paymentsのある月を全部含む
+  // ALL_MONTHSãåççæ: sales/cashflow/paymentsã®ããæãå¨é¨å«ã
   const mkSet = new Set(ALL_MONTHS);
-  // salesのある月
+  // salesã®ããæ
   Object.keys(DB.sales).forEach(mk => { if((DB.sales[mk]||[]).length>0) mkSet.add(mk); });
-  // cashflowのある月
+  // cashflowã®ããæ
   Object.keys(DB.cashflow).forEach(mk => { if(Object.keys(DB.cashflow[mk]||{}).length>0) mkSet.add(mk); });
-  // paymentsのある月: "2026/04/01" → "26年4月" に変換して追加
+  // paymentsã®ããæ: "2026/04/01" â "26å¹´4æ" ã«å¤æãã¦è¿½å 
   Object.keys(DB.payments).forEach(payKey => {
     if((DB.payments[payKey]||[]).length===0) return;
     const m = payKey.match(/^(\d{4})\/(\d{2})\/\d{2}$/);
     if(m) {
-      const mk = String(Number(m[1])-2000)+'年'+String(Number(m[2]))+'月';
+      const mk = String(Number(m[1])-2000)+'å¹´'+String(Number(m[2]))+'æ';
       mkSet.add(mk);
     }
   });
-  // expensesのある月: "2026-04" → "26年4月"
+  // expensesã®ããæ: "2026-04" â "26å¹´4æ"
   (DB.expenses||[]).forEach(e => {
     if(!e.ym) return;
     const em = e.ym.match(/^(\d{4})-(\d{2})$/);
-    if(em) mkSet.add(String(Number(em[1])-2000)+'年'+String(Number(em[2]))+'月');
+    if(em) mkSet.add(String(Number(em[1])-2000)+'å¹´'+String(Number(em[2]))+'æ');
   });
-  // 時系列ソート
-  const mkToNum = mk => { const r=mk.match(/(\d+)年(\d+)月/); return r?(2000+Number(r[1]))*100+Number(r[2]):0; };
+  // æç³»åã½ã¼ã
+  const mkToNum = mk => { const r=mk.match(/(\d+)å¹´(\d+)æ/); return r?(2000+Number(r[1]))*100+Number(r[2]):0; };
   const dynamicMonths = [...mkSet].sort((a,b)=>mkToNum(a)-mkToNum(b));
 
-  // 年間集計（今期: 9月〜翌8月、8月決算）
+  // å¹´ééè¨ï¼ä»æ: 9æãç¿8æã8ææ±ºç®ï¼
   const nowDate = new Date();
   const fyYear = nowDate.getMonth() >= 8 ? nowDate.getFullYear() : nowDate.getFullYear() - 1;
   const fyStartNum = (fyYear - 2000) * 100 + 9;
@@ -1819,12 +1819,12 @@ function renderCashflow() {
   document.getElementById('cf-annual-sales').textContent = fmt(annualSales);
   document.getElementById('cf-annual-ext').textContent   = fmt(annualExt);
 
-  // 月別収支計算
+  // æå¥åæ¯è¨ç®
   const rows = dynamicMonths.map(mk => {
     const cf = DB.cashflow[mk] || {};
-    // 売上: 発生月ベースで自動集計
+    // å£²ä¸: çºçæãã¼ã¹ã§èªåéè¨
     const sales = getSalesForMonth(mk);
-    // 外注費: 実際の支払いがあればそちら優先、なければ発注見込み
+    // å¤æ³¨è²»: å®éã®æ¯æããããã°ãã¡ãåªåããªããã°çºæ³¨è¦è¾¼ã¿
     const paymentActual = getPaymentForMonth(mk);
     const ext = paymentActual > 0 ? paymentActual : getExtForMonth(mk);
     const fixed  = FIXED_COST;
@@ -1837,53 +1837,53 @@ function renderCashflow() {
     return { mk, sales, ext, fixed, salary, other, bonus, total, net, bal: cf.bal, memo: cf.memo||'', isActualExt };
   });
 
-  // 最新の残高
+  // ææ°ã®æ®é«
   const withBal = rows.filter(r => r.bal !== undefined && r.bal !== null && r.bal !== '');
   if(withBal.length > 0) {
     const latest = withBal[withBal.length - 1];
     document.getElementById('cf-balance').textContent = fmt(latest.bal);
-    document.getElementById('cf-balance-date').textContent = latest.mk + ' 時点';
+    document.getElementById('cf-balance-date').textContent = latest.mk + ' æç¹';
   }
 
-  // テーブル描画
+  // ãã¼ãã«æç»
   const tbody = document.getElementById('cf-tbody');
   const active = rows.filter(r => {
     if(r.sales > 0 || r.ext > 0 || r.other > 0) return true;
-    // paymentsデータがある月も表示
+    // paymentsãã¼ã¿ãããæãè¡¨ç¤º
     const ym = monthKeyToYM(r.mk);
     const payKey = ym.slice(0,4)+'/'+ym.slice(5,7)+'/01';
     if((DB.payments[payKey]||[]).length > 0) return true;
     return false;
   });
   if(!active.length) {
-    tbody.innerHTML = '<tr><td colspan="10" class="empty-state">売上データを登録すると自動反映されます</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="10" class="empty-state">å£²ä¸ãã¼ã¿ãç»é²ããã¨èªååæ ããã¾ã</td></tr>';
   } else {
     tbody.innerHTML = active.map(r => {
       const netColor = r.net >= 0 ? 'var(--sage)' : 'var(--accent)';
       const prevMk = prevMonthKey(r.mk);
       return `<tr>
         <td class="mono" style="font-weight:600;">${r.mk}</td>
-        <td class="mono">${fmt(r.sales)}<div style="font-size:9px;color:var(--dim);">発生月ベース</div></td>
-        <td class="mono">${fmt(r.ext)}<div style="font-size:9px;color:${r.isActualExt?'var(--teal)':'var(--dim)'};">${r.isActualExt?'実績':'見込み'}</div></td>
+        <td class="mono">${fmt(r.sales)}<div style="font-size:9px;color:var(--dim);">çºçæãã¼ã¹</div></td>
+        <td class="mono">${fmt(r.ext)}<div style="font-size:9px;color:${r.isActualExt?'var(--teal)':'var(--dim)'};">${r.isActualExt?'å®ç¸¾':'è¦è¾¼ã¿'}</div></td>
         <td class="mono" style="color:var(--muted);">${fmt(r.fixed)}</td>
         <td class="mono" style="color:var(--muted);">${fmt(r.salary)}</td>
         <td class="mono" style="color:var(--muted);">${fmt(r.other)}</td>
         <td class="mono">${fmt(r.total)}</td>
         <td class="mono" style="color:${netColor};font-weight:600;">${r.net>=0?'+':''}${fmt(r.net)}</td>
-        <td class="mono" style="color:var(--teal);font-weight:600;">${r.bal!==undefined&&r.bal!==''?fmt(r.bal):'—'}</td>
+        <td class="mono" style="color:var(--teal);font-weight:600;">${r.bal!==undefined&&r.bal!==''?fmt(r.bal):'â'}</td>
         <td style="font-size:12px;color:var(--muted);">${r.memo}</td>
       </tr>`;
     }).join('');
   }
 
-  // 経費データ件数表示
+  // çµè²»ãã¼ã¿ä»¶æ°è¡¨ç¤º
   const expCount = (DB.expenses||[]).length;
   document.getElementById('expense-summary').style.display = expCount > 0 ? '' : 'none';
-  document.getElementById('expense-count').textContent = expCount + '件';
+  document.getElementById('expense-count').textContent = expCount + 'ä»¶';
 
-  // チャート: 月次純増減
+  // ãã£ã¼ã: ææ¬¡ç´å¢æ¸
   const chartRows = active.length > 0 ? active : rows.slice(-6);
-  const labels = chartRows.map(r => r.mk.replace('年','/').replace('月',''));
+  const labels = chartRows.map(r => r.mk.replace('å¹´','/').replace('æ',''));
   const netData = chartRows.map(r => r.net);
   const balData = chartRows.map(r => r.bal || null);
 
@@ -1898,13 +1898,13 @@ function renderCashflow() {
     }]},
     options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
       scales:{
-        y:{beginAtZero:false, ticks:{callback:v=>(v>=0?'+':'')+Math.round(v/10000)+'万', font:{size:10,family:'DM Mono'}, color:'#8c8579'}, grid:{color:'#e4e0d8'}, border:{display:false}},
+        y:{beginAtZero:false, ticks:{callback:v=>(v>=0?'+':'')+Math.round(v/10000)+'ä¸', font:{size:10,family:'DM Mono'}, color:'#8c8579'}, grid:{color:'#e4e0d8'}, border:{display:false}},
         x:{ticks:{font:{size:10},color:'#8c8579'}, grid:{display:false}, border:{display:false}}
       }
     }
   });
 
-  // チャート: 残高推移
+  // ãã£ã¼ã: æ®é«æ¨ç§»
   const ctx2 = document.getElementById('balanceChart');
   if(ctx2._chart) ctx2._chart.destroy();
   ctx2._chart = new Chart(ctx2, {
@@ -1912,7 +1912,7 @@ function renderCashflow() {
     data:{ labels, datasets:[{ data:balData, borderColor:'rgba(26,102,112,0.9)', backgroundColor:'rgba(26,102,112,0.08)', fill:true, tension:0.3, borderWidth:2, pointRadius:4, pointBackgroundColor:'rgba(26,102,112,1)' }]},
     options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
       scales:{
-        y:{beginAtZero:false, ticks:{callback:v=>Math.round(v/10000)+'万', font:{size:10,family:'DM Mono'}, color:'#8c8579'}, grid:{color:'#e4e0d8'}, border:{display:false}},
+        y:{beginAtZero:false, ticks:{callback:v=>Math.round(v/10000)+'ä¸', font:{size:10,family:'DM Mono'}, color:'#8c8579'}, grid:{color:'#e4e0d8'}, border:{display:false}},
         x:{ticks:{font:{size:10},color:'#8c8579'}, grid:{display:false}, border:{display:false}}
       }
     }
@@ -1937,17 +1937,17 @@ function parseExpenseCSV(text) {
   let dateCol = -1, amountCol = -1, descCol = -1, catCol = -1;
   headers.forEach((h, i) => {
     const hl = h.toLowerCase();
-    if (dateCol < 0 && (hl.includes('日') || hl.includes('date') || hl === '発生日' || hl === '取引日' || hl === '利用日')) dateCol = i;
-    if (amountCol < 0 && (hl.includes('金額') || hl.includes('amount') || hl === '支出金額')) amountCol = i;
-    if (catCol < 0 && (hl.includes('科目') || hl.includes('category') || hl === '勘定科目')) catCol = i;
-    if (descCol < 0 && (hl.includes('備考') || hl.includes('摘要') || hl.includes('memo') || hl.includes('内容') || hl.includes('利用先'))) descCol = i;
+    if (dateCol < 0 && (hl.includes('æ¥') || hl.includes('date') || hl === 'çºçæ¥' || hl === 'åå¼æ¥' || hl === 'å©ç¨æ¥')) dateCol = i;
+    if (amountCol < 0 && (hl.includes('éé¡') || hl.includes('amount') || hl === 'æ¯åºéé¡')) amountCol = i;
+    if (catCol < 0 && (hl.includes('ç§ç®') || hl.includes('category') || hl === 'åå®ç§ç®')) catCol = i;
+    if (descCol < 0 && (hl.includes('åè') || hl.includes('æè¦') || hl.includes('memo') || hl.includes('åå®¹') || hl.includes('å©ç¨å'))) descCol = i;
   });
   if (dateCol < 0 || amountCol < 0) return null; // can't detect
   const results = [];
   for (let i = 1; i < lines.length; i++) {
     const cols = lines[i].split(delim).map(c => c.trim().replace(/"/g, ''));
     const dateStr = cols[dateCol] || '';
-    const amount = Math.abs(Number((cols[amountCol] || '').replace(/[¥,]/g, '')) || 0);
+    const amount = Math.abs(Number((cols[amountCol] || '').replace(/[Â¥,]/g, '')) || 0);
     if (!dateStr || !amount) continue;
     // Normalize date to YYYY-MM
     let ym = '';
@@ -1971,19 +1971,19 @@ function previewExpenseCSV() {
   const preview = document.getElementById('expense-preview');
   const content = document.getElementById('expense-preview-content');
   if (!parsed) {
-    content.innerHTML = '<div style="color:var(--accent);">日付・金額の列を検出できませんでした。ヘッダー行に「発生日」「金額」等を含めてください。</div>';
+    content.innerHTML = '<div style="color:var(--accent);">æ¥ä»ã»éé¡ã®åãæ¤åºã§ãã¾ããã§ããããããã¼è¡ã«ãçºçæ¥ããéé¡ãç­ãå«ãã¦ãã ããã</div>';
     preview.style.display = '';
     return;
   }
   if (!parsed.length) {
-    content.innerHTML = '<div style="color:var(--accent);">取り込めるデータがありませんでした。</div>';
+    content.innerHTML = '<div style="color:var(--accent);">åãè¾¼ãããã¼ã¿ãããã¾ããã§ããã</div>';
     preview.style.display = '';
     return;
   }
   // Group by month
   const byMonth = {};
   parsed.forEach(e => { byMonth[e.ym] = (byMonth[e.ym] || 0) + e.amount; });
-  content.innerHTML = `<div style="margin-bottom:6px;"><strong>${parsed.length}件</strong> 検出</div>` +
+  content.innerHTML = `<div style="margin-bottom:6px;"><strong>${parsed.length}ä»¶</strong> æ¤åº</div>` +
     Object.entries(byMonth).sort().map(([ym, total]) =>
       `<div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid var(--line);"><span>${ym}</span><span class="mono">${fmt(total)}</span></div>`
     ).join('');
@@ -1993,17 +1993,17 @@ function previewExpenseCSV() {
 function importExpenseCSV() {
   const text = document.getElementById('expense-csv').value;
   const parsed = parseExpenseCSV(text);
-  if (!parsed || !parsed.length) { alert('取り込めるデータがありません'); return; }
+  if (!parsed || !parsed.length) { alert('åãè¾¼ãããã¼ã¿ãããã¾ãã'); return; }
   if (!DB.expenses) DB.expenses = [];
   DB.expenses.push(...parsed);
   save();
   closeExpenseImportModal();
   renderCashflow();
-  alert(`✅ ${parsed.length}件の経費データを取り込みました`);
+  alert(`â ${parsed.length}ä»¶ã®çµè²»ãã¼ã¿ãåãè¾¼ã¿ã¾ãã`);
 }
 
 function clearExpenses() {
-  if (!confirm('取り込み済みの経費データを全て削除しますか？')) return;
+  if (!confirm('åãè¾¼ã¿æ¸ã¿ã®çµè²»ãã¼ã¿ãå¨ã¦åé¤ãã¾ããï¼')) return;
   DB.expenses = [];
   save();
   renderCashflow();
@@ -2023,32 +2023,32 @@ async function init(){
   document.getElementById('sidebarDate').textContent=dateStr;
   document.getElementById('o-date').value=today();
 
-  // ローディングを最初に消す（何があっても止まらない）
+  // ã­ã¼ãã£ã³ã°ãæåã«æ¶ãï¼ä½ããã£ã¦ãæ­¢ã¾ããªãï¼
   const overlay=document.getElementById('loading-overlay');
   overlay.classList.add('hidden');
   setTimeout(()=>{overlay.style.display='none';}, 300);
 
-  // Step1: localStorageから読み込み
+  // Step1: localStorageããèª­ã¿è¾¼ã¿
   try {
     const local = localStorage.getItem('sasuta_v2');
     if (local) DB = JSON.parse(local);
-  } catch(e) { console.warn('localStorage読み込みスキップ:', e.message); }
+  } catch(e) { console.warn('localStorageèª­ã¿è¾¼ã¿ã¹ã­ãã:', e.message); }
 
-  // 画面描画（エラーが出ても止まらない）
+  // ç»é¢æç»ï¼ã¨ã©ã¼ãåºã¦ãæ­¢ã¾ããªãï¼
   try {
     syncOrderMonths();syncOrderProjects();syncCostProjects();
     initMonthPickers();
     renderDashboard();
-  } catch(e) { console.warn('初期描画エラー:', e.message); }
+  } catch(e) { console.warn('åææç»ã¨ã©ã¼:', e.message); }
 
-  // Step2: バックグラウンドでクラウド同期（失敗しても画面に影響しない）
+  // Step2: ããã¯ã°ã©ã¦ã³ãã§ã¯ã©ã¦ãåæï¼å¤±æãã¦ãç»é¢ã«å½±é¿ããªãï¼
   setTimeout(async ()=>{
     try {
       await loadFromCloud();
       syncOrderMonths();syncOrderProjects();syncCostProjects();
       renderCurrentPage();
     } catch(e) {
-      setSyncStatus('error','クラウド未接続');
+      setSyncStatus('error','ã¯ã©ã¦ãæªæ¥ç¶');
     }
   }, 800);
 }
